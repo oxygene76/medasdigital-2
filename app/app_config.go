@@ -59,6 +59,8 @@ import (
 	medasdigitalmoduletypes "medasdigital/x/medasdigital/types"
 	_ "medasdigital/x/tokenfactory/module" // import for side-effects
 	tokenfactorymoduletypes "medasdigital/x/tokenfactory/types"
+
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -98,6 +100,7 @@ var (
 		// chain modules
 		medasdigitalmoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
+		wasmtypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 
@@ -124,6 +127,7 @@ var (
 		// chain modules
 		medasdigitalmoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
+		wasmtypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	}
 
@@ -144,6 +148,7 @@ var (
 		// chain modules
 		medasdigitalmoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
+		wasmtypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	}
 
@@ -165,6 +170,7 @@ var (
 		{Account: ibcfeetypes.ModuleName},
 		{Account: icatypes.ModuleName},
 		{Account: tokenfactorymoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: wasmtypes.ModuleName, Permissions: []string{authtypes.Burner}},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 
