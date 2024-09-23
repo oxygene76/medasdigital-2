@@ -1,0 +1,17 @@
+syntax = "proto3";
+package medasdigital.medasdigital;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "medasdigital/medasdigital/params.proto";
+
+option go_package = "medasdigital/x/medasdigital/types";
+
+// GenesisState defines the medasdigital module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
