@@ -1,4 +1,4 @@
-### Step-by-Step Guide to Setting Up Validators for the MedasDigital Testnet
+### Step-by-Step Guide to Setting Up Validators for the Medas Digital 2.0 Testnet
 
 This guide describes the steps to correctly set up **validators** for the MedasDigital 2.0 chain testnet and integrate `gentx` transactions into the genesis file.
 
