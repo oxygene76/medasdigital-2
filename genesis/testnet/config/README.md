@@ -36,8 +36,8 @@ go version
 #### 2. Clone the MedasDigital Repository
 2.1. Clone the MedasDigital repository from GitHub:
 ```bash
-git clone https://github.com/<your-repo>/medasdigital.git
-cd medasdigital
+git clone https://github.com/oxygene76/medasdigital-2.git
+cd medasdigital-2
 ```
 
 #### 3. Build the Binary
