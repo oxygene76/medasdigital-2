@@ -1,0 +1,164 @@
+Address: medas1qyfled5ulf6wmu2u4smstn8rlzazanmqaqnv8f
+  Denom: umedas, Amount: 2354803578
+
+Address: medas1p0tzpucw3akwchzt04ahej0wd4awwm2jad5vgl
+  Denom: umedas, Amount: 1043067
+
+Address: medas1zfh6ccddln9e4fkwse7fcquvecpnnxykzs2pey
+  Denom: umedas, Amount: 142668
+
+Address: medas1z024vgu2v80dv0gg64aawnz8kynh3apudwla5v
+  Denom: umedas, Amount: 1046455
+
+Address: medas1rgq0d9d7kqnm33fmldhm38lh6577zchzrax860
+  Denom: umedas, Amount: 2000000000000
+
+Address: medas1r7sp8qf07jtj437tcz47jpthlqw3ffthjyz25v
+  Denom: umedas, Amount: 812021
+
+Address: medas1y4e53uwpevedz9qjfvw7x0qndp72u54zh7egat
+  Denom: umedas, Amount: 352
+
+Address: medas19vtyswlpmc2tewr3t5d8cweh5fyj7ylp9t88zy
+  Denom: umedas, Amount: 49999983
+
+Address: medas1967ey9t0wjdtnk9gltq0wjy8m57d9rrs6v90yu
+  Denom: umedas, Amount: 2000000000000
+
+Address: medas1xjvhpmflhue38mc8j75gqj2h0fds9guxd3uly6
+  Denom: umedas, Amount: 11809904
+
+Address: medas18trqyqnv6rzaf0auzyc38cdyj5xvcv3dpznp9k
+  Denom: umedas, Amount: 5000000
+
+Address: medas18nupa5ptx6n5q2240xpgm4pqlhy2080zukyvye
+  Denom: umedas, Amount: 4491443
+
+Address: medas187dz9zlxc3zrltzx5756tu7zew6yu3v0yz73nv
+  Denom: umedas, Amount: 1000000
+
+Address: medas1fu2p20fw8fhm6cclzqal6t5jd9q4yx4973l9e0
+  Denom: umedas, Amount: 368176
+
+Address: medas1fa59jlnx2aljljp7v2n9thc8ul9y74pwtemg97
+  Denom: umedas, Amount: 330573053
+
+Address: medas1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3sg48fd
+  Denom: umedas, Amount: 232274349115673
+
+Address: medas128wn5p8fvmlyyk4hdyuf2t9p0gzut656867t60
+  Denom: umedas, Amount: 6000000000000
+
+Address: medas12252pwfkf82wmvptnl359ez27nuw90srkycdwt
+  Denom: umedas, Amount: 6000000000000
+
+Address: medas122hjrmj8k2f0lc0m8nepdysgx9f2gan2lmggh5
+  Denom: umedas, Amount: 509892
+
+Address: medas12h8m6zd7d390mhhcyqp3zgc9epd4dk97ad0ssc
+  Denom: umedas, Amount: 186000000
+
+Address: medas1tygms3xhhs3yv487phx3dw4a95jn7t7lygfkle
+  Denom: umedas, Amount: 66929114584576
+
+Address: medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp
+  Denom: umedas, Amount: 2783326971070
+
+Address: medas1drqgprr4r3mtcncpxjn6a0kr84ag8c3knt8d5c
+  Denom: umedas, Amount: 14852115
+
+Address: medas1wev8ptzj27aueu04wgvvl4gvurax6rj5vuskn5
+  Denom: umedas, Amount: 705742824
+
+Address: medas1w68sqty80mm55w2qpp46d95d5rgl9ecrh6xzmq
+  Denom: umedas, Amount: 234995
+
+Address: medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf
+  Denom: umedas, Amount: 11000000
+
+Address: medas1sr0lw3rnl4u3zz7hxrek0pp26hjhapecxx3v5g
+  Denom: umedas, Amount: 305000000
+
+Address: medas1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zvc5e9
+  Denom: umedas, Amount: 25034450300578
+
+Address: medas1jhr9fewck8yr4vrzckagcx8dcqusmvhwe2z2ly
+  Denom: umedas, Amount: 27544497759538
+
+Address: medas1jmcqdyh9auemdr35xnqsywpagd9ty3yxdg80ju
+  Denom: umedas, Amount: 46304308
+
+Address: medas1ja9adsspcz4awax7slj3u8kpzuyygl0dl8dxta
+  Denom: umedas, Amount: 765975
+
+Address: medas1nd86lwg7se890hau65eeq6ru9cxunc53rwkyq8
+  Denom: umedas, Amount: 198
+
+Address: medas14dfk2dc4ktqqw8rk4ak0raz9gpjje4t208u72v
+  Denom: umedas, Amount: 1000000000000
+
+Address: medas14wa8gkl0u36jmr7qd69w045xye2m0vf9vdzxdv
+  Denom: umedas, Amount: 21365149651949
+
+Address: medas1kr8ssf53gwjd26qhh0pf96ahqaav056wtfa8h7
+  Denom: umedas, Amount: 6000000000000
+
+Address: medas1kvvwcw8puzgqkmf8knk8tscghmvh2v7fcehwx3
+  Denom: umedas, Amount: 2000000000000
+
+Address: medas1hrz4aeuyh50xq8en4ncant9fkrfspkswgvcs86
+  Denom: umedas, Amount: 193767253
+
+Address: medas1c9mkft0d3sdjm3us883270veuww7qe3ye03tpt
+  Denom: umedas, Amount: 3561316
+
+Address: medas1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx4wezu3
+  Denom: ibc/92E4AB82E3B2AF2D5181AC69C74F9F6D890442C7B7B02CC8634B9D3ED7CF936D, Amount: 1000000000000000000
+  Denom: ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712, Amount: 2000000
+  Denom: ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518, Amount: 1000000
+  Denom: umedas, Amount: 39865697135126
+
+Address: medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45
+  Denom: ibc/B4C138B6F08A5BC826ABEFD56CAE828D2CF0A3B62A73B74AECC46D257371B125, Amount: 11230000
+  Denom: umedas, Amount: 520544662897
+
+Address: medas1e4w7857hp7dtxmda3hm25rrg0uqknjp0rcxsl3
+  Denom: umedas, Amount: 859569147
+
+Address: medas16wg6q5p6cnvug8uy03vzm8xzju9scrg9su5n5x
+  Denom: umedas, Amount: 8999983
+
+Address: medas163ndtplrrpkh2faf2c0y6t9v86llx86qhcw6gh
+  Denom: umedas, Amount: 58806
+
+Address: medas16klcnrmxdzqyp25qt28lwvfac6wpyww26elahr
+  Denom: umedas, Amount: 405730700
+
+Address: medas16hp7wzudkeyw6fvgvalm0fh3elp9czhfgh7wch
+  Denom: umedas, Amount: 189
+
+Address: medas1ucj4xmmq3ykgkw2halpf24h5n2awsu2tjs30wy
+  Denom: umedas, Amount: 999999937
+
+Address: medas1a9gzwgqf8069v9j500paye5dm2p54tlxrm2xw3
+  Denom: umedas, Amount: 1000000
+
+Address: medas1a8wn23mna63s2dam0u4kc5j5gzxeg7w6g5v93h
+  Denom: ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712, Amount: 1000000
+  Denom: umedas, Amount: 96999793
+
+Address: medas1a53udazy8ayufvy0s434pfwjcedzqv34nl7dm5
+  Denom: umedas, Amount: 5006281814405
+
+Address: medas17sael2kcmm8npe2pmkxj3un90xfg60vv3xc9n8
+  Denom: umedas, Amount: 105000000
+
+Address: medas17lee6fy4lymdgtzz4gf5u2z935vysd63ht5zjk
+  Denom: umedas, Amount: 2000000000000
+
+Address: medas1lxprahs9ptamq3rshtg8mhmztvxmkv20pa9zzs
+  Denom: umedas, Amount: 1579979
+
+Address: medas1l56z09rcgnamet6st2sm25ez6jc3ynp5qvk629
+  Denom: umedas, Amount: 1058306
+
