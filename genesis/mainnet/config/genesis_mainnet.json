@@ -1,0 +1,1419 @@
+{
+  "app_name": "medasdigitald",
+  "app_version": "v1.0.0",
+  "genesis_time": "2024-09-29T16:00:00Z",
+  "chain_id": "medasdigital-2",
+  "initial_height": 1,
+  "app_hash": null,
+  "app_state": {
+    "06-solomachine": null,
+    "07-tendermint": null,
+    "auth": {
+      "params": {
+        "max_memo_characters": "256",
+        "tx_sig_limit": "7",
+        "tx_size_cost_per_byte": "10",
+        "sig_verify_cost_ed25519": "590",
+        "sig_verify_cost_secp256k1": "1000"
+      },
+      "accounts": [
+			{
+					"address": "medas1qyfled5ulf6wmu2u4smstn8rlzazanmqaqnv8f",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A0POvrnpFZWLae9B+M97cZHVld4xF4hzONNwjIZT+R9c",
+					"account_number": "55",
+					"sequence": "12",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1p0tzpucw3akwchzt04ahej0wd4awwm2jad5vgl",
+					"type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
+					"pub_key": "Aqf0j71p7Jud3OwVZskhaegGcN54grmBgU3EH0jEoZqZ",
+					"account_number": "6",
+					"sequence": "10",
+					"balance": null,
+					"vesting": {
+							"original_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "1900000000000"
+									}
+							],
+							"delegated_free": [
+									{
+											"denom": "umedas",
+											"amount": "393679000000"
+									}
+							],
+							"delegated_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "1900000000000"
+									}
+							],
+							"end_time": "1798757999",
+							"start_time": ""
+					}
+			},
+			{
+					"address": "medas1zfh6ccddln9e4fkwse7fcquvecpnnxykzs2pey",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A6yavHeHp22iN9gWmXSByqKDMqLTHu5LbAsIoEocxSM8",
+					"account_number": "40",
+					"sequence": "3",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1z024vgu2v80dv0gg64aawnz8kynh3apudwla5v",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "Anjasu/UoeT7Y1urwTdOEBd3NDCjzOAETnBEiBwlGPw0",
+					"account_number": "54",
+					"sequence": "1",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1r7sp8qf07jtj437tcz47jpthlqw3ffthjyz25v",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A5jIVLMMAg7ylpdEAwcciVV4RFZCcvk+ePhw+SlcjObZ",
+					"account_number": "41",
+					"sequence": "29",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1y4e53uwpevedz9qjfvw7x0qndp72u54zh7egat",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A2zDsceAY/+pk8sbbNGV/34PT4mQX3YDlbpCc2u5yszj",
+					"account_number": "37",
+					"sequence": "4",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "",
+					"type": "/cosmos.auth.v1beta1.ModuleAccount",
+					"pub_key": "",
+					"account_number": "",
+					"sequence": "",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas19vtyswlpmc2tewr3t5d8cweh5fyj7ylp9t88zy",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "Ale1j/swvadSJaOkSiJmK4mN/HXA211FNWzC9o0V4ymi",
+					"account_number": "52",
+					"sequence": "1",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1xjvhpmflhue38mc8j75gqj2h0fds9guxd3uly6",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A/9xkMkg2yqvmc3jwGtE5a6RzO1vMSJcuMaeMYMPA3EQ",
+					"account_number": "33",
+					"sequence": "31",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas18trqyqnv6rzaf0auzyc38cdyj5xvcv3dpznp9k",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "49",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas18nupa5ptx6n5q2240xpgm4pqlhy2080zukyvye",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A5zfw6RMG9p8aU5YMidfLwZ3EDsC5CDqLcW/EkVZgt4b",
+					"account_number": "29",
+					"sequence": "1",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas187dz9zlxc3zrltzx5756tu7zew6yu3v0yz73nv",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "51",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1fu2p20fw8fhm6cclzqal6t5jd9q4yx4973l9e0",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A7nb/igKtLOvYSmWQ9PlRoAi9PzUiheoM80YSK+pkZuV",
+					"account_number": "58",
+					"sequence": "31",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1fa59jlnx2aljljp7v2n9thc8ul9y74pwtemg97",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "30",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "",
+					"type": "/cosmos.auth.v1beta1.ModuleAccount",
+					"pub_key": "",
+					"account_number": "",
+					"sequence": "",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas128wn5p8fvmlyyk4hdyuf2t9p0gzut656867t60",
+					"type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
+					"pub_key": "",
+					"account_number": "5",
+					"sequence": "0",
+					"balance": null,
+					"vesting": {
+							"original_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "5900000000000"
+									}
+							],
+							"delegated_free": [],
+							"delegated_vesting": [],
+							"end_time": "1798757999",
+							"start_time": ""
+					}
+			},
+			{
+					"address": "medas12252pwfkf82wmvptnl359ez27nuw90srkycdwt",
+					"type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
+					"pub_key": "",
+					"account_number": "3",
+					"sequence": "0",
+					"balance": null,
+					"vesting": {
+							"original_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "5900000000000"
+									}
+							],
+							"delegated_free": [],
+							"delegated_vesting": [],
+							"end_time": "1798757999",
+							"start_time": ""
+					}
+			},
+			{
+					"address": "medas122hjrmj8k2f0lc0m8nepdysgx9f2gan2lmggh5",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A5kpcd6SKDIRS/WqKj8pt0eemSuj4HDx+B7tOnQPJnRb",
+					"account_number": "35",
+					"sequence": "4",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas12h8m6zd7d390mhhcyqp3zgc9epd4dk97ad0ssc",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "57",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "",
+					"type": "/cosmos.auth.v1beta1.ModuleAccount",
+					"pub_key": "",
+					"account_number": "",
+					"sequence": "",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A/gkg0aRKzUWk3cFjBeyGs/p7bXgLtXX64Rdwilg11LL",
+					"account_number": "11",
+					"sequence": "54",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1drqgprr4r3mtcncpxjn6a0kr84ag8c3knt8d5c",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "32",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1wev8ptzj27aueu04wgvvl4gvurax6rj5vuskn5",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "42",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1w68sqty80mm55w2qpp46d95d5rgl9ecrh6xzmq",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "At53rcL3rcfUdaY0qV+YdjojaVbr2Jdjql/3K/Or4nCG",
+					"account_number": "44",
+					"sequence": "10",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "",
+					"type": "/cosmos.auth.v1beta1.ModuleAccount",
+					"pub_key": "",
+					"account_number": "",
+					"sequence": "",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1sr0lw3rnl4u3zz7hxrek0pp26hjhapecxx3v5g",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "45",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "",
+					"type": "/cosmos.auth.v1beta1.ModuleAccount",
+					"pub_key": "",
+					"account_number": "",
+					"sequence": "",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1jhr9fewck8yr4vrzckagcx8dcqusmvhwe2z2ly",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "AzXRo0Zc2AJTVOR1EWiXz6pu1kb+V0gLUl6G2VDGaqoU",
+					"account_number": "12",
+					"sequence": "125",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1jmcqdyh9auemdr35xnqsywpagd9ty3yxdg80ju",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "ArD3DzdPgozqWXmSYFBW2KisL5q6k0d5Bi0kILgxwZfX",
+					"account_number": "34",
+					"sequence": "3",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1ja9adsspcz4awax7slj3u8kpzuyygl0dl8dxta",
+					"type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
+					"pub_key": "A/NATLiOnC/QJztqDDt2ZUIGzj21n0TOyV0zR5ZzQVF6",
+					"account_number": "7",
+					"sequence": "8",
+					"balance": null,
+					"vesting": {
+							"original_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "5900000000000"
+									}
+							],
+							"delegated_free": [
+									{
+											"denom": "umedas",
+											"amount": "628650971953"
+									}
+							],
+							"delegated_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "5900000000000"
+									}
+							],
+							"end_time": "1798757999",
+							"start_time": ""
+					}
+			},
+			{
+					"address": "medas1nd86lwg7se890hau65eeq6ru9cxunc53rwkyq8",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A+BpBDCCgeCbAoS5PjaRjDP5rAp8otH+UZtPhWhktF1Y",
+					"account_number": "26",
+					"sequence": "1",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas14wa8gkl0u36jmr7qd69w045xye2m0vf9vdzxdv",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A6SKfpnbNDa581CSzp3FYNYG//DImre3HEQfl4bhf3rp",
+					"account_number": "14",
+					"sequence": "28",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas14a7ay4r87009lh4rs8ng5pts0qgy3m7nj9xjq0",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "Aoe0cj9kdQJ2I85yV9Vw8PiWBBRsfBjMq3/IXOeEqt8H",
+					"account_number": "39",
+					"sequence": "81",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1kr8ssf53gwjd26qhh0pf96ahqaav056wtfa8h7",
+					"type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
+					"pub_key": "",
+					"account_number": "2",
+					"sequence": "0",
+					"balance": null,
+					"vesting": {
+							"original_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "5900000000000"
+									}
+							],
+							"delegated_free": [],
+							"delegated_vesting": [],
+							"end_time": "1798757999",
+							"start_time": ""
+					}
+			},
+			{
+					"address": "medas1krtrt5dvhnw5j46ljgah7q5f9pm3vvakxsa7ze",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "23",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1hrz4aeuyh50xq8en4ncant9fkrfspkswgvcs86",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "43",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1c9mkft0d3sdjm3us883270veuww7qe3ye03tpt",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "AgKKUDARmU5twBsU2NxbNKOBVvqlcwqEIsrl4aaRBKPV",
+					"account_number": "31",
+					"sequence": "24",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx4wezu3",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A93E2hVUm2Ska1/1o1qjf8rcnmZJ6mvaSbAI9+yrNM4i",
+					"account_number": "13",
+					"sequence": "74",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45",
+					"type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
+					"pub_key": "Atmg7r8VI+lUTBNTuxQsUqB1yHRFiKzKkKZd6TOilhvT",
+					"account_number": "0",
+					"sequence": "59",
+					"balance": null,
+					"vesting": {
+							"original_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "2000000000000"
+									}
+							],
+							"delegated_free": [
+									{
+											"denom": "umedas",
+											"amount": "21222001000001"
+									}
+							],
+							"delegated_vesting": [
+									{
+											"denom": "umedas",
+											"amount": "2000000000000"
+									}
+							],
+							"end_time": "1798757999",
+							"start_time": ""
+					}
+			},
+			{
+					"address": "medas1e4w7857hp7dtxmda3hm25rrg0uqknjp0rcxsl3",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "AmzOcLttiMYBAlu5NSVq4B9oRIFPvkZPhp0v8+e9ZFxw",
+					"account_number": "21",
+					"sequence": "300",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas16wg6q5p6cnvug8uy03vzm8xzju9scrg9su5n5x",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "AvmZZiiZPWxXT+MxJzrrQLaPXoJOs/o5cBWMT2IDvAm4",
+					"account_number": "56",
+					"sequence": "1",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas163ndtplrrpkh2faf2c0y6t9v86llx86qhcw6gh",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "A6zhpMC/T7tC4zOV6kV/SaAV+cHBAgv02JdahQLk110S",
+					"account_number": "36",
+					"sequence": "4",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas16klcnrmxdzqyp25qt28lwvfac6wpyww26elahr",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "27",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas16hp7wzudkeyw6fvgvalm0fh3elp9czhfgh7wch",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "AjuGTtjP//yhXXxYHSTJY/tYyLk5l4kV5GYUelPkT8Sx",
+					"account_number": "46",
+					"sequence": "4",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas16h2ynrzwhxgjnd0hswkvdvq9nav9kklqfl4rdr",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "48",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "",
+					"type": "/cosmos.auth.v1beta1.ModuleAccount",
+					"pub_key": "",
+					"account_number": "",
+					"sequence": "",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1ucj4xmmq3ykgkw2halpf24h5n2awsu2tjs30wy",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "AytQg7y9/qMwVcEM1owDhFtZnws1wCkVtCF1MQYDMLlQ",
+					"account_number": "47",
+					"sequence": "3",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1a9gzwgqf8069v9j500paye5dm2p54tlxrm2xw3",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "50",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1a8wn23mna63s2dam0u4kc5j5gzxeg7w6g5v93h",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "ApopWgAzYxnwrn4OuZoRlJxpazW1Rh/irU/BTHzIWKmX",
+					"account_number": "53",
+					"sequence": "32",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1a53udazy8ayufvy0s434pfwjcedzqv34nl7dm5",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "22",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "",
+					"type": "/cosmos.auth.v1beta1.ModuleAccount",
+					"pub_key": "",
+					"account_number": "",
+					"sequence": "",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas17sael2kcmm8npe2pmkxj3un90xfg60vv3xc9n8",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "24",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1lxprahs9ptamq3rshtg8mhmztvxmkv20pa9zzs",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "AtgHtOs+Y5k8a3sapSdgNTrrD5SoBInIsIgdhG5sMshj",
+					"account_number": "28",
+					"sequence": "3",
+					"balance": [],
+					"vesting": null
+			},
+			{
+					"address": "medas1l56z09rcgnamet6st2sm25ez6jc3ynp5qvk629",
+					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"pub_key": "",
+					"account_number": "38",
+					"sequence": "0",
+					"balance": [],
+					"vesting": null
+			}
+			]
+    },
+    "authz": {
+      "authorization": []
+    },
+    "bank": {
+      "params": {
+        "send_enabled": [],
+        "default_send_enabled": true
+      },
+		"balances": [
+		{
+			"address": "medas1qyfled5ulf6wmu2u4smstn8rlzazanmqaqnv8f",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "2354803578"
+			}
+			]
+		},
+		{
+			"address": "medas1p0tzpucw3akwchzt04ahej0wd4awwm2jad5vgl",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "1043067"
+			}
+			]
+		},
+		{
+			"address": "medas1zfh6ccddln9e4fkwse7fcquvecpnnxykzs2pey",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "142668"
+			}
+			]
+		},
+		{
+			"address": "medas1z024vgu2v80dv0gg64aawnz8kynh3apudwla5v",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "1046455"
+			}
+			]
+		},
+		{
+			"address": "medas1r7sp8qf07jtj437tcz47jpthlqw3ffthjyz25v",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "812021"
+			}
+			]
+		},
+		{
+			"address": "medas1y4e53uwpevedz9qjfvw7x0qndp72u54zh7egat",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "352"
+			}
+			]
+		},
+		{
+			"address": "medas19vtyswlpmc2tewr3t5d8cweh5fyj7ylp9t88zy",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "49999983"
+			}
+			]
+		},
+		{
+			"address": "medas1xjvhpmflhue38mc8j75gqj2h0fds9guxd3uly6",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "11809904"
+			}
+			]
+		},
+		{
+			"address": "medas18trqyqnv6rzaf0auzyc38cdyj5xvcv3dpznp9k",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "5000000"
+			}
+			]
+		},
+		{
+			"address": "medas18nupa5ptx6n5q2240xpgm4pqlhy2080zukyvye",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "4491443"
+			}
+			]
+		},
+		{
+			"address": "medas187dz9zlxc3zrltzx5756tu7zew6yu3v0yz73nv",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "1000000"
+			}
+			]
+		},
+		{
+			"address": "medas1fu2p20fw8fhm6cclzqal6t5jd9q4yx4973l9e0",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "368176"
+			}
+			]
+		},
+		{
+			"address": "medas1fa59jlnx2aljljp7v2n9thc8ul9y74pwtemg97",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "330573053"
+			}
+			]
+		},
+		{
+			"address": "medas1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3sg48fd",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "232274349115673"
+			}
+			]
+		},
+		{
+			"address": "medas128wn5p8fvmlyyk4hdyuf2t9p0gzut656867t60",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "6000000000000"
+			}
+			]
+		},
+		{
+			"address": "medas12252pwfkf82wmvptnl359ez27nuw90srkycdwt",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "6000000000000"
+			}
+			]
+		},
+		{
+			"address": "medas122hjrmj8k2f0lc0m8nepdysgx9f2gan2lmggh5",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "509892"
+			}
+			]
+		},
+		{
+			"address": "medas12h8m6zd7d390mhhcyqp3zgc9epd4dk97ad0ssc",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "186000000"
+			}
+			]
+		},
+		{
+			"address": "medas1tygms3xhhs3yv487phx3dw4a95jn7t7lygfkle",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "66929114584576"
+			}
+			]
+		},
+		{
+			"address": "medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "2783326971070"
+			}
+			]
+		},
+		{
+			"address": "medas1drqgprr4r3mtcncpxjn6a0kr84ag8c3knt8d5c",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "14852115"
+			}
+			]
+		},
+		{
+			"address": "medas1wev8ptzj27aueu04wgvvl4gvurax6rj5vuskn5",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "705742824"
+			}
+			]
+		},
+		{
+			"address": "medas1w68sqty80mm55w2qpp46d95d5rgl9ecrh6xzmq",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "234995"
+			}
+			]
+		},
+		{
+			"address": "medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "11000000"
+			}
+			]
+		},
+		{
+			"address": "medas1sr0lw3rnl4u3zz7hxrek0pp26hjhapecxx3v5g",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "305000000"
+			}
+			]
+		},
+		{
+			"address": "medas1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zvc5e9",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "25034450300578"
+			}
+			]
+		},
+		{
+			"address": "medas1jhr9fewck8yr4vrzckagcx8dcqusmvhwe2z2ly",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "36544497759538"
+			}
+			]
+		},
+		{
+			"address": "medas1jmcqdyh9auemdr35xnqsywpagd9ty3yxdg80ju",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "46304308"
+			}
+			]
+		},
+		{
+			"address": "medas1ja9adsspcz4awax7slj3u8kpzuyygl0dl8dxta",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "765975"
+			}
+			]
+		},
+		{
+			"address": "medas1nd86lwg7se890hau65eeq6ru9cxunc53rwkyq8",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "198"
+			}
+			]
+		},
+		{
+			"address": "medas14wa8gkl0u36jmr7qd69w045xye2m0vf9vdzxdv",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "21365149651949"
+			}
+			]
+		},
+		{
+			"address": "medas1kr8ssf53gwjd26qhh0pf96ahqaav056wtfa8h7",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "6000000000000"
+			}
+			]
+		},
+		{
+			"address": "medas1hrz4aeuyh50xq8en4ncant9fkrfspkswgvcs86",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "193767253"
+			}
+			]
+		},
+		{
+			"address": "medas1c9mkft0d3sdjm3us883270veuww7qe3ye03tpt",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "3561316"
+			}
+			]
+		},
+		{
+			"address": "medas1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx4wezu3",
+			"coins": [
+			{
+				"denom": "ibc/92E4AB82E3B2AF2D5181AC69C74F9F6D890442C7B7B02CC8634B9D3ED7CF936D",
+				"amount": "1000000000000000000"
+			},
+			{
+				"denom": "ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712",
+				"amount": "2000000"
+			},
+			{
+				"denom": "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+				"amount": "1000000"
+			},
+			{
+				"denom": "umedas",
+				"amount": "39865697135126"
+			}
+			]
+		},
+		{
+			"address": "medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45",
+			"coins": [
+			{
+				"denom": "ibc/B4C138B6F08A5BC826ABEFD56CAE828D2CF0A3B62A73B74AECC46D257371B125",
+				"amount": "11230000"
+			},
+			{
+				"denom": "umedas",
+				"amount": "520544662897"
+			}
+			]
+		},
+		{
+			"address": "medas1e4w7857hp7dtxmda3hm25rrg0uqknjp0rcxsl3",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "859569147"
+			}
+			]
+		},
+		{
+			"address": "medas16wg6q5p6cnvug8uy03vzm8xzju9scrg9su5n5x",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "8999983"
+			}
+			]
+		},
+		{
+			"address": "medas163ndtplrrpkh2faf2c0y6t9v86llx86qhcw6gh",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "58806"
+			}
+			]
+		},
+		{
+			"address": "medas16klcnrmxdzqyp25qt28lwvfac6wpyww26elahr",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "405730700"
+			}
+			]
+		},
+		{
+			"address": "medas16hp7wzudkeyw6fvgvalm0fh3elp9czhfgh7wch",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "189"
+			}
+			]
+		},
+		{
+			"address": "medas1ucj4xmmq3ykgkw2halpf24h5n2awsu2tjs30wy",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "999999937"
+			}
+			]
+		},
+		{
+			"address": "medas1a9gzwgqf8069v9j500paye5dm2p54tlxrm2xw3",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "1000000"
+			}
+			]
+		},
+		{
+			"address": "medas1a8wn23mna63s2dam0u4kc5j5gzxeg7w6g5v93h",
+			"coins": [
+			{
+				"denom": "ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712",
+				"amount": "1000000"
+			},
+			{
+				"denom": "umedas",
+				"amount": "96999793"
+			}
+			]
+		},
+		{
+			"address": "medas1a53udazy8ayufvy0s434pfwjcedzqv34nl7dm5",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "5006281814405"
+			}
+			]
+		},
+		{
+			"address": "medas17sael2kcmm8npe2pmkxj3un90xfg60vv3xc9n8",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "105000000"
+			}
+			]
+		},
+		{
+			"address": "medas1lxprahs9ptamq3rshtg8mhmztvxmkv20pa9zzs",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "1579979"
+			}
+			]
+		},
+		{
+			"address": "medas1l56z09rcgnamet6st2sm25ez6jc3ynp5qvk629",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "1058306"
+			}
+			]
+		}
+	],
+		"supply": [
+		{
+				"denom": "ibc/92E4AB82E3B2AF2D5181AC69C74F9F6D890442C7B7B02CC8634B9D3ED7CF936D",
+				"amount": "1000000000000000000"
+		},
+		{
+				"denom": "ibc/B4C138B6F08A5BC826ABEFD56CAE828D2CF0A3B62A73B74AECC46D257371B125",
+				"amount": "11230000"
+		},
+		{
+				"denom": "ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712",
+				"amount": "3000000"
+		},
+		{
+				"denom": "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+				"amount": "1000000"
+		},
+		{
+				"denom": "umedas",
+				"amount": "448330120822228"
+		}
+    ],
+		"denom_metadata": [
+		{
+				"description": "IBC token from transfer/channel-5/rowan",
+				"denom_units": [
+						{
+								"denom": "rowan",
+								"exponent": 0,
+								"aliases": []
+						}
+				],
+				"base": "ibc/92E4AB82E3B2AF2D5181AC69C74F9F6D890442C7B7B02CC8634B9D3ED7CF936D",
+				"display": "transfer/channel-5/rowan",
+				"name": "transfer/channel-5/rowan IBC token",
+				"symbol": "ROWAN",
+				"uri": "",
+				"uri_hash": ""
+		},
+		{
+				"description": "IBC token from transfer/channel-6/udvpn",
+				"denom_units": [
+						{
+								"denom": "udvpn",
+								"exponent": 0,
+								"aliases": []
+						}
+				],
+				"base": "ibc/B4C138B6F08A5BC826ABEFD56CAE828D2CF0A3B62A73B74AECC46D257371B125",
+				"display": "transfer/channel-6/udvpn",
+				"name": "transfer/channel-6/udvpn IBC token",
+				"symbol": "UDVPN",
+				"uri": "",
+				"uri_hash": ""
+		},
+		{
+				"description": "IBC token from transfer/channel-4/udvpn",
+				"denom_units": [
+						{
+								"denom": "udvpn",
+								"exponent": 0,
+								"aliases": []
+						}
+				],
+				"base": "ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712",
+				"display": "transfer/channel-4/udvpn",
+				"name": "transfer/channel-4/udvpn IBC token",
+				"symbol": "UDVPN",
+				"uri": "",
+				"uri_hash": ""
+		},
+		{
+				"description": "IBC token from transfer/channel-0/uosmo",
+				"denom_units": [
+						{
+								"denom": "uosmo",
+								"exponent": 0,
+								"aliases": []
+						}
+				],
+				"base": "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+				"display": "transfer/channel-0/uosmo",
+				"name": "transfer/channel-0/uosmo IBC token",
+				"symbol": "UOSMO",
+				"uri": "",
+				"uri_hash": ""
+		}
+		],
+		"send_enabled": []
+    },
+    "capability": {
+      "index": "1",
+      "owners": []
+    },
+    "circuit": {
+      "account_permissions": [],
+      "disabled_type_urls": []
+    },
+    "consensus": null,
+    "crisis": {
+      "constant_fee": {
+        "denom": "umedas",
+        "amount": "1000"
+      }
+    },
+    "distribution": {
+      "params": {
+        "community_tax": "0.020000000000000000",
+        "base_proposer_reward": "0.000000000000000000",
+        "bonus_proposer_reward": "0.000000000000000000",
+        "withdraw_addr_enabled": true
+      },
+      "fee_pool": {
+        "community_pool": []
+      },
+      "delegator_withdraw_infos": [],
+      "previous_proposer": "",
+      "outstanding_rewards": [],
+      "validator_accumulated_commissions": [],
+      "validator_historical_rewards": [],
+      "validator_current_rewards": [],
+      "delegator_starting_infos": [],
+      "validator_slash_events": []
+    },
+    "evidence": {
+      "evidence": []
+    },
+    "feegrant": {
+      "allowances": []
+    },
+    "feeibc": {
+      "identified_fees": [],
+      "fee_enabled_channels": [],
+      "registered_payees": [],
+      "registered_counterparty_payees": [],
+      "forward_relayers": []
+    },
+    "genutil": {
+      "gen_txs": []
+    },
+    "gov": {
+      "starting_proposal_id": "1",
+      "deposits": [],
+      "votes": [],
+      "proposals": [],
+      "deposit_params": null,
+      "voting_params": null,
+      "tally_params": null,
+      "params": {
+        "min_deposit": [
+          {
+            "denom": "umedas",
+            "amount": "10000000"
+          }
+        ],
+        "max_deposit_period": "172800s",
+        "voting_period": "172800s",
+        "quorum": "0.334000000000000000",
+        "threshold": "0.500000000000000000",
+        "veto_threshold": "0.334000000000000000",
+        "min_initial_deposit_ratio": "0.000000000000000000",
+        "proposal_cancel_ratio": "0.500000000000000000",
+        "proposal_cancel_dest": "",
+        "expedited_voting_period": "86400s",
+        "expedited_threshold": "0.667000000000000000",
+        "expedited_min_deposit": [
+          {
+            "denom": "umedas",
+            "amount": "50000000"
+          }
+        ],
+        "burn_vote_quorum": false,
+        "burn_proposal_deposit_prevote": false,
+        "burn_vote_veto": true,
+        "min_deposit_ratio": "0.010000000000000000"
+      },
+      "constitution": ""
+    },
+    "group": {
+      "group_seq": "0",
+      "groups": [],
+      "group_members": [],
+      "group_policy_seq": "0",
+      "group_policies": [],
+      "proposal_seq": "0",
+      "proposals": [],
+      "votes": []
+    },
+    "ibc": {
+      "client_genesis": {
+        "clients": [],
+        "clients_consensus": [],
+        "clients_metadata": [],
+        "params": {
+          "allowed_clients": [
+            "*"
+          ]
+        },
+        "create_localhost": false,
+        "next_client_sequence": "0"
+      },
+      "connection_genesis": {
+        "connections": [],
+        "client_connection_paths": [],
+        "next_connection_sequence": "0",
+        "params": {
+          "max_expected_time_per_block": "30000000000"
+        }
+      },
+      "channel_genesis": {
+        "channels": [],
+        "acknowledgements": [],
+        "commitments": [],
+        "receipts": [],
+        "send_sequences": [],
+        "recv_sequences": [],
+        "ack_sequences": [],
+        "next_channel_sequence": "0",
+        "params": {
+          "upgrade_timeout": {
+            "height": {
+              "revision_number": "0",
+              "revision_height": "0"
+            },
+            "timestamp": "600000000000"
+          }
+        }
+      }
+    },
+    "interchainaccounts": {
+      "controller_genesis_state": {
+        "active_channels": [],
+        "interchain_accounts": [],
+        "ports": [],
+        "params": {
+          "controller_enabled": true
+        }
+      },
+      "host_genesis_state": {
+        "active_channels": [],
+        "interchain_accounts": [],
+        "port": "icahost",
+        "params": {
+          "host_enabled": true,
+          "allow_messages": [
+            "*"
+          ]
+        }
+      }
+    },
+    "medasdigital": {
+      "params": {}
+    },
+    "mint": {
+      "minter": {
+        "inflation": "0.100000000000000000",
+        "annual_provisions": "0.000000000000000000"
+      },
+      "params": {
+        "mint_denom": "umedas",
+        "inflation_rate_change": "0.050000000000000000",
+        "inflation_max": "0.150000000000000000",
+        "inflation_min": "0.050000000000000000",
+        "goal_bonded": "0.670000000000000000",
+        "blocks_per_year": "6311520"
+      }
+    },
+    "nft": {
+      "classes": [],
+      "entries": []
+    },
+    "params": null,
+    "runtime": null,
+    "slashing": {
+      "params": {
+        "signed_blocks_window": "100",
+        "min_signed_per_window": "0.500000000000000000",
+        "downtime_jail_duration": "600s",
+        "slash_fraction_double_sign": "0.050000000000000000",
+        "slash_fraction_downtime": "0.010000000000000000"
+      },
+      "signing_infos": [],
+      "missed_blocks": []
+    },
+    "staking": {
+      "params": {
+        "unbonding_time": "1814400s",
+        "max_validators": 100,
+        "max_entries": 7,
+        "historical_entries": 10000,
+        "bond_denom": "umedas",
+        "min_commission_rate": "0.000000000000000000"
+      },
+      "last_total_power": "0",
+      "last_validator_powers": [],
+      "validators": [],
+      "delegations": [],
+      "unbonding_delegations": [],
+      "redelegations": [],
+      "exported": false
+    },
+    "tokenfactory": {
+      "params": {},
+      "denomList": []
+    },
+    "transfer": {
+      "port_id": "transfer",
+      "denom_traces": [],
+      "params": {
+        "send_enabled": true,
+        "receive_enabled": true
+      },
+      "total_escrowed": []
+    },
+    "upgrade": {},
+    "vesting": {},
+    "wasm": {
+      "params": {
+        "code_upload_access": {
+          "permission": "Everybody",
+          "addresses": []
+        },
+        "instantiate_default_permission": "Everybody"
+      },
+      "codes": [],
+      "contracts": [],
+      "sequences": []
+    }
+  },
+  "consensus": {
+    "params": {
+      "block": {
+        "max_bytes": "22020096",
+        "max_gas": "-1"
+      },
+      "evidence": {
+        "max_age_num_blocks": "100000",
+        "max_age_duration": "172800000000000",
+        "max_bytes": "1048576"
+      },
+      "validator": {
+        "pub_key_types": [
+          "ed25519"
+        ]
+      },
+      "version": {
+        "app": "0"
+      },
+      "abci": {
+        "vote_extensions_enable_height": "0"
+      }
+    }
+  }
+}
