@@ -1,0 +1,58 @@
+{
+    "total_supply": [
+        {
+            "denom": "ibc/92E4AB82E3B2AF2D5181AC69C74F9F6D890442C7B7B02CC8634B9D3ED7CF936D",
+            "amount": "1000000000000000000"
+        },
+        {
+            "denom": "ibc/B4C138B6F08A5BC826ABEFD56CAE828D2CF0A3B62A73B74AECC46D257371B125",
+            "amount": "11230000"
+        },
+        {
+            "denom": "ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712",
+            "amount": "3000000"
+        },
+        {
+            "denom": "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+            "amount": "1000000"
+        },
+        {
+            "denom": "umedas",
+            "amount": "448330120822228"
+        }
+    ],
+    "denom_metadata": [
+        {
+            "denom": "ibc/92E4AB82E3B2AF2D5181AC69C74F9F6D890442C7B7B02CC8634B9D3ED7CF936D",
+            "display": "transfer/channel-5/rowan",
+            "description": "IBC token from transfer/channel-5/rowan",
+            "symbol": "ROWAN",
+            "exponent": "N/A",
+            "aliases": []
+        },
+        {
+            "denom": "ibc/B4C138B6F08A5BC826ABEFD56CAE828D2CF0A3B62A73B74AECC46D257371B125",
+            "display": "transfer/channel-6/udvpn",
+            "description": "IBC token from transfer/channel-6/udvpn",
+            "symbol": "UDVPN",
+            "exponent": "N/A",
+            "aliases": []
+        },
+        {
+            "denom": "ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712",
+            "display": "transfer/channel-4/udvpn",
+            "description": "IBC token from transfer/channel-4/udvpn",
+            "symbol": "UDVPN",
+            "exponent": "N/A",
+            "aliases": []
+        },
+        {
+            "denom": "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+            "display": "transfer/channel-0/uosmo",
+            "description": "IBC token from transfer/channel-0/uosmo",
+            "symbol": "UOSMO",
+            "exponent": "N/A",
+            "aliases": []
+        }
+    ]
+}
