@@ -1,0 +1,28 @@
+import json
+
+def extract_balances(genesis_file_path, output_file_path):
+    try:
+        # Load the provided genesis JSON file to extract balances
+        with open(genesis_file_path, 'r') as file:
+            genesis_data = json.load(file)
+
+        # Extract balances from the app_state -> bank -> balances section
+        balances = genesis_data.get('app_state', {}).get('bank', {}).get('balances', [])
+
+        # Write the complete balances section to a new JSON file in the correct genesis format
+        formatted_balances = {
+            "balances": balances
+        }
+
+        with open(output_file_path, 'w') as output_file:
+            json.dump(formatted_balances, output_file, indent=2)
+
+        print(f"Balances successfully extracted to: {output_file_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+# Example usage
+genesis_file_path = 'genesis_medasdigital_1.json'  # Path to your genesis file
+output_file_path = 'extracted_balances_genesis_format.json'  # Path where you want to save the extracted balances
+
+extract_balances(genesis_file_path, output_file_path)
