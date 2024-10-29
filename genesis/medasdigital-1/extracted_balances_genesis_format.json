@@ -1,0 +1,501 @@
+{
+  "balances": [
+    {
+      "address": "medas1qyfled5ulf6wmu2u4smstn8rlzazanmqaqnv8f",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "2354803578"
+        }
+      ]
+    },
+    {
+      "address": "medas1p0tzpucw3akwchzt04ahej0wd4awwm2jad5vgl",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "1043067"
+        }
+      ]
+    },
+    {
+      "address": "medas1zfh6ccddln9e4fkwse7fcquvecpnnxykzs2pey",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "142668"
+        }
+      ]
+    },
+    {
+      "address": "medas1z024vgu2v80dv0gg64aawnz8kynh3apudwla5v",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "1046455"
+        }
+      ]
+    },
+    {
+      "address": "medas1rgq0d9d7kqnm33fmldhm38lh6577zchzrax860",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "2000000000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1r7sp8qf07jtj437tcz47jpthlqw3ffthjyz25v",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "812021"
+        }
+      ]
+    },
+    {
+      "address": "medas1y4e53uwpevedz9qjfvw7x0qndp72u54zh7egat",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "352"
+        }
+      ]
+    },
+    {
+      "address": "medas19vtyswlpmc2tewr3t5d8cweh5fyj7ylp9t88zy",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "49999983"
+        }
+      ]
+    },
+    {
+      "address": "medas1967ey9t0wjdtnk9gltq0wjy8m57d9rrs6v90yu",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "2000000000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1xjvhpmflhue38mc8j75gqj2h0fds9guxd3uly6",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "11809904"
+        }
+      ]
+    },
+    {
+      "address": "medas18trqyqnv6rzaf0auzyc38cdyj5xvcv3dpznp9k",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "5000000"
+        }
+      ]
+    },
+    {
+      "address": "medas18nupa5ptx6n5q2240xpgm4pqlhy2080zukyvye",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "4491443"
+        }
+      ]
+    },
+    {
+      "address": "medas187dz9zlxc3zrltzx5756tu7zew6yu3v0yz73nv",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "1000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1fu2p20fw8fhm6cclzqal6t5jd9q4yx4973l9e0",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "368176"
+        }
+      ]
+    },
+    {
+      "address": "medas1fa59jlnx2aljljp7v2n9thc8ul9y74pwtemg97",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "330573053"
+        }
+      ]
+    },
+    {
+      "address": "medas1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3sg48fd",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "232274349115673"
+        }
+      ]
+    },
+    {
+      "address": "medas128wn5p8fvmlyyk4hdyuf2t9p0gzut656867t60",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "6000000000000"
+        }
+      ]
+    },
+    {
+      "address": "medas12252pwfkf82wmvptnl359ez27nuw90srkycdwt",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "6000000000000"
+        }
+      ]
+    },
+    {
+      "address": "medas122hjrmj8k2f0lc0m8nepdysgx9f2gan2lmggh5",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "509892"
+        }
+      ]
+    },
+    {
+      "address": "medas12h8m6zd7d390mhhcyqp3zgc9epd4dk97ad0ssc",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "186000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1tygms3xhhs3yv487phx3dw4a95jn7t7lygfkle",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "66929114584576"
+        }
+      ]
+    },
+    {
+      "address": "medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "2783326971070"
+        }
+      ]
+    },
+    {
+      "address": "medas1drqgprr4r3mtcncpxjn6a0kr84ag8c3knt8d5c",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "14852115"
+        }
+      ]
+    },
+    {
+      "address": "medas1wev8ptzj27aueu04wgvvl4gvurax6rj5vuskn5",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "705742824"
+        }
+      ]
+    },
+    {
+      "address": "medas1w68sqty80mm55w2qpp46d95d5rgl9ecrh6xzmq",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "234995"
+        }
+      ]
+    },
+    {
+      "address": "medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "11000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1sr0lw3rnl4u3zz7hxrek0pp26hjhapecxx3v5g",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "305000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zvc5e9",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "25034450300578"
+        }
+      ]
+    },
+    {
+      "address": "medas1jhr9fewck8yr4vrzckagcx8dcqusmvhwe2z2ly",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "27544497759538"
+        }
+      ]
+    },
+    {
+      "address": "medas1jmcqdyh9auemdr35xnqsywpagd9ty3yxdg80ju",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "46304308"
+        }
+      ]
+    },
+    {
+      "address": "medas1ja9adsspcz4awax7slj3u8kpzuyygl0dl8dxta",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "765975"
+        }
+      ]
+    },
+    {
+      "address": "medas1nd86lwg7se890hau65eeq6ru9cxunc53rwkyq8",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "198"
+        }
+      ]
+    },
+    {
+      "address": "medas14dfk2dc4ktqqw8rk4ak0raz9gpjje4t208u72v",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "1000000000000"
+        }
+      ]
+    },
+    {
+      "address": "medas14wa8gkl0u36jmr7qd69w045xye2m0vf9vdzxdv",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "21365149651949"
+        }
+      ]
+    },
+    {
+      "address": "medas1kr8ssf53gwjd26qhh0pf96ahqaav056wtfa8h7",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "6000000000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1kvvwcw8puzgqkmf8knk8tscghmvh2v7fcehwx3",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "2000000000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1hrz4aeuyh50xq8en4ncant9fkrfspkswgvcs86",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "193767253"
+        }
+      ]
+    },
+    {
+      "address": "medas1c9mkft0d3sdjm3us883270veuww7qe3ye03tpt",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "3561316"
+        }
+      ]
+    },
+    {
+      "address": "medas1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx4wezu3",
+      "coins": [
+        {
+          "denom": "ibc/92E4AB82E3B2AF2D5181AC69C74F9F6D890442C7B7B02CC8634B9D3ED7CF936D",
+          "amount": "1000000000000000000"
+        },
+        {
+          "denom": "ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712",
+          "amount": "2000000"
+        },
+        {
+          "denom": "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+          "amount": "1000000"
+        },
+        {
+          "denom": "umedas",
+          "amount": "39865697135126"
+        }
+      ]
+    },
+    {
+      "address": "medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45",
+      "coins": [
+        {
+          "denom": "ibc/B4C138B6F08A5BC826ABEFD56CAE828D2CF0A3B62A73B74AECC46D257371B125",
+          "amount": "11230000"
+        },
+        {
+          "denom": "umedas",
+          "amount": "520544662897"
+        }
+      ]
+    },
+    {
+      "address": "medas1e4w7857hp7dtxmda3hm25rrg0uqknjp0rcxsl3",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "859569147"
+        }
+      ]
+    },
+    {
+      "address": "medas16wg6q5p6cnvug8uy03vzm8xzju9scrg9su5n5x",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "8999983"
+        }
+      ]
+    },
+    {
+      "address": "medas163ndtplrrpkh2faf2c0y6t9v86llx86qhcw6gh",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "58806"
+        }
+      ]
+    },
+    {
+      "address": "medas16klcnrmxdzqyp25qt28lwvfac6wpyww26elahr",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "405730700"
+        }
+      ]
+    },
+    {
+      "address": "medas16hp7wzudkeyw6fvgvalm0fh3elp9czhfgh7wch",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "189"
+        }
+      ]
+    },
+    {
+      "address": "medas1ucj4xmmq3ykgkw2halpf24h5n2awsu2tjs30wy",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "999999937"
+        }
+      ]
+    },
+    {
+      "address": "medas1a9gzwgqf8069v9j500paye5dm2p54tlxrm2xw3",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "1000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1a8wn23mna63s2dam0u4kc5j5gzxeg7w6g5v93h",
+      "coins": [
+        {
+          "denom": "ibc/B7489F796F582168A256F44B1B2AB93DD2E868487DA91F28FD2BA967E97F5712",
+          "amount": "1000000"
+        },
+        {
+          "denom": "umedas",
+          "amount": "96999793"
+        }
+      ]
+    },
+    {
+      "address": "medas1a53udazy8ayufvy0s434pfwjcedzqv34nl7dm5",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "5006281814405"
+        }
+      ]
+    },
+    {
+      "address": "medas17sael2kcmm8npe2pmkxj3un90xfg60vv3xc9n8",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "105000000"
+        }
+      ]
+    },
+    {
+      "address": "medas17lee6fy4lymdgtzz4gf5u2z935vysd63ht5zjk",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "2000000000000"
+        }
+      ]
+    },
+    {
+      "address": "medas1lxprahs9ptamq3rshtg8mhmztvxmkv20pa9zzs",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "1579979"
+        }
+      ]
+    },
+    {
+      "address": "medas1l56z09rcgnamet6st2sm25ez6jc3ynp5qvk629",
+      "coins": [
+        {
+          "denom": "umedas",
+          "amount": "1058306"
+        }
+      ]
+    }
+  ]
+}
