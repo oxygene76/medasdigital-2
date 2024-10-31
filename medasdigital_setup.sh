@@ -8,9 +8,11 @@ CHAIN_ID="medasdigital-2"
 MIN_GAS_PRICE="0.025"             # Set the minimum gas price here
 GAS_DENOM="umedas"                # Set the denom here
 PERSISTENT_PEERS="peer1@ip1:26656,peer2@ip2:26656"  # Add your persistent peers here
+GENESIS_URL="https://raw.githubusercontent.com/oxygene76/medasdigital-2/refs/heads/main/genesis/mainnet/config/genesis.json"
 
 # Function to download and install the latest binary from GitHub and set up CosmWasm library
 setup_node() {
+    clear
     echo "Fetching latest MedasDigital binary..."
     # Fetch the latest release version
     LATEST_RELEASE=$(curl -s "https://api.github.com/repos/oxygene76/medasdigital-2/releases/latest" | grep "tag_name" | cut -d '"' -f 4)
@@ -31,6 +33,11 @@ setup_node() {
     echo "Initializing node in $NODE_HOME..."
     medasdigitald init "MedasDigitalNode" --chain-id $CHAIN_ID --home $NODE_HOME
 
+    # Download and replace the genesis.json file
+    echo "Downloading genesis.json from $GENESIS_URL..."
+    wget -O $NODE_HOME/config/genesis.json $GENESIS_URL
+    echo "Genesis file downloaded and set up at $NODE_HOME/config/genesis.json."
+
     # Set minimum gas price and denom in app.toml
     echo "Setting minimum gas price and denom in app.toml..."
     sed -i "s/^minimum-gas-prices =.*/minimum-gas-prices = \"$MIN_GAS_PRICE$GAS_DENOM\"/" $NODE_HOME/config/app.toml
@@ -44,6 +51,7 @@ setup_node() {
 
 # Function to set up a validator
 setup_validator() {
+    clear
     read -p "Enter your wallet name: " WALLET_NAME
     read -p "Enter your staking amount (e.g., 1000000umedas): " STAKE_AMOUNT
     read -p "Enter your commission rate (e.g., 0.10): " COMMISSION_RATE
@@ -74,12 +82,14 @@ setup_validator() {
 
 # Function to create a wallet
 create_wallet() {
+    clear
     read -p "Enter a wallet name: " WALLET_NAME
     medasdigitald keys add $WALLET_NAME --home $NODE_HOME
 }
 
 # Function to import a wallet from mnemonic or private key
 import_wallet() {
+    clear
     read -p "Enter the wallet name: " WALLET_NAME
     echo "Choose import method:"
     echo "1) Mnemonic Phrase"
@@ -103,11 +113,13 @@ import_wallet() {
 
 # Function to list wallets
 list_wallets() {
+    clear
     medasdigitald keys list --home $NODE_HOME
 }
 
 # Display menu
 while true; do
+    clear
     echo "Select an option:"
     echo "1) Setup Node"
     echo "2) Setup Validator"
