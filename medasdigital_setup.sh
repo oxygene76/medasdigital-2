@@ -93,4 +93,12 @@ while true; do
     echo "5) Exit"
     read -p "Enter your choice [1-5]: " choice
 
-    case $choice
+    case $choice in
+        1) setup_node ;;
+        2) setup_validator ;;
+        3) create_wallet ;;
+        4) list_wallets ;;
+        5) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please select a valid option [1-5].";;
+    esac
+done
