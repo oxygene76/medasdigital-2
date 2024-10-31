@@ -78,6 +78,29 @@ create_wallet() {
     medasdigitald keys add $WALLET_NAME --home $NODE_HOME
 }
 
+# Function to import a wallet from mnemonic or private key
+import_wallet() {
+    read -p "Enter the wallet name: " WALLET_NAME
+    echo "Choose import method:"
+    echo "1) Mnemonic Phrase"
+    echo "2) Private Key"
+    read -p "Select an option [1-2]: " method
+
+    if [[ $method -eq 1 ]]; then
+        read -sp "Enter your 24-word mnemonic phrase: " MNEMONIC
+        echo
+        echo "Importing wallet from mnemonic..."
+        echo "$MNEMONIC" | medasdigitald keys add $WALLET_NAME --recover --home $NODE_HOME
+    elif [[ $method -eq 2 ]]; then
+        read -sp "Enter your private key: " PRIVATE_KEY
+        echo
+        echo "Importing wallet from private key..."
+        echo "$PRIVATE_KEY" | medasdigitald keys unsafe-import-eth-key $WALLET_NAME --home $NODE_HOME
+    else
+        echo "Invalid option. Please select either 1 or 2."
+    fi
+}
+
 # Function to list wallets
 list_wallets() {
     medasdigitald keys list --home $NODE_HOME
@@ -89,16 +112,18 @@ while true; do
     echo "1) Setup Node"
     echo "2) Setup Validator"
     echo "3) Create Wallet"
-    echo "4) List Wallets"
-    echo "5) Exit"
-    read -p "Enter your choice [1-5]: " choice
+    echo "4) Import Wallet"
+    echo "5) List Wallets"
+    echo "6) Exit"
+    read -p "Enter your choice [1-6]: " choice
 
     case $choice in
         1) setup_node ;;
         2) setup_validator ;;
         3) create_wallet ;;
-        4) list_wallets ;;
-        5) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid option. Please select a valid option [1-5].";;
+        4) import_wallet ;;
+        5) list_wallets ;;
+        6) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please select a valid option [1-6].";;
     esac
 done
