@@ -19,7 +19,7 @@
       "accounts": [
 			{
 					"address": "medas1qyfled5ulf6wmu2u4smstn8rlzazanmqaqnv8f",
-					"type": "/cosmos.auth.v1beta1.BaseAccount",
+					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": "A0POvrnpFZWLae9B+M97cZHVld4xF4hzONNwjIZT+R9c",
 					"account_number": "55",
 					"sequence": "12",
@@ -28,7 +28,7 @@
 			},
 			{
 					"address": "medas1p0tzpucw3akwchzt04ahej0wd4awwm2jad5vgl",
-					"type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
+					"@type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
 					"pub_key": "Aqf0j71p7Jud3OwVZskhaegGcN54grmBgU3EH0jEoZqZ",
 					"account_number": "6",
 					"sequence": "10",
