@@ -1096,7 +1096,7 @@
 						},
 						{
 								"denom": "rowan",
-								"exponent": 0,
+								"exponent": 6,
 								"aliases": []
 						}
 				],
@@ -1117,7 +1117,7 @@
 						},
 						{
 								"denom": "udvpn",
-								"exponent": 0,
+								"exponent": 6,
 								"aliases": []
 						}
 				],
@@ -1138,7 +1138,7 @@
 						},
 						{
 								"denom": "udvpn",
-								"exponent": 0,
+								"exponent": 6,
 								"aliases": []
 						}
 				],
@@ -1159,7 +1159,7 @@
 						},
 						{
 								"denom": "uosmo",
-								"exponent": 0,
+								"exponent": 6,
 								"aliases": []
 						}
 				],
