@@ -174,7 +174,7 @@
 					"pub_key": null,
 					"account_number": "0",
 					"sequence": "0"
-			}
+			},
 			{
 					"address": "medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
