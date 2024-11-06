@@ -73,13 +73,6 @@
 					"sequence": "0"
 			},
 			{
-					"address": "medas1yl6hdjhmkf37639730gffanpzndzdpmhtv2p8e",
-					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
-					"pub_key": null,
-					"account_number": "0",
-					"sequence": "0"
-			},
-			{
 					"address": "medas19vtyswlpmc2tewr3t5d8cweh5fyj7ylp9t88zy",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
@@ -124,13 +117,6 @@
 			{
 					"address": "medas1fa59jlnx2aljljp7v2n9thc8ul9y74pwtemg97",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
-					"pub_key": null,
-					"account_number": "0",
-					"sequence": "0"
-			},
-			{
-					"address": "",
-					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
 					"account_number": "0",
 					"sequence": "0"
@@ -188,14 +174,7 @@
 					"pub_key": null,
 					"account_number": "0",
 					"sequence": "0"
-			},
-			{
-					"address": "",
-					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
-					"pub_key": null,
-					"account_number": "0",
-					"sequence": "0"
-			},
+			}
 			{
 					"address": "medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
@@ -225,22 +204,8 @@
 					"sequence": "0"
 			},
 			{
-					"address": "",
-					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
-					"pub_key": null,
-					"account_number": "0",
-					"sequence": "0"
-			},
-			{
 					"address": "medas1sr0lw3rnl4u3zz7hxrek0pp26hjhapecxx3v5g",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
-					"pub_key": null,
-					"account_number": "0",
-					"sequence": "0"
-			},
-			{
-					"address": "",
-					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
 					"account_number": "0",
 					"sequence": "0"
@@ -418,13 +383,6 @@
 					"sequence": "0"
 			},
 			{
-					"address": "",
-					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
-					"pub_key": null,
-					"account_number": "0",
-					"sequence": "0"
-			},
-			{
 					"address": "medas1ucj4xmmq3ykgkw2halpf24h5n2awsu2tjs30wy",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
@@ -448,13 +406,6 @@
 			{
 					"address": "medas1a53udazy8ayufvy0s434pfwjcedzqv34nl7dm5",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
-					"pub_key": null,
-					"account_number": "0",
-					"sequence": "0"
-			},
-			{
-					"address": "",
-					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
 					"account_number": "0",
 					"sequence": "0"
