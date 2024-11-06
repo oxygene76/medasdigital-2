@@ -22,9 +22,7 @@
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
 					"account_number": "0",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"sequence": "0"
 			},
 			{
 					"address": "medas1p0tzpucw3akwchzt04ahej0wd4awwm2jad5vgl",
@@ -32,7 +30,6 @@
 					"pub_key": null,
 					"account_number": "0",
 					"sequence": "0",
-					"balance": null,
 					"vesting": {
 							"original_vesting": [
 									{
@@ -61,125 +58,98 @@
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
 					"account_number": "0",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"sequence": "0"
 			},
 			{
 					"address": "medas1z024vgu2v80dv0gg64aawnz8kynh3apudwla5v",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
 					"account_number": "0",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"sequence": "0"
 			},
 			{
 					"address": "medas1r7sp8qf07jtj437tcz47jpthlqw3ffthjyz25v",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
 					"account_number": "0",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"sequence": "0"
 			},
 			{
 					"address": "medas1y4e53uwpevedz9qjfvw7x0qndp72u54zh7egat",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
 					"account_number": "0",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"sequence": "0"
 			},
 			{
 					"address": "medas1yl6hdjhmkf37639730gffanpzndzdpmhtv2p8e",
 					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
 					"account_number": "0",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"sequence": "0"
 			},
 			{
 					"address": "medas19vtyswlpmc2tewr3t5d8cweh5fyj7ylp9t88zy",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "52",
-					"sequence": "1",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1xjvhpmflhue38mc8j75gqj2h0fds9guxd3uly6",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "33",
-					"sequence": "31",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas18trqyqnv6rzaf0auzyc38cdyj5xvcv3dpznp9k",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "49",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas18nupa5ptx6n5q2240xpgm4pqlhy2080zukyvye",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "29",
-					"sequence": "1",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas187dz9zlxc3zrltzx5756tu7zew6yu3v0yz73nv",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "51",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1fu2p20fw8fhm6cclzqal6t5jd9q4yx4973l9e0",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "58",
-					"sequence": "31",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1fa59jlnx2aljljp7v2n9thc8ul9y74pwtemg97",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "30",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "",
 					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
-					"account_number": "",
-					"sequence": "",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas128wn5p8fvmlyyk4hdyuf2t9p0gzut656867t60",
 					"@type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
 					"pub_key": null,
-					"account_number": "5",
+					"account_number": "0",
 					"sequence": "0",
-					"balance": null,
 					"vesting": {
 							"original_vesting": [
 									{
@@ -197,9 +167,8 @@
 					"address": "medas12252pwfkf82wmvptnl359ez27nuw90srkycdwt",
 					"@type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
 					"pub_key": null,
-					"account_number": "3",
+					"account_number": "0",
 					"sequence": "0",
-					"balance": null,
 					"vesting": {
 							"original_vesting": [
 									{
@@ -217,117 +186,92 @@
 					"address": "medas122hjrmj8k2f0lc0m8nepdysgx9f2gan2lmggh5",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "35",
-					"sequence": "4",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas12h8m6zd7d390mhhcyqp3zgc9epd4dk97ad0ssc",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "57",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "",
 					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
-					"account_number": "",
-					"sequence": "",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "11",
-					"sequence": "54",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1drqgprr4r3mtcncpxjn6a0kr84ag8c3knt8d5c",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "32",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1wev8ptzj27aueu04wgvvl4gvurax6rj5vuskn5",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "42",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1w68sqty80mm55w2qpp46d95d5rgl9ecrh6xzmq",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "44",
-					"sequence": "10",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "",
 					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
-					"account_number": "",
-					"sequence": "",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1sr0lw3rnl4u3zz7hxrek0pp26hjhapecxx3v5g",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "45",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "",
 					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
-					"account_number": "",
-					"sequence": "",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1jhr9fewck8yr4vrzckagcx8dcqusmvhwe2z2ly",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "12",
-					"sequence": "125",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1jmcqdyh9auemdr35xnqsywpagd9ty3yxdg80ju",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "34",
-					"sequence": "3",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1ja9adsspcz4awax7slj3u8kpzuyygl0dl8dxta",
 					"@type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
 					"pub_key": null,
-					"account_number": "7",
-					"sequence": "8",
-					"balance": null,
+					"account_number": "0",
+					"sequence": "0",
 					"vesting": {
 							"original_vesting": [
 									{
@@ -355,36 +299,29 @@
 					"address": "medas1nd86lwg7se890hau65eeq6ru9cxunc53rwkyq8",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "26",
-					"sequence": "1",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas14wa8gkl0u36jmr7qd69w045xye2m0vf9vdzxdv",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "14",
-					"sequence": "28",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas14a7ay4r87009lh4rs8ng5pts0qgy3m7nj9xjq0",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "39",
-					"sequence": "81",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1kr8ssf53gwjd26qhh0pf96ahqaav056wtfa8h7",
 					"@type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
 					"pub_key": null,
-					"account_number": "2",
+					"account_number": "0",
 					"sequence": "0",
-					"balance": null,
 					"vesting": {
 							"original_vesting": [
 									{
@@ -402,45 +339,36 @@
 					"address": "medas1krtrt5dvhnw5j46ljgah7q5f9pm3vvakxsa7ze",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "23",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1hrz4aeuyh50xq8en4ncant9fkrfspkswgvcs86",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "43",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1c9mkft0d3sdjm3us883270veuww7qe3ye03tpt",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "31",
-					"sequence": "24",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx4wezu3",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "13",
-					"sequence": "74",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45",
 					"@type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
 					"pub_key": null,
 					"account_number": "0",
-					"sequence": "59",
-					"balance": null,
+					"sequence": "0",
 					"vesting": {
 							"original_vesting": [
 									{
@@ -468,136 +396,106 @@
 					"address": "medas1e4w7857hp7dtxmda3hm25rrg0uqknjp0rcxsl3",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "21",
-					"sequence": "300",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas16wg6q5p6cnvug8uy03vzm8xzju9scrg9su5n5x",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "56",
-					"sequence": "1",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas163ndtplrrpkh2faf2c0y6t9v86llx86qhcw6gh",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "36",
-					"sequence": "4",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas16klcnrmxdzqyp25qt28lwvfac6wpyww26elahr",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "27",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas16hp7wzudkeyw6fvgvalm0fh3elp9czhfgh7wch",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "46",
-					"sequence": "4",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas16h2ynrzwhxgjnd0hswkvdvq9nav9kklqfl4rdr",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "48",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "",
 					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
-					"account_number": "",
-					"sequence": "",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1ucj4xmmq3ykgkw2halpf24h5n2awsu2tjs30wy",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "47",
-					"sequence": "3",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1a9gzwgqf8069v9j500paye5dm2p54tlxrm2xw3",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "50",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1a8wn23mna63s2dam0u4kc5j5gzxeg7w6g5v93h",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "53",
-					"sequence": "32",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1a53udazy8ayufvy0s434pfwjcedzqv34nl7dm5",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "22",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "",
 					"@type": "/cosmos.auth.v1beta1.ModuleAccount",
 					"pub_key": null,
-					"account_number": "",
-					"sequence": "",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas17sael2kcmm8npe2pmkxj3un90xfg60vv3xc9n8",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "24",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1lxprahs9ptamq3rshtg8mhmztvxmkv20pa9zzs",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "28",
-					"sequence": "3",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			},
 			{
 					"address": "medas1l56z09rcgnamet6st2sm25ez6jc3ynp5qvk629",
 					"@type": "/cosmos.auth.v1beta1.BaseAccount",
 					"pub_key": null,
-					"account_number": "38",
-					"sequence": "0",
-					"balance": [],
-					"vesting": null
+					"account_number": "0",
+					"sequence": "0"
 			}
 			]
     },
