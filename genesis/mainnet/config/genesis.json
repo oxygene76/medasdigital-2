@@ -1087,7 +1087,7 @@
       "delegations": [
 	{
 	"delegator_address": "medas1ag9c7tp4zkkkg7ae35d5m386uaj6s2wxzr39ad",
-	"validator_address": ""medasvaloper1jhr9fewck8yr4vrzckagcx8dcqusmvhwkq78fv",
+	"validator_address": "medasvaloper1jhr9fewck8yr4vrzckagcx8dcqusmvhwkq78fv",
   	"shares": "500000000000"
 	}
 
