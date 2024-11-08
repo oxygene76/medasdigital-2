@@ -619,7 +619,17 @@
 			"coins": [
 			{
 				"denom": "umedas",
-				"amount": "2783326971070"
+				"amount": "783326971070"
+			}
+			]
+		},
+		
+		{
+			"address": "medas1mqdqwpupvqaflrxt2uatva8ca75ate8urx7we2",
+			"coins": [
+			{
+				"denom": "umedas",
+				"amount": "2000000000000"
 			}
 			]
 		},
