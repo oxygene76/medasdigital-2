@@ -10,7 +10,6 @@ GAS_DENOM="umedas"                # Set the denom here
 PERSISTENT_PEERS="peer1@ip1:26656,peer2@ip2:26656"  # Add your persistent peers here
 GENESIS_URL="https://raw.githubusercontent.com/oxygene76/medasdigital-2/refs/heads/main/genesis/mainnet/config/genesis.json"
 
-
 # Funktion, um nach jeder Aktion auf Eingabe zu warten
 pause() {
     read -p "Press Return to continue..."
