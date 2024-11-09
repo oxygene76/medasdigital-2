@@ -64,6 +64,9 @@ setup_node() {
     echo "Setting persistent peers and other configurations in config.toml..."
     sed -i "s/^persistent_peers =.*/persistent_peers = \"$PERSISTENT_PEERS\"/" $NODE_HOME/config/config.toml
 
+    echo "Setting keyring-backend to file in client.toml..."
+    sed -i "s/^keyring-backend =.*/keyring-backend = \"file\"/" $NODE_HOME/config/client.toml
+
     echo "Node setup complete. Configuration is located in $NODE_HOME"
     pause
 }
