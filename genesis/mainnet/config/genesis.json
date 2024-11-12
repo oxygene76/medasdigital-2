@@ -317,7 +317,7 @@
           "@type": "/cosmos.vesting.v1beta1.DelayedVestingAccount",
           "base_vesting_account": {
             "base_account": {
-              "address": "medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45",
+              "address": "medas1mvtz0cd75284c3ufpnf5ltpx9ktw0qmu67amad",
               "pub_key": null,
               "account_number": "0",
               "sequence": "0"
@@ -627,7 +627,7 @@
           "coins": [
             {
               "denom": "umedas",
-              "amount": "2000000000000"
+              "amount": "66000000000000"
             }
           ]
         },
@@ -726,7 +726,7 @@
           "coins": [
             {
               "denom": "umedas",
-              "amount": "21365149651949"
+              "amount": "365149651949"
             }
           ]
         },
@@ -762,7 +762,7 @@
           "coins": [
             {
               "denom": "umedas",
-              "amount": "39865697135126"
+              "amount": "865697135126"
             }
           ]
         },
@@ -771,7 +771,7 @@
           "coins": [
             {
               "denom": "umedas",
-              "amount": "520544662897"
+              "amount": "20544662897"
             }
           ]
         },
@@ -852,7 +852,34 @@
           "coins": [
             {
               "denom": "umedas",
-              "amount": "36000000000000"
+              "amount": "80000000000000"
+            }
+          ]
+        },
+        {
+          "address": "medas1yhleqe4qlvlyn0qygpf7dmg9r3w2ffkyfkkyff",
+          "coins": [
+            {
+              "denom": "umedas",
+              "amount": "42000000000000"
+            }
+          ]
+        },
+        {
+          "address": "medas15rl3ahn2q42zf3pftdr7zj79vh2hqz7q959j4m",
+          "coins": [
+            {
+              "denom": "umedas",
+              "amount": "42000000000000"
+            }
+          ]
+        },
+        {
+          "address": "medas1mvtz0cd75284c3ufpnf5ltpx9ktw0qmu67amad",
+          "coins": [
+            {
+              "denom": "umedas",
+              "amount": "2000000000000"
             }
           ]
         },
