@@ -7,7 +7,7 @@ NODE_HOME="$HOME/.medasdigital"   # Define node home directory
 CHAIN_ID="medasdigital-2"
 MIN_GAS_PRICE="0.025"             # Set the minimum gas price here
 GAS_DENOM="umedas"                # Set the denom here
-PERSISTENT_PEERS="peer1@ip1:26656,peer2@ip2:26656"  # Add your persistent peers here
+PERSISTENT_PEERS="51ca3b0a3663af88566b32ecfd77948e55000bcc@88.205.101.195:2665690be2e9f0a279372d2931e38f15025db9a847dbd@88.205.101.196:26656,0e567c9efe6e6d15f9b3257679398368c2ab04bb@88.205.101.197:26656,669d1b9f9c4bb99df594abaee4b13ae1b14d37a6@64.251.18.192:26656,cbfcd111ee19483dbbfed0919ac0d23119c5f0fe@67.207.180.166:26656"  # Add your persistent peers here
 GENESIS_URL="https://raw.githubusercontent.com/oxygene76/medasdigital-2/refs/heads/main/genesis/mainnet/config/genesis.json"
 
 # Funktion, um nach jeder Aktion auf Eingabe zu warten
