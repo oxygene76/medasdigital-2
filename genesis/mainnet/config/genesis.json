@@ -52,6 +52,13 @@
           "sequence": "0"
         },
         {
+          "address": "medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45",
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "pub_key": null,
+          "account_number": "0",
+          "sequence": "0"
+        },
+        {
           "address": "medas1z024vgu2v80dv0gg64aawnz8kynh3apudwla5v",
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
           "pub_key": null,
