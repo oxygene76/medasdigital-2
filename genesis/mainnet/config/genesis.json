@@ -1412,13 +1412,7 @@
       "last_total_power": "0",
       "last_validator_powers": [],
       "validators": [],
-      "delegations": [
-      {
-        "delegator_address": "medas1mvtz0cd75284c3ufpnf5ltpx9ktw0qmu67amad",
-        "validator_address": "medasvaloper1cddn8c0zwl87pvuwe6pll67yv4eqhctaznglru",
-        "shares": "1000000000000"
-      }
-      ],
+      "delegations": [],
       "unbonding_delegations": [],
       "redelegations": [],
       "exported": false
