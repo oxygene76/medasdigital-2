@@ -955,7 +955,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "medas1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx4wezu3",
+                "delegator_address": "",
                 "validator_address": "medasvaloper1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx6y902e",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1017,7 +1017,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "medas1jhr9fewck8yr4vrzckagcx8dcqusmvhwe2z2ly",
+                "delegator_address": "",
                 "validator_address": "medasvaloper1jhr9fewck8yr4vrzckagcx8dcqusmvhwkq78fv",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1079,7 +1079,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45",
+                "delegator_address": "",
                 "validator_address": "medasvaloper1cddn8c0zwl87pvuwe6pll67yv4eqhctaznglru",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1141,7 +1141,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp",
+                "delegator_address": "",
                 "validator_address": "medasvaloper1tjgm5kuh27827c3hn7kw69q7q8xjqnxgp3dajf",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1203,7 +1203,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "medas14wa8gkl0u36jmr7qd69w045xye2m0vf9vdzxdv",
+                "delegator_address": "",
                 "validator_address": "medasvaloper14wa8gkl0u36jmr7qd69w045xye2m0vf9r87tmy",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1405,34 +1405,7 @@
       "last_total_power": "0",
       "last_validator_powers": [],
       "validators": [],
-      "delegations": [
-        {
-          "delegator_address": "medas1ag9c7tp4zkkkg7ae35d5m386uaj6s2wxzr39ad",
-          "validator_address": "medasvaloper1jhr9fewck8yr4vrzckagcx8dcqusmvhwkq78fv",
-          "shares": "18000000000000"
-        },
-        {
-          "delegator_address": "medas1mvtz0cd75284c3ufpnf5ltpx9ktw0qmu67amad",
-          "validator_address": "medasvaloper1cddn8c0zwl87pvuwe6pll67yv4eqhctaznglru",
-          "shares": "1000000000000"
-        },
-        {
-          "delegator_address": "medas1yhleqe4qlvlyn0qygpf7dmg9r3w2ffkyfkkyff",
-          "validator_address": "medasvaloper1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx6y902e",
-          "shares": "21000000000000"
-        },
-        
-        {
-          "delegator_address": "medas1mqdqwpupvqaflrxt2uatva8ca75ate8urx7we2",
-          "validator_address": "medasvaloper1tjgm5kuh27827c3hn7kw69q7q8xjqnxgp3dajf",
-          "shares": "33000000000000"
-        },
-        {
-          "delegator_address": "medas15rl3ahn2q42zf3pftdr7zj79vh2hqz7q959j4m",
-          "validator_address": "medasvaloper14wa8gkl0u36jmr7qd69w045xye2m0vf9r87tmy",
-          "shares": "21000000000000"
-        }
-      ],
+      "delegations": [],
       "unbonding_delegations": [],
       "redelegations": [],
       "exported": false
