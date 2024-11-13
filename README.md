@@ -47,7 +47,7 @@ The `medasdigital_setup.sh` script automates the process of setting up a Medas D
 To download the setup script under Linux, use the following command:
 
 ```bash
-wget https://example.com/medasdigital_setup.sh
+wget https://raw.githubusercontent.com/oxygene76/medasdigital-2/refs/heads/main/medasdigital_setup.sh
 ```
 
 #### Step 2: Make the Script Executable and Run It
@@ -69,8 +69,6 @@ The setup script will provide the following options:
 4. **Import Wallet** - Allows you to import an existing wallet using either a mnemonic phrase or private key.
 5. **List Wallets** - Displays a list of all wallets created on this node.
 6. **Create Systemd Service** - Sets up the node as a systemd service to ensure it runs in the background and restarts on reboot.
-
-
 
 After setting up the node, it is recommended to install the service to ensure that the node runs in the background and restarts on reboot. To do this, select Option 6 from the script menu to create a systemd service.
 
