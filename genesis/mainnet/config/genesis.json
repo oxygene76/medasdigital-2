@@ -1450,7 +1450,17 @@
         {
           "delegator_address": "medas1ag9c7tp4zkkkg7ae35d5m386uaj6s2wxzr39ad",
           "validator_address": "medasvaloper1jhr9fewck8yr4vrzckagcx8dcqusmvhwkq78fv",
-          "shares": "500000000000"
+          "shares": "18000000000000"
+        },
+        {
+          "delegator_address": "medas1mvtz0cd75284c3ufpnf5ltpx9ktw0qmu67amad",
+          "validator_address": "medasvaloper1tjgm5kuh27827c3hn7kw69q7q8xjqnxgp3dajf",
+          "shares": "1000000000000"
+        },
+        {
+          "delegator_address": "medas1yhleqe4qlvlyn0qygpf7dmg9r3w2ffkyfkkyff",
+          "validator_address": "medasvaloper1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx6y902e",
+          "shares": "21000000000000"
         }
       ],
       "unbonding_delegations": [],
