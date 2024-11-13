@@ -920,12 +920,7 @@
           ]
         }
       ],
-      "supply": [
-        {
-          "denom": "umedas",
-          "amount": "448330120822228"
-        }
-      ],
+      "supply": [],
       "denom_metadata": [],
       "send_enabled": []
     },
