@@ -52,6 +52,33 @@ setup_node() {
     pause
 }
 
+# Function to create a systemd service for the node
+create_service() {
+    clear
+    echo "Creating systemd service for medasdigitald..."
+
+    sudo tee /etc/systemd/system/medasdigitald.service > /dev/null <<EOF
+[Unit]
+Description=Medas Digital Node
+After=network.target
+
+[Service]
+User=$USER
+ExecStart=$BIN_DIR/medasdigitald start --home $NODE_HOME
+Restart=always
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    sudo systemctl daemon-reload
+    sudo systemctl enable medasdigitald
+    echo "Service created and enabled. You can start it with: sudo systemctl start medasdigitald"
+    pause
+}
+
+
 # Function to set up a validator
 setup_validator() {
     clear
@@ -153,8 +180,9 @@ while true; do
     echo "3) Create Wallet"
     echo "4) Import Wallet"
     echo "5) List Wallets"
-    echo "6) Exit"
-    read -p "Enter your choice [1-6]: " choice
+    echo "6) Create Systemd Service"
+    echo "7) Exit"
+    read -p "Enter your choice [1-7]: " choice
 
     case $choice in
         1) setup_node ;;
@@ -162,7 +190,8 @@ while true; do
         3) create_wallet ;;
         4) import_wallet ;;
         5) list_wallets ;;
-        6) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid option. Please select a valid option [1-6].";;
+        6) create_service ;;
+        7) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please select a valid option [1-7]."; pause ;;
     esac
 done
