@@ -42,15 +42,24 @@ Very soon after the initial launch, everyone interested in supporting MedasDigit
 
 The `medasdigital_setup.sh` script automates the process of setting up a Medas Digital 2.0 node, creating wallets, and configuring validators.
 
-#### Step 1: Download and Run the Setup Script
+#### Step 1: Download the Setup Script
 
-Make sure you have the necessary permissions, then download and run the script with:
+To download the setup script under Linux, use the following command:
+
+```bash
+wget https://example.com/medasdigital_setup.sh
+```
+
+#### Step 2: Make the Script Executable and Run It
+
+Make sure you have the necessary permissions, then make the script executable and run it with:
 
 ```bash
 chmod +x medasdigital_setup.sh
 ./medasdigital_setup.sh
+```
 
-# Script Options
+### Script Options
 
 The setup script will provide the following options:
 
@@ -61,16 +70,9 @@ The setup script will provide the following options:
 5. **List Wallets** - Displays a list of all wallets created on this node.
 6. **Create Systemd Service** - Sets up the node as a systemd service to ensure it runs in the background and restarts on reboot.
 
-## Example: Setting up a Node
+
 
-To set up a node, select Option 1 from the script menu. This will:
-
-- Download the latest `medasdigitald` binary.
-- Install CosmWasm dependencies.
-- Initialize the node and download the genesis file.
-- Configure persistent peers and minimum gas prices.
-
-After completing the setup, your node will start synchronizing with the network.
+After setting up the node, it is recommended to install the service to ensure that the node runs in the background and restarts on reboot. To do this, select Option 6 from the script menu to create a systemd service.
 
 ## Example: Setting up a Validator
 
