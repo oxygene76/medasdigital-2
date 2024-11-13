@@ -560,15 +560,6 @@
           ]
         },
         {
-          "address": "medas1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3sg48fd",
-          "coins": [
-            {
-              "denom": "umedas",
-              "amount": "232274349115673"
-            }
-          ]
-        },
-        {
           "address": "medas128wn5p8fvmlyyk4hdyuf2t9p0gzut656867t60",
           "coins": [
             {
@@ -601,15 +592,6 @@
             {
               "denom": "umedas",
               "amount": "186000000"
-            }
-          ]
-        },
-        {
-          "address": "medas1tygms3xhhs3yv487phx3dw4a95jn7t7lygfkle",
-          "coins": [
-            {
-              "denom": "umedas",
-              "amount": "66929114584576"
             }
           ]
         },
@@ -655,15 +637,6 @@
             {
               "denom": "umedas",
               "amount": "234995"
-            }
-          ]
-        },
-        {
-          "address": "medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf",
-          "coins": [
-            {
-              "denom": "umedas",
-              "amount": "11000000"
             }
           ]
         },
