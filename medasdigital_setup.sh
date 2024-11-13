@@ -27,7 +27,7 @@ setup_node() {
     sudo mv medasdigitald $BIN_DIR/
 
     echo "Setting up CosmWasm library..."
-    wget -P /usr/lib https://github.com/CosmWasm/wasmvm/raw/main/internal/api/libwasmvm.x86_64.so
+    wget -P /usr/lib https://github.com/CosmWasm/wasmvm/raw/release/2.1/internal/api/libwasmvm.x86_64.so
     sudo ldconfig
     echo "CosmWasm library setup complete."
 
