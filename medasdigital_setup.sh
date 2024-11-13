@@ -63,7 +63,7 @@ Description=Medas Digital Node
 After=network.target
 
 [Service]
-User=$USER
+User=root
 ExecStart=$BIN_DIR/medasdigitald start --home $NODE_HOME
 Restart=always
 LimitNOFILE=4096
