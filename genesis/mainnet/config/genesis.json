@@ -955,7 +955,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "",
+                "delegator_address": "medas1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx4wezu3",
                 "validator_address": "medasvaloper1cg8u9nk6amf3fphtu9kppq7dgrlx9zqx6y902e",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1017,7 +1017,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "",
+                "delegator_address": "medas1jhr9fewck8yr4vrzckagcx8dcqusmvhwe2z2ly",
                 "validator_address": "medasvaloper1jhr9fewck8yr4vrzckagcx8dcqusmvhwkq78fv",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1079,7 +1079,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "",
+                "delegator_address": "medas1cddn8c0zwl87pvuwe6pll67yv4eqhctade5j45",
                 "validator_address": "medasvaloper1cddn8c0zwl87pvuwe6pll67yv4eqhctaznglru",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1141,7 +1141,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "",
+                "delegator_address": "medas1tjgm5kuh27827c3hn7kw69q7q8xjqnxgwm3syp",
                 "validator_address": "medasvaloper1tjgm5kuh27827c3hn7kw69q7q8xjqnxgp3dajf",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
@@ -1203,7 +1203,7 @@
                   "max_change_rate": "0.010000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "",
+                "delegator_address": "medas14wa8gkl0u36jmr7qd69w045xye2m0vf9vdzxdv",
                 "validator_address": "medasvaloper14wa8gkl0u36jmr7qd69w045xye2m0vf9r87tmy",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
