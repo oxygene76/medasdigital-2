@@ -677,15 +677,6 @@
           ]
         },
         {
-          "address": "medas1jv65s3grqf6v6jl3dp4t6c9t9rk99cd8zvc5e9",
-          "coins": [
-            {
-              "denom": "umedas",
-              "amount": "25034450300578"
-            }
-          ]
-        },
-        {
           "address": "medas1jhr9fewck8yr4vrzckagcx8dcqusmvhwe2z2ly",
           "coins": [
             {
