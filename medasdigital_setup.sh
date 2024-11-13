@@ -58,9 +58,10 @@ create_service() {
     echo "Creating systemd service for medasdigitald..."
 
     sudo tee /etc/systemd/system/medasdigitald.service > /dev/null <<EOF
+
 [Unit]
 Description=Medas Digital Node
-After=network.target
+After=network-online.target
 
 [Service]
 User=root
