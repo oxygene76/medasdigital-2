@@ -124,7 +124,8 @@ setup_validator() {
     BALANCE_OUTPUT=$(medasdigitald q bank balances $WALLET_ADDRESS --home $NODE_HOME)
     echo "Current wallet balance:"
     echo "$BALANCE_OUTPUT"
-    read -p "Enter the amount of tokens to self-delegate (e.g., 1000000umedas): " STAKE_AMOUNT
+    read -p "Enter the amount of tokens to self-delegate (e.g., 1000000umedas) [default: 1000000umedas]: " STAKE_AMOUNT
+    STAKE_AMOUNT=\${STAKE_AMOUNT:-"1000000umedas"}
 
     read -p "Enter your desired commission rate (e.g., 0.10) [default: 0.10]: " COMMISSION_RATE
     COMMISSION_RATE=${COMMISSION_RATE:-0.10}
