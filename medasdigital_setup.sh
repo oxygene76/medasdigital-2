@@ -137,18 +137,24 @@ setup_validator() {
     COMMISSION_MAX_CHANGE=${COMMISSION_MAX_CHANGE:-0.01}
 
     MONIKER=$(grep '^moniker' $NODE_HOME/config/config.toml | cut -d '=' -f2 | tr -d ' "')
+    PUBKEY=$(medasdigitald tendermint show-validator --home $NODE_HOME)
+
+    echo "Creating validator JSON configuration..."
+    VALIDATOR_JSON="$NODE_HOME/validator.json"
+    cat > $VALIDATOR_JSON <<EOF
+{
+    "pubkey": {"@type": "/cosmos.crypto.ed25519.PubKey", "key": "$PUBKEY"},
+    "amount": "$STAKE_AMOUNT",
+    "moniker": "$MONIKER",
+    "commission-rate": "$COMMISSION_RATE",
+    "commission-max-rate": "$COMMISSION_MAX_RATE",
+    "commission-max-change-rate": "$COMMISSION_MAX_CHANGE",
+    "min-self-delegation": "1"
+}
+EOF
+
     echo "Creating validator with moniker: $MONIKER"
-    medasdigitald tx staking create-validator \
-      --amount $STAKE_AMOUNT \
-      --from $WALLET_NAME \
-      --commission-rate $COMMISSION_RATE \
-      --commission-max-rate $COMMISSION_MAX_RATE \
-      --commission-max-change-rate $COMMISSION_MAX_CHANGE \
-      --min-self-delegation "1" \
-      --pubkey $(medasdigitald tendermint show-validator --home $NODE_HOME) \
-      --moniker "$MONIKER" \
-      --chain-id $CHAIN_ID \
-      --home $NODE_HOME
+    medasdigitald tx staking create-validator $VALIDATOR_JSON --from $WALLET_NAME --chain-id $CHAIN_ID --home $NODE_HOME
     pause
 }
 
