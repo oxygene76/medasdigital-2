@@ -138,7 +138,7 @@ setup_validator() {
 
     MONIKER=$(grep '^moniker' $NODE_HOME/config/config.toml | cut -d '=' -f2 | tr -d '"')
     PUBKEY=$(medasdigitald tendermint show-validator --home $NODE_HOME)
-
+    
     echo "########################################"
     echo "#        VALIDATOR CONFIGURATION       #"
     echo "########################################"
