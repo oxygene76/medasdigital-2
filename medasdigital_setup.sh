@@ -50,6 +50,19 @@ setup_node() {
     sed -i "s/^keyring-backend =.*/keyring-backend = \"file\"/" $NODE_HOME/config/client.toml
 
     echo "Node setup complete. Configuration is located in $NODE_HOME"
+
+    echo "Checking if the node is fully synchronized..."
+    while true; do
+        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.catching_up')
+        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.latest_block_height')
+        if [ "$SYNC_STATUS" == "false" ]; then
+            echo "Node is fully synchronized. Setup complete."
+            break
+        else
+            echo "Node is still synchronizing. Current block height: $CURRENT_BLOCK"
+            sleep 10
+        fi
+    done
     pause
 }
 
@@ -94,9 +107,10 @@ setup_validator() {
     fi
 
     echo "Please make sure you have enough Medas tokens in the wallet for self-delegation."
-    BALANCE_OUTPUT=$(medasdigitald q bank balances $(medasdigitald keys show $WALLET_NAME -a --home $NODE_HOME))
-echo "Current wallet balance:"
-echo "$BALANCE_OUTPUT"
+    WALLET_ADDRESS=$(medasdigitald keys show $WALLET_NAME -a --home $NODE_HOME)
+    BALANCE_OUTPUT=$(medasdigitald q bank balances $WALLET_ADDRESS --home $NODE_HOME)
+    echo "Current wallet balance:"
+    echo "$BALANCE_OUTPUT"
     read -p "Enter the amount of tokens to self-delegate (e.g., 1000000umedas): " STAKE_AMOUNT
 
     read -p "Enter your desired commission rate (e.g., 0.10) [default: 0.10]: " COMMISSION_RATE
@@ -163,6 +177,14 @@ list_wallets() {
     pause
 }
 
+# Function to view node logs
+view_node_logs() {
+    clear
+    echo "Displaying MedasDigital node logs..."
+    sudo journalctl -fu medasdigitald
+    pause
+}
+
 # Display menu
 while true; do
     clear
@@ -195,8 +217,9 @@ while true; do
     echo "4) Import Wallet"
     echo "5) List Wallets"
     echo "6) Create Systemd Service"
-    echo "7) Exit"
-    read -p "Enter your choice [1-7]: " choice
+    echo "7) View Node Logs"
+    echo "8) Exit"
+    read -p "Enter your choice [1-8]: " choice
 
     case $choice in
         1) setup_node ;;
@@ -205,7 +228,8 @@ while true; do
         4) import_wallet ;;
         5) list_wallets ;;
         6) create_service ;;
-        7) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid option. Please select a valid option [1-7]."; pause ;;
+        7) view_node_logs ;;
+        8) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please select a valid option [1-8]."; pause ;;
     esac
 done
