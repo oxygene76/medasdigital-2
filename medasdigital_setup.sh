@@ -21,8 +21,8 @@ setup_node() {
     if [ -d "$NODE_HOME" ]; then
         echo "Node has already been set up at $NODE_HOME."
         echo "Checking synchronization status..."
-        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.catching_up')
-        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.latest_block_height')
+        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.sync_info.catching_up')
+        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.sync_info.latest_block_height')
         if [ "$SYNC_STATUS" == "false" ]; then
             echo "Node is fully synchronized. Current block height: $CURRENT_BLOCK"
         else
@@ -67,8 +67,8 @@ setup_node() {
 
     echo "Checking if the node is fully synchronized..."
     while true; do
-        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.catching_up')
-        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.latest_block_height')
+        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.sync_info.catching_up')
+        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.sync_info.latest_block_height')
         if [ "$SYNC_STATUS" == "false" ]; then
             echo "Node is fully synchronized. Setup complete."
             break
@@ -204,12 +204,12 @@ view_node_status() {
     while true; do
         clear
         echo "Fetching node status..."
-        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.catching_up')
-        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.latest_block_height')
-        PEERS=$(medasdigitald status 2>&1 | jq -r '.Peers[]?.node_info.id' | wc -l)
+        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.sync_info.catching_up')
+        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.sync_info.latest_block_height')
+        PEERS=$(medasdigitald status 2>&1 | jq -r '.validator_info.address')
         LATEST_BLOCK_INFO=$(medasdigitald q block $CURRENT_BLOCK 2>/dev/null)
         VALIDATOR_ADDRESS=$(echo "$LATEST_BLOCK_INFO" | jq -r '.block.last_commit.signatures[0].validator_address')
-        VALIDATOR_INFO=$(medasdigitald query staking validator $(medasdigitald tendermint show-address) 2>/dev/null)
+        VALIDATOR_INFO=$(medasdigitald q staking validator $VALIDATOR_ADDRESS 2>/dev/null)
         VALIDATOR_MONIKER=$(echo "$VALIDATOR_INFO" | jq -r '.description.moniker')
 
         echo "########################################"
