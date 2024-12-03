@@ -33,7 +33,8 @@ setup_node() {
     echo "CosmWasm library setup complete."
 
     echo "Initializing node in $NODE_HOME..."
-    medasdigitald init "MedasDigitalNode" --chain-id $CHAIN_ID --home $NODE_HOME
+    read -p "Enter your desired node moniker: " NODE_MONIKER
+    medasdigitald init "$NODE_MONIKER" --chain-id $CHAIN_ID --home $NODE_HOME
 
     echo "Downloading genesis.json from $GENESIS_URL..."
     wget -O $NODE_HOME/config/genesis.json $GENESIS_URL
@@ -79,23 +80,35 @@ EOF
     pause
 }
 
-
 # Function to set up a validator
 setup_validator() {
     clear
-    read -p "Enter your wallet name: " WALLET_NAME
-    read -p "Enter your staking amount (e.g., 1000000umedas): " STAKE_AMOUNT
-    read -p "Enter your commission rate (e.g., 0.10): " COMMISSION_RATE
-    read -p "Enter your commission max rate (e.g., 0.20): " COMMISSION_MAX_RATE
-    read -p "Enter your commission max change rate (e.g., 0.01): " COMMISSION_MAX_CHANGE
-    read -p "Enter your validator moniker (name): " MONIKER_NAME
 
-    if ! medasdigitald keys show $WALLET_NAME --home $NODE_HOME > /dev/null 2>&1; then
-        echo "Wallet $WALLET_NAME does not exist. Please create it first."
-        exit 1
+    if ! medasdigitald keys list --home $NODE_HOME | grep -q "name"; then
+        echo "No wallet found. Creating a new wallet."
+        read -p "Enter a wallet name: " WALLET_NAME
+        medasdigitald keys add $WALLET_NAME --home $NODE_HOME
+    else
+        echo "Wallet found. Proceeding with validation setup."
+        WALLET_NAME=$(medasdigitald keys list --home $NODE_HOME | grep "name" | awk '{print $2}')
     fi
 
-    echo "Creating validator with moniker: $MONIKER_NAME"
+    echo "Please make sure you have enough Medas tokens in the wallet for self-delegation."
+    BALANCE_OUTPUT=$(medasdigitald q bank balances $(medasdigitald keys show $WALLET_NAME -a --home $NODE_HOME))
+echo "Current wallet balance:"
+echo "$BALANCE_OUTPUT"
+    read -p "Enter the amount of tokens to self-delegate (e.g., 1000000umedas): " STAKE_AMOUNT
+
+    read -p "Enter your desired commission rate (e.g., 0.10) [default: 0.10]: " COMMISSION_RATE
+    COMMISSION_RATE=${COMMISSION_RATE:-0.10}
+
+    read -p "Enter your commission max rate (e.g., 0.20) [default: 0.20]: " COMMISSION_MAX_RATE
+    COMMISSION_MAX_RATE=${COMMISSION_MAX_RATE:-0.20}
+
+    read -p "Enter your commission max change rate (e.g., 0.01) [default: 0.01]: " COMMISSION_MAX_CHANGE
+    COMMISSION_MAX_CHANGE=${COMMISSION_MAX_CHANGE:-0.01}
+
+    echo "Creating validator with moniker: $(medasdigitald config moniker --home $NODE_HOME)"
     medasdigitald tx staking create-validator \
       --amount $STAKE_AMOUNT \
       --from $WALLET_NAME \
@@ -104,7 +117,7 @@ setup_validator() {
       --commission-max-change-rate $COMMISSION_MAX_CHANGE \
       --min-self-delegation "1" \
       --pubkey $(medasdigitald tendermint show-validator --home $NODE_HOME) \
-      --moniker "$MONIKER_NAME" \
+      --moniker "$(medasdigitald config moniker --home $NODE_HOME)" \
       --chain-id $CHAIN_ID \
       --home $NODE_HOME
     pause
