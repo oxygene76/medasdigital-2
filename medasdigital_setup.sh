@@ -136,7 +136,7 @@ setup_validator() {
     COMMISSION_MAX_CHANGE=${COMMISSION_MAX_CHANGE:-0.01}
 
     MONIKER=$(grep '^moniker' $NODE_HOME/config/config.toml | cut -d '=' -f2 | sed 's/^ *//;s/ *$//' | tr -d '"')
-    PUBKEY=$(medasdigitald tendermint show-validator --home $NODE_HOME)
+    PUBKEY=$(medasdigitald tendermint show-validator --home $NODE_HOME | jq -r '.value')
     
     echo "########################################"
     echo "#        VALIDATOR CONFIGURATION       #"
