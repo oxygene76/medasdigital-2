@@ -176,7 +176,7 @@ cat > $VALIDATOR_JSON <<EOF
 EOF
 
     echo "Creating validator with moniker: $MONIKER"
-    medasdigitald tx staking create-validator $VALIDATOR_JSON --from $WALLET_NAME --chain-id $CHAIN_ID --fees 5000umedas --gas auto --home $NODE_HOME
+    medasdigitald tx staking create-validator $VALIDATOR_JSON --from $WALLET_NAME --chain-id $CHAIN_ID --fees 10000umedas --gas auto --gas-adjustment 1.2 --home $NODE_HOME
     pause
 }
 
