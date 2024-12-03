@@ -201,9 +201,10 @@ view_node_logs() {
 
 # Function to display node status including block height, peers, etc.
 view_node_status() {
+    echo "Press [ESC] to exit."
     while true; do
-        clear
-        echo "Fetching node status..."
+        tput civis  # Hide cursor
+        echo -e "\e[H\e[JFetching node status..."
         SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.sync_info.catching_up')
         CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.sync_info.latest_block_height')
         PEERS=$(medasdigitald status 2>&1 | jq -r '.validator_info.address')
@@ -227,14 +228,15 @@ view_node_status() {
         echo "Last Block Validator Moniker : $VALIDATOR_MONIKER"
         echo "########################################"
         echo
-        echo "Press [ESC] to exit."
 
         # Wait for 1 second or until ESC key is pressed
         read -t 1 -n 1 key
         if [[ $key == $'\e' ]]; then
+            tput cnorm  # Show cursor
             break
         fi
     done
+    tput cnorm  # Show cursor
     pause
 }
 
