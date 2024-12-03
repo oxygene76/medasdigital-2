@@ -162,7 +162,7 @@ setup_validator() {
     VALIDATOR_JSON="$NODE_HOME/validator.json"
     cat > $VALIDATOR_JSON <<EOF
 {
-    "pubkey": {"@type": "/cosmos.crypto.ed25519.PubKey", "key": "$PUBKEY"},
+    "pubkey": {"type": "/cosmos.crypto.ed25519.PubKey", "key": "$PUBKEY"},
     "amount": "$STAKE_AMOUNT",
     "moniker": "$MONIKER",
     "commission-rate": "$COMMISSION_RATE",
