@@ -139,6 +139,27 @@ setup_validator() {
     MONIKER=$(grep '^moniker' $NODE_HOME/config/config.toml | cut -d '=' -f2 | tr -d '"')
     PUBKEY=$(medasdigitald tendermint show-validator --home $NODE_HOME)
 
+    echo "########################################"
+    echo "#        VALIDATOR CONFIGURATION       #"
+    echo "########################################"
+    echo "Moniker                : $MONIKER"
+    echo "Wallet Name            : $WALLET_NAME"
+    echo "Self-Delegation Amount : $STAKE_AMOUNT"
+    echo "Commission Rate        : $COMMISSION_RATE"
+    echo "Commission Max Rate    : $COMMISSION_MAX_RATE"
+    echo "Commission Max Change  : $COMMISSION_MAX_CHANGE"
+    echo "Public Key             : $PUBKEY"
+    echo "########################################"
+    echo
+
+    read -p "Do you want to proceed with creating the validator? (yes/no): " CONFIRM
+    if [[ $CONFIRM != "yes" ]]; then
+        echo "Validator creation aborted."
+        pause
+        return
+    fi
+
+    
     echo "Creating validator JSON configuration..."
     VALIDATOR_JSON="$NODE_HOME/validator.json"
     cat > $VALIDATOR_JSON <<EOF
