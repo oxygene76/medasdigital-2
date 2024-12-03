@@ -18,6 +18,12 @@ pause() {
 # Function to download and install the latest binary from GitHub and set up CosmWasm library
 setup_node() {
     clear
+    if [ -d "$NODE_HOME" ]; then
+        echo "Node has already been set up at $NODE_HOME. Skipping setup."
+        pause
+        return
+    fi
+
     echo "Fetching latest MedasDigital binary..."
     LATEST_RELEASE=$(curl -s "https://api.github.com/repos/oxygene76/medasdigital-2/releases/latest" | grep "tag_name" | cut -d '"' -f 4)
     echo "Latest version: $LATEST_RELEASE"
