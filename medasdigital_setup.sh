@@ -158,7 +158,6 @@ setup_validator() {
         pause
         return
     fi
-
     
     echo "Creating validator JSON configuration..."
     VALIDATOR_JSON="$NODE_HOME/validator.json"
