@@ -239,8 +239,9 @@ view_node_status() {
         CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.sync_info.latest_block_height')
         PEERS=$(medasdigitald status 2>&1 | jq -r '.node_info.other.rpc_address')
         LATEST_BLOCK_INFO=$(medasdigitald q block $CURRENT_BLOCK 2>/dev/null)
-        VALIDATOR_ADDRESS=$(echo "$LATEST_BLOCK_INFO" | jq -r '.block.last_commit.signatures[0].validator_address')
-        if [ "$VALIDATOR_ADDRESS" != "null" ]; then
+        VALIDATOR_ADDRESS=$(echo "$LATEST_BLOCK_INFO" | jq -r '.block.last_commit.signatures[].validator_address' | head -n 1)
+
+        if [ "$VALIDATOR_ADDRESS" != "null" ] && [ -n "$VALIDATOR_ADDRESS" ]; then
             VALIDATOR_INFO=$(medasdigitald q staking validator $VALIDATOR_ADDRESS 2>/dev/null)
             VALIDATOR_MONIKER=$(echo "$VALIDATOR_INFO" | jq -r '.description.moniker')
         else
