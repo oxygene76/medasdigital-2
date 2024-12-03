@@ -136,7 +136,7 @@ setup_validator() {
     read -p "Enter your commission max change rate (e.g., 0.01) [default: 0.01]: " COMMISSION_MAX_CHANGE
     COMMISSION_MAX_CHANGE=${COMMISSION_MAX_CHANGE:-0.01}
 
-    MONIKER=$(grep '^moniker' $NODE_HOME/config/config.toml | cut -d '=' -f2 | tr -d ' "')
+    MONIKER=$(grep '^moniker' $NODE_HOME/config/config.toml | cut -d '=' -f2 | tr -d '"')
     PUBKEY=$(medasdigitald tendermint show-validator --home $NODE_HOME)
 
     echo "Creating validator JSON configuration..."
