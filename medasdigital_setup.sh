@@ -14,7 +14,6 @@ GENESIS_URL="https://raw.githubusercontent.com/oxygene76/medasdigital-2/refs/hea
 pause() {
     read -p "Press Return to continue..."
 }
-
 # Function to download and install the latest binary from GitHub and set up CosmWasm library
 setup_node() {
     clear
