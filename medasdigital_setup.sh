@@ -204,10 +204,10 @@ view_node_status() {
     echo "Press [ESC] to exit."
     while true; do
         tput civis  # Hide cursor
-        echo -e "\e[H\e[JFetching node status..."
+        tput cup 0 0  # Move cursor to the top-left without clearing the screen
         SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.sync_info.catching_up')
         CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.sync_info.latest_block_height')
-        PEERS=$(medasdigitald status 2>&1 | jq -r '.validator_info.address')
+        PEERS=$(medasdigitald status 2>&1 | jq -r '.node_info.id')
         LATEST_BLOCK_INFO=$(medasdigitald q block $CURRENT_BLOCK 2>/dev/null)
         VALIDATOR_ADDRESS=$(echo "$LATEST_BLOCK_INFO" | jq -r '.block.last_commit.signatures[0].validator_address')
         VALIDATOR_INFO=$(medasdigitald q staking validator $VALIDATOR_ADDRESS 2>/dev/null)
@@ -224,8 +224,8 @@ view_node_status() {
         fi
         echo "Current Block   : $CURRENT_BLOCK"
         echo "Connected Peers : $PEERS"
-        echo "Last Block Validator Address : $VALIDATOR_ADDRESS"
-        echo "Last Block Validator Moniker : $VALIDATOR_MONIKER"
+        echo "Last Block Validator Address : ${VALIDATOR_ADDRESS:-N/A}"
+        echo "Last Block Validator Moniker : ${VALIDATOR_MONIKER:-N/A}"
         echo "########################################"
         echo
 
@@ -262,31 +262,4 @@ while true; do
     echo " ########::'####:. ######:::'####:::: ##:::: ##:::: ##: ########:::: #########: ###::. #####:::"
     echo "........:::....:::......::::....:::::..:::::..:::::..::........:::::.........::...::::.....::::"
     echo
-    echo "Welcome to Medas Digital 2.0!"
-    echo
-    echo
-    echo "Select an option:"
-    echo "1) Setup Node"
-    echo "2) Setup Validator"
-    echo "3) Create Wallet"
-    echo "4) Import Wallet"
-    echo "5) List Wallets"
-    echo "6) Create Systemd Service"
-    echo "7) View Node Logs"
-    echo "8) View Node Status"
-    echo "9) Exit"
-    read -p "Enter your choice [1-9]: " choice
-
-    case $choice in
-        1) setup_node ;;
-        2) setup_validator ;;
-        3) create_wallet ;;
-        4) import_wallet ;;
-        5) list_wallets ;;
-        6) create_service ;;
-        7) view_node_logs ;;
-        8) view_node_status ;;
-        9) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid option. Please select a valid option [1-9]."; pause ;;
-    esac
-done
+    echo "Welcome to Medas Digital 2.0!
