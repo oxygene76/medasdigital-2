@@ -160,17 +160,17 @@ setup_validator() {
     
     echo "Creating validator JSON configuration..."
     VALIDATOR_JSON="$NODE_HOME/validator.json"
+    
     cat > $VALIDATOR_JSON <<EOF
-{
-    "pubkey": {"type": "/cosmos.crypto.ed25519.PubKey", "key": "$PUBKEY"},
-    "amount": "$STAKE_AMOUNT",
-    "moniker": "$MONIKER",
-    "commission-rate": "$COMMISSION_RATE",
-    "commission-max-rate": "$COMMISSION_MAX_RATE",
-    "commission-max-change-rate": "$COMMISSION_MAX_CHANGE",
-    "min-self-delegation": "1"
-}
-EOF
+    {
+        "pubkey": {"@type": "/cosmos.crypto.ed25519.PubKey", "key": "$PUBKEY"},
+        "amount": "$STAKE_AMOUNT",
+        "moniker": "$MONIKER",
+        "commission-rate": "$COMMISSION_RATE",
+        "commission-max-rate": "$COMMISSION_MAX_RATE",
+        "commission-max-change-rate": "$COMMISSION_MAX_CHANGE",
+    }
+    EOF
 
     echo "Creating validator with moniker: $MONIKER"
     medasdigitald tx staking create-validator $VALIDATOR_JSON --from $WALLET_NAME --chain-id $CHAIN_ID --home $NODE_HOME
