@@ -136,7 +136,8 @@ setup_validator() {
     read -p "Enter your commission max change rate (e.g., 0.01) [default: 0.01]: " COMMISSION_MAX_CHANGE
     COMMISSION_MAX_CHANGE=${COMMISSION_MAX_CHANGE:-0.01}
 
-    echo "Creating validator with moniker: $(medasdigitald config moniker --home $NODE_HOME)"
+    MONIKER=$(grep '^moniker' $NODE_HOME/config/config.toml | cut -d '=' -f2 | tr -d ' "')
+    echo "Creating validator with moniker: $MONIKER"
     medasdigitald tx staking create-validator \
       --amount $STAKE_AMOUNT \
       --from $WALLET_NAME \
@@ -145,7 +146,7 @@ setup_validator() {
       --commission-max-change-rate $COMMISSION_MAX_CHANGE \
       --min-self-delegation "1" \
       --pubkey $(medasdigitald tendermint show-validator --home $NODE_HOME) \
-      --moniker "$(medasdigitald config moniker --home $NODE_HOME)" \
+      --moniker "$MONIKER" \
       --chain-id $CHAIN_ID \
       --home $NODE_HOME
     pause
