@@ -19,7 +19,15 @@ pause() {
 setup_node() {
     clear
     if [ -d "$NODE_HOME" ]; then
-        echo "Node has already been set up at $NODE_HOME. Skipping setup."
+        echo "Node has already been set up at $NODE_HOME."
+        echo "Checking synchronization status..."
+        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.catching_up')
+        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.latest_block_height')
+        if [ "$SYNC_STATUS" == "false" ]; then
+            echo "Node is fully synchronized. Current block height: $CURRENT_BLOCK"
+        else
+            echo "Node is still synchronizing. Current block height: $CURRENT_BLOCK"
+        fi
         pause
         return
     fi
@@ -191,6 +199,45 @@ view_node_logs() {
     pause
 }
 
+# Function to display node status including block height, peers, etc.
+view_node_status() {
+    while true; do
+        clear
+        echo "Fetching node status..."
+        SYNC_STATUS=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.catching_up')
+        CURRENT_BLOCK=$(medasdigitald status 2>&1 | jq -r '.SyncInfo.latest_block_height')
+        PEERS=$(medasdigitald status 2>&1 | jq -r '.Peers[]?.node_info.id' | wc -l)
+        LATEST_BLOCK_INFO=$(medasdigitald q block $CURRENT_BLOCK 2>/dev/null)
+        VALIDATOR_ADDRESS=$(echo "$LATEST_BLOCK_INFO" | jq -r '.block.last_commit.signatures[0].validator_address')
+        VALIDATOR_INFO=$(medasdigitald query staking validator $(medasdigitald tendermint show-address) 2>/dev/null)
+        VALIDATOR_MONIKER=$(echo "$VALIDATOR_INFO" | jq -r '.description.moniker')
+
+        echo "########################################"
+        echo "#           NODE STATUS                #"
+        echo "########################################"
+        echo
+        if [ "$SYNC_STATUS" == "false" ]; then
+            echo "Node Status     : Fully Synchronized"
+        else
+            echo "Node Status     : Synchronizing"
+        fi
+        echo "Current Block   : $CURRENT_BLOCK"
+        echo "Connected Peers : $PEERS"
+        echo "Last Block Validator Address : $VALIDATOR_ADDRESS"
+        echo "Last Block Validator Moniker : $VALIDATOR_MONIKER"
+        echo "########################################"
+        echo
+        echo "Press [ESC] to exit."
+
+        # Wait for 1 second or until ESC key is pressed
+        read -t 1 -n 1 key
+        if [[ $key == $'\e' ]]; then
+            break
+        fi
+    done
+    pause
+}
+
 # Display menu
 while true; do
     clear
@@ -224,8 +271,9 @@ while true; do
     echo "5) List Wallets"
     echo "6) Create Systemd Service"
     echo "7) View Node Logs"
-    echo "8) Exit"
-    read -p "Enter your choice [1-8]: " choice
+    echo "8) View Node Status"
+    echo "9) Exit"
+    read -p "Enter your choice [1-9]: " choice
 
     case $choice in
         1) setup_node ;;
@@ -235,7 +283,8 @@ while true; do
         5) list_wallets ;;
         6) create_service ;;
         7) view_node_logs ;;
-        8) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid option. Please select a valid option [1-8]."; pause ;;
+        8) view_node_status ;;
+        9) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please select a valid option [1-9]."; pause ;;
     esac
 done
