@@ -69,8 +69,8 @@ The setup script will provide the following options:
 4. **Import Wallet** - Allows you to import an existing wallet using either a mnemonic phrase or private key.
 5. **List Wallets** - Displays a list of all wallets created on this node.
 6. **Create Systemd Service** - Sets up the node as a systemd service to ensure it runs in the background and restarts on reboot.
-
-After setting up the node, it is recommended to install the service to ensure that the node runs in the background and restarts on reboot. To do this, select Option 6 from the script menu to create a systemd service.
+7. **View Node Logs** - Displays the real-time logs of the MedasDigital node to monitor its activity and troubleshoot issues.
+8. **View Node Status** - Shows detailed information about the node status, including synchronization status, current block height, connected peers, and the validator who signed the latest block.
 
 ## Example: Setting up a Validator
 
