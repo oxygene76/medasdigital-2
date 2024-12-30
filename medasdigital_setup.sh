@@ -171,7 +171,8 @@ cat > $VALIDATOR_JSON <<EOF
         "moniker": "$MONIKER",
         "commission-rate": "$COMMISSION_RATE",
         "commission-max-rate": "$COMMISSION_MAX_RATE",
-        "commission-max-change-rate": "$COMMISSION_MAX_CHANGE"
+        "commission-max-change-rate": "$COMMISSION_MAX_CHANGE",
+        "min-self-delegation": "1"
     }
 EOF
 
