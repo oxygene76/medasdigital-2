@@ -1,6 +1,6 @@
- # Welcome to MedasDigital 2.0: Building the Future of Decentralized Finance and Digital Ownership
+# Welcome to MedasDigital 2.0: Building the Future of Digital Ownership
 
-MedasDigital 2.0 is an innovative blockchain project built on the Cosmos SDK, designed to empower users with a decentralized platform for finance, asset creation, and ownership. With a focus on security, flexibility, and ease of use, MedasDigital 2.0 is set to redefine how individuals and businesses engage with blockchain technology.
+MedasDigital 2.0 is an innovative blockchain project built on the Cosmos SDK, designed to empower users with a decentralized platform for asset creation and ownership. With a focus on security, flexibility, and ease of use, MedasDigital 2.0 is set to redefine how individuals and businesses engage with blockchain technology.
 
 ## Key Features of MedasDigital 2.0
 
@@ -12,9 +12,9 @@ MedasDigital 2.0 is an innovative blockchain project built on the Cosmos SDK, de
 
 ## A Growing Ecosystem with Real-World Use Cases
 
-MedasDigital 2.0 is more than a blockchain; it’s a thriving ecosystem designed to bring real-world applications to decentralized finance (DeFi), digital ownership, and beyond. With support for token creation, NFTs, and smart contracts, MedasDigital 2.0 provides an ideal environment for developers, entrepreneurs, and community members to innovate and grow.
+MedasDigital 2.0 is more than a blockchain; it’s a thriving ecosystem designed to bring real-world applications to digital ownership and beyond. With support for token creation, NFTs, and smart contracts, MedasDigital 2.0 provides an ideal environment for developers, entrepreneurs, and community members to innovate and grow.
 
-Join us as we build the future of blockchain technology. MedasDigital 2.0 is committed to creating a decentralized, user-centric platform that unlocks new possibilities in digital ownership and finance. Whether you’re a developer, validator, or simply a blockchain enthusiast, there’s a place for you in the MedasDigital 2.0 ecosystem.
+Join us as we build the future of blockchain technology. MedasDigital 2.0 is committed to creating a decentralized, user-centric platform that unlocks new possibilities in digital ownership. Whether you’re a developer, validator, or simply a blockchain enthusiast, there’s a place for you in the MedasDigital 2.0 ecosystem.
 
 -----
 
