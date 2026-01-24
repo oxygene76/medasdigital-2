@@ -2,7 +2,7 @@
 
 BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 COMMIT := $(shell git log -1 --format='%H')
-GO_VERSION := "1.22"
+GO_VERSION := 1.22
 
 # don't override user values
 ifeq (,$(VERSION))
@@ -122,11 +122,15 @@ build-reproducible-generic: go.sum
 
 # Add check to make sure we are using the proper Go version before proceeding with anything
 check-go-version:
-	@if ! go version | grep -q "go$(GO_VERSION)"; then \
-		echo "\033[0;31mERROR:\033[0m Go version $(GO_VERSION) is required for compiling medasdigitald. It looks like you are using" "$(shell go version) \nThere are potential consensus-breaking changes that can occur when running binaries compiled with different versions of Go. Please download Go version $(GO_VERSION) and retry. Thank you!"; \
+	@go_actual=$$(go version | awk '{print $$3}' | cut -c3-); \
+	go_major_minor=$$(echo $$go_actual | cut -d. -f1,2); \
+	if [ "$$go_major_minor" != "$(GO_VERSION)" ]; then \
+		echo "\033[0;31mERROR:\033[0m Go version $(GO_VERSION).x is required for compiling medasdigitald."; \
+		echo "It looks like you are using: $$(go version)"; \
+		echo "There are potential consensus-breaking changes that can occur when running binaries compiled with different versions of Go."; \
+		echo "Please download Go version $(GO_VERSION).x and retry. Thank you!"; \
 		exit 1; \
 	fi
-
 
 ###############################################################################
 ###                                Protobuf                                 ###
