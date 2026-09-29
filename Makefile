@@ -2,7 +2,7 @@
 
 BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 COMMIT := $(shell git log -1 --format='%H')
-GO_VERSION := 1.22
+GO_VERSION := 1.26
 
 # don't override user values
 ifeq (,$(VERSION))
@@ -111,7 +111,7 @@ build-upgrade-binaries: build
 	@echo "Building old binary from $(OLD_REF)"
 	@git worktree remove --force $(UPGRADE_OLD_SRC) 2>/dev/null || true
 	@git worktree add --detach $(UPGRADE_OLD_SRC) $(OLD_REF)
-	@$(MAKE) -C $(UPGRADE_OLD_SRC) build
+	@GOTOOLCHAIN=go1.22.11 $(MAKE) -C $(UPGRADE_OLD_SRC) build
 	@mkdir -p $(BUILDDIR)/old $(BUILDDIR)/new
 	@cp $(UPGRADE_OLD_SRC)/bin/medasdigitald $(BUILDDIR)/old/medasdigitald
 	@git worktree remove --force $(UPGRADE_OLD_SRC)

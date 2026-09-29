@@ -35,7 +35,9 @@ func (app *App) registerWasmModules(
 
 	scopedWasmKeeper := app.CapabilityKeeper.ScopeToModule(wasmtypes.ModuleName)
 
-	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
+	// wasmd 0.54 split WasmConfig into NodeConfig (app.toml [wasm], node-local)
+	// and VMConfig (consensus-relevant Wasm limits; empty = wasmvm defaults).
+	nodeConfig, err := wasm.ReadNodeConfig(appOpts)
 	if err != nil {
 		return nil, fmt.Errorf("error while reading wasm config: %s", err)
 	}
@@ -57,7 +59,8 @@ func (app *App) registerWasmModules(
 		app.MsgServiceRouter(),
 		app.GRPCQueryRouter(),
 		DefaultNodeHome,
-		wasmConfig,
+		nodeConfig,
+		wasmtypes.VMConfig{},
 		wasmkeeper.BuiltInCapabilities(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		wasmOpts...,
@@ -77,7 +80,7 @@ func (app *App) registerWasmModules(
 		return nil, err
 	}
 
-	if err := app.setAnteHandler(app.txConfig, wasmConfig, app.GetKey(wasmtypes.StoreKey)); err != nil {
+	if err := app.setAnteHandler(app.txConfig, nodeConfig, app.GetKey(wasmtypes.StoreKey)); err != nil {
 		return nil, err
 	}
 
@@ -125,7 +128,7 @@ func (app *App) setPostHandler() error {
 	return nil
 }
 
-func (app *App) setAnteHandler(txConfig client.TxConfig, wasmConfig wasmtypes.WasmConfig, txCounterStoreKey *storetypes.KVStoreKey) error {
+func (app *App) setAnteHandler(txConfig client.TxConfig, nodeConfig wasmtypes.NodeConfig, txCounterStoreKey *storetypes.KVStoreKey) error {
 	anteHandler, err := NewAnteHandler(
 		HandlerOptions{
 			HandlerOptions: ante.HandlerOptions{
@@ -136,7 +139,7 @@ func (app *App) setAnteHandler(txConfig client.TxConfig, wasmConfig wasmtypes.Wa
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
 			IBCKeeper:             app.IBCKeeper,
-			WasmConfig:            &wasmConfig,
+			NodeConfig:            &nodeConfig,
 			WasmKeeper:            &app.WasmKeeper,
 			TXCounterStoreService: runtime.NewKVStoreService(txCounterStoreKey),
 			CircuitKeeper:         &app.CircuitBreakerKeeper,
