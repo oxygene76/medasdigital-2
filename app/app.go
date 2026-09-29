@@ -302,6 +302,14 @@ func New(
 		return app.App.InitChainer(ctx, req)
 	})
 
+	// Upgrades: after registerIBCModules (handlers migrate over the complete
+	// module manager) and before app.Load (which seals the BaseApp, so the
+	// store loader can no longer be set).
+	app.setUpgradeHandlers()
+	if err := app.setUpgradeStoreLoader(); err != nil {
+		return nil, err
+	}
+
 	if err := app.Load(loadLatest); err != nil {
 		return nil, err
 	}
