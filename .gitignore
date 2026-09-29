@@ -24,3 +24,10 @@ release/
 
 # Go workspace file
 go.work
+
+# Build output (make build) and pinned proto tools (make proto-tools)
+bin/
+build/
+
+# Local single-node testnet (scripts/localnet.sh)
+.localnet/
