@@ -19,7 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Query_Params_FullMethodName = "/medasdigital.medasdigital.Query/Params"
+	Query_Params_FullMethodName           = "/medasdigital.medasdigital.Query/Params"
+	Query_Commit_FullMethodName           = "/medasdigital.medasdigital.Query/Commit"
+	Query_Commits_FullMethodName          = "/medasdigital.medasdigital.Query/Commits"
+	Query_CommitsByHash_FullMethodName    = "/medasdigital.medasdigital.Query/CommitsByHash"
+	Query_CommitsByCreator_FullMethodName = "/medasdigital.medasdigital.Query/CommitsByCreator"
 )
 
 // QueryClient is the client API for Query service.
@@ -28,6 +32,15 @@ const (
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// Commit returns a single commit by id.
+	Commit(ctx context.Context, in *QueryCommitRequest, opts ...grpc.CallOption) (*QueryCommitResponse, error)
+	// Commits returns all commits ordered by id.
+	Commits(ctx context.Context, in *QueryCommitsRequest, opts ...grpc.CallOption) (*QueryCommitsResponse, error)
+	// CommitsByHash returns all commits with the given hash (one per creator).
+	CommitsByHash(ctx context.Context, in *QueryCommitsByHashRequest, opts ...grpc.CallOption) (*QueryCommitsByHashResponse, error)
+	// CommitsByCreator returns the commits of an address ordered by id,
+	// revealed or not.
+	CommitsByCreator(ctx context.Context, in *QueryCommitsByCreatorRequest, opts ...grpc.CallOption) (*QueryCommitsByCreatorResponse, error)
 }
 
 type queryClient struct {
@@ -47,12 +60,57 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) Commit(ctx context.Context, in *QueryCommitRequest, opts ...grpc.CallOption) (*QueryCommitResponse, error) {
+	out := new(QueryCommitResponse)
+	err := c.cc.Invoke(ctx, Query_Commit_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Commits(ctx context.Context, in *QueryCommitsRequest, opts ...grpc.CallOption) (*QueryCommitsResponse, error) {
+	out := new(QueryCommitsResponse)
+	err := c.cc.Invoke(ctx, Query_Commits_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) CommitsByHash(ctx context.Context, in *QueryCommitsByHashRequest, opts ...grpc.CallOption) (*QueryCommitsByHashResponse, error) {
+	out := new(QueryCommitsByHashResponse)
+	err := c.cc.Invoke(ctx, Query_CommitsByHash_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) CommitsByCreator(ctx context.Context, in *QueryCommitsByCreatorRequest, opts ...grpc.CallOption) (*QueryCommitsByCreatorResponse, error) {
+	out := new(QueryCommitsByCreatorResponse)
+	err := c.cc.Invoke(ctx, Query_CommitsByCreator_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// Commit returns a single commit by id.
+	Commit(context.Context, *QueryCommitRequest) (*QueryCommitResponse, error)
+	// Commits returns all commits ordered by id.
+	Commits(context.Context, *QueryCommitsRequest) (*QueryCommitsResponse, error)
+	// CommitsByHash returns all commits with the given hash (one per creator).
+	CommitsByHash(context.Context, *QueryCommitsByHashRequest) (*QueryCommitsByHashResponse, error)
+	// CommitsByCreator returns the commits of an address ordered by id,
+	// revealed or not.
+	CommitsByCreator(context.Context, *QueryCommitsByCreatorRequest) (*QueryCommitsByCreatorResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -62,6 +120,18 @@ type UnimplementedQueryServer struct {
 
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (UnimplementedQueryServer) Commit(context.Context, *QueryCommitRequest) (*QueryCommitResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Commit not implemented")
+}
+func (UnimplementedQueryServer) Commits(context.Context, *QueryCommitsRequest) (*QueryCommitsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Commits not implemented")
+}
+func (UnimplementedQueryServer) CommitsByHash(context.Context, *QueryCommitsByHashRequest) (*QueryCommitsByHashResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CommitsByHash not implemented")
+}
+func (UnimplementedQueryServer) CommitsByCreator(context.Context, *QueryCommitsByCreatorRequest) (*QueryCommitsByCreatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CommitsByCreator not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -94,6 +164,78 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Commit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCommitRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Commit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Commit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Commit(ctx, req.(*QueryCommitRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Commits_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCommitsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Commits(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_Commits_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Commits(ctx, req.(*QueryCommitsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_CommitsByHash_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCommitsByHashRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CommitsByHash(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_CommitsByHash_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CommitsByHash(ctx, req.(*QueryCommitsByHashRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_CommitsByCreator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCommitsByCreatorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CommitsByCreator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_CommitsByCreator_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CommitsByCreator(ctx, req.(*QueryCommitsByCreatorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -104,6 +246,22 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "Commit",
+			Handler:    _Query_Commit_Handler,
+		},
+		{
+			MethodName: "Commits",
+			Handler:    _Query_Commits_Handler,
+		},
+		{
+			MethodName: "CommitsByHash",
+			Handler:    _Query_CommitsByHash_Handler,
+		},
+		{
+			MethodName: "CommitsByCreator",
+			Handler:    _Query_CommitsByCreator_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

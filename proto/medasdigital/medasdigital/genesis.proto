@@ -3,6 +3,7 @@ package medasdigital.medasdigital;
 
 import "amino/amino.proto";
 import "gogoproto/gogo.proto";
+import "medasdigital/medasdigital/notary.proto";
 import "medasdigital/medasdigital/params.proto";
 
 option go_package = "medasdigital/x/medasdigital/types";
@@ -14,4 +15,14 @@ message GenesisState {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+
+  // commits are all notary commits. The hash and creator indexes are rebuilt
+  // from them on import.
+  repeated Commit commits = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+
+  // next_commit_id is the id the next commit will get (1 on a fresh chain).
+  uint64 next_commit_id = 3;
 }

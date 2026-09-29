@@ -31,3 +31,6 @@ build/
 
 # Local single-node testnet (scripts/localnet.sh)
 .localnet/
+
+# Python bytecode (scripts/notary_hash.py)
+__pycache__/

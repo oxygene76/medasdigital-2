@@ -20,12 +20,19 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
-
+				Params:       types.NewParams(1, 0),
+				NextCommitId: 1,
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			// Zero params are invalid since max_payload_bytes must be >= 1.
+			desc:     "empty genesis state is invalid",
+			genState: &types.GenesisState{},
+			valid:    false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	}

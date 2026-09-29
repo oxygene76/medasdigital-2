@@ -2,9 +2,12 @@ syntax = "proto3";
 package medasdigital.medasdigital;
 
 import "amino/amino.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/query/v1/query.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
+import "medasdigital/medasdigital/notary.proto";
 import "medasdigital/medasdigital/params.proto";
 
 option go_package = "medasdigital/x/medasdigital/types";
@@ -13,7 +16,30 @@ option go_package = "medasdigital/x/medasdigital/types";
 service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get = "/medasdigital/medasdigital/params";
+  }
+
+  // Commit returns a single commit by id.
+  rpc Commit(QueryCommitRequest) returns (QueryCommitResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get = "/medasdigital/medasdigital/commits/{id}";
+  }
+
+  // Commits returns all commits ordered by id.
+  rpc Commits(QueryCommitsRequest) returns (QueryCommitsResponse) {
+    option (google.api.http).get = "/medasdigital/medasdigital/commits";
+  }
+
+  // CommitsByHash returns all commits with the given hash (one per creator).
+  rpc CommitsByHash(QueryCommitsByHashRequest) returns (QueryCommitsByHashResponse) {
+    option (google.api.http).get = "/medasdigital/medasdigital/commits/by_hash/{hash}";
+  }
+
+  // CommitsByCreator returns the commits of an address ordered by id,
+  // revealed or not.
+  rpc CommitsByCreator(QueryCommitsByCreatorRequest) returns (QueryCommitsByCreatorResponse) {
+    option (google.api.http).get = "/medasdigital/medasdigital/commits/by_creator/{creator}";
   }
 }
 
@@ -27,4 +53,62 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+// QueryCommitRequest is the request type for the Query/Commit RPC method.
+message QueryCommitRequest {
+  uint64 id = 1;
+}
+
+// QueryCommitResponse is the response type for the Query/Commit RPC method.
+message QueryCommitResponse {
+  Commit commit = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryCommitsRequest is the request type for the Query/Commits RPC method.
+message QueryCommitsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryCommitsResponse is the response type for the Query/Commits RPC method.
+message QueryCommitsResponse {
+  repeated Commit commits = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryCommitsByHashRequest is the request type for the Query/CommitsByHash RPC method.
+message QueryCommitsByHashRequest {
+  // hash is the 32-byte hash as 64 hex characters (case-insensitive).
+  string hash = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryCommitsByHashResponse is the response type for the Query/CommitsByHash RPC method.
+message QueryCommitsByHashResponse {
+  repeated Commit commits = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryCommitsByCreatorRequest is the request type for the Query/CommitsByCreator RPC method.
+message QueryCommitsByCreatorRequest {
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryCommitsByCreatorResponse is the response type for the Query/CommitsByCreator RPC method.
+message QueryCommitsByCreatorResponse {
+  repeated Commit commits = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
