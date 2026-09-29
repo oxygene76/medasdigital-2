@@ -1,0 +1,22 @@
+{
+  "messages": [
+    {
+      "@type": "/cosmwasm.wasm.v1.MsgUpdateParams",
+      "authority": "medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf",
+      "params": {
+        "code_upload_access": {
+          "permission": "AnyOfAddresses",
+          "addresses": [
+            "medas1rtpn4veps600g8p5nm8e7m4pcggvgqv5cw04tv"
+          ]
+        },
+        "instantiate_default_permission": "Everybody"
+      }
+    }
+  ],
+  "metadata": "",
+  "deposit": "50000000umedas",
+  "title": "Restrict CosmWasm code upload to a deploy address",
+  "summary": "Emergency measure: the wasmvm, Cosmos SDK and ibc-go versions currently running on medasdigital-2 are affected by known vulnerabilities that can halt the chain. Until the network is upgraded, this proposal restricts uploading new CosmWasm code (MsgStoreCode and the combined store messages) to the deploy address medas1rtpn4veps600g8p5nm8e7m4pcggvgqv5cw04tv. Instantiating already uploaded code remains open to everybody (instantiate_default_permission stays Everybody). The restriction can be lifted by a later governance proposal.",
+  "expedited": true
+}

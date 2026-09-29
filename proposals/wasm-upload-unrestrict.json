@@ -1,0 +1,20 @@
+{
+  "messages": [
+    {
+      "@type": "/cosmwasm.wasm.v1.MsgUpdateParams",
+      "authority": "medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf",
+      "params": {
+        "code_upload_access": {
+          "permission": "Everybody",
+          "addresses": []
+        },
+        "instantiate_default_permission": "Everybody"
+      }
+    }
+  ],
+  "metadata": "",
+  "deposit": "10000000umedas",
+  "title": "Lift the CosmWasm code upload restriction",
+  "summary": "Restores permissionless CosmWasm code upload (code_upload_access Everybody), reverting the emergency restriction to a deploy address. instantiate_default_permission stays Everybody. Submit only after the chain runs versions that fix the vulnerabilities that motivated the restriction.",
+  "expedited": false
+}
