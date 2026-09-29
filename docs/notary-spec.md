@@ -338,7 +338,7 @@ file. Verify it with `scripts/notary_hash.py vectors`.
 |---|---|---|---|---|
 | 1 | `medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf` (20 bytes, gov module account) | `000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f` | `{"epoch":"2026-10-01T00:00:00Z","object":"2024 YR4","ra_deg":"123.456789","schema":"orbit.prediction.v1"}` | `dfa7416689de1848783c4494b7a4296e1c770d9c80454bcc1a4eb725d3691f6c` |
 | 2 | `medas14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s32jrf6` (32 bytes, CosmWasm contract code 1 / instance 1) | `6d3479a290dce3001d82da753592bccac6719c722dc232de68d34ea41b057dd4` | `{"note":"Δt ≤ 0.5 s, Beobachter: Sternwarte Göttingen","object":"(3200) Phaethon","observer":"Müller"}` (UTF-8) | `7872919d266a32f56ebac8caeb01dc5f342bbaddf1e76f2424beba5099c402e4` |
-| 3 | `medas1qyqszqgpqyqszqgpqyqszqgpqyqszqgphqakax` (20 × 0x01) | `ff` × 32 | `x` (1 byte) | `6020c7c8631884517e1ecf7cb09b8c074c8049b6087e209e542fd35cca61c74f` |
+| 3 | `medas1qyqszqgpqyqszqgpqyqszqgpqyqszqgphqakax` (20 × 0x01) | `ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff` | `x` (1 byte) | `6020c7c8631884517e1ecf7cb09b8c074c8049b6087e209e542fd35cca61c74f` |
 | 4 | as #1 | as #1 | hex `00fffe00` (not UTF-8) | `b3dcd22c5d8366d75e2edce66edb0a1b96e9e44bf89ce9c32da8583f1bb3cb27` |
 
 The vectors were cross-checked independently:
