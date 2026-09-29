@@ -5,6 +5,8 @@
 #   scripts/localnet.sh [up]   wipe ./.localnet, init a fresh chain, start the
 #                              node in the background, wait for blocks and run
 #                              a bank-send smoke test (default)
+#   scripts/localnet.sh init   wipe ./.localnet and init a fresh chain (no start)
+#   scripts/localnet.sh start  start the node on the existing ./.localnet
 #   scripts/localnet.sh stop   stop the background node
 #   scripts/localnet.sh smoke  run the bank-send smoke test against a running node
 #   scripts/localnet.sh status print height and account balances
@@ -13,6 +15,10 @@
 # outside that directory is touched and the node only listens on 127.0.0.1.
 # Ports are offset by +10000 from the defaults so a real node on the same
 # machine is not disturbed; override them via the environment if needed.
+#
+# The binary defaults to ./bin/medasdigitald; set BINARY to use another one
+# (scripts/upgrade-test.sh switches binaries this way). The script can also
+# be sourced to reuse its functions.
 #
 # The keyring backend is "test" (unencrypted). Never use these keys anywhere
 # else.
@@ -161,7 +167,9 @@ init_chain() {
 
 start_node() {
 	log "starting node (log: $LOG_FILE)"
-	nohup "$BINARY" start --home "$HOME_DIR" >"$LOG_FILE" 2>&1 &
+	# Append, so the log of a previous binary (e.g. the upgrade halt) is kept.
+	echo "===== $(date -u +%FT%TZ) starting $BINARY =====" >>"$LOG_FILE"
+	nohup "$BINARY" start --home "$HOME_DIR" >>"$LOG_FILE" 2>&1 &
 	echo $! >"$PID_FILE"
 }
 
@@ -181,6 +189,42 @@ wait_for_blocks() {
 	die "no blocks after 60s, see $LOG_FILE"
 }
 
+# Wait until the RPC answers, then until $1 (default 2) further blocks are
+# committed. Used after restarting an existing chain.
+wait_for_new_blocks() {
+	local n="${1:-2}" h0=0
+	for _ in $(seq 1 60); do
+		node_pid >/dev/null || die "node exited, see $LOG_FILE"
+		h0="$(height)"
+		[ "${h0:-0}" -gt 0 ] && break
+		sleep 1
+	done
+	[ "${h0:-0}" -gt 0 ] || die "RPC not reachable after 60s, see $LOG_FILE"
+	wait_for_blocks $((h0 + n))
+}
+
+# Takes the JSON output of a broadcast tx, fails if CheckTx rejected it, waits
+# until it is included in a block and fails if DeliverTx failed. Prints the
+# included tx as JSON.
+wait_tx() {
+	local res="$1" code hash
+	code="$(echo "$res" | jq -r '.code')"
+	hash="$(echo "$res" | jq -r '.txhash')"
+	[ "$code" = "0" ] || die "tx rejected by CheckTx: $(echo "$res" | jq -r '.raw_log')"
+
+	for _ in $(seq 1 30); do
+		if res="$(bin query tx "$hash" --node "$NODE" --output json 2>/dev/null)"; then
+			code="$(echo "$res" | jq -r '.code')"
+			[ "$code" = "0" ] || die "tx $hash failed: $(echo "$res" | jq -r '.raw_log')"
+			log "tx $hash included at height $(echo "$res" | jq -r '.height')" >&2
+			echo "$res"
+			return 0
+		fi
+		sleep 1
+	done
+	die "tx $hash not found after 30s"
+}
+
 smoke_test() {
 	local from to before after h1 h2
 	from="$(addr alice)"
@@ -194,24 +238,11 @@ smoke_test() {
 
 	before="$(balance "$to")"
 	log "sending $SEND_AMOUNT$DENOM alice -> bob (bob before: $before)"
-	local res code hash
+	local res
 	res="$(bin tx bank send "$from" "$to" "$SEND_AMOUNT$DENOM" \
 		--chain-id "$CHAIN_ID" --keyring-backend "$KEYRING" --node "$NODE" \
 		--fees "$FEES" --yes --output json)"
-	code="$(echo "$res" | jq -r '.code')"
-	hash="$(echo "$res" | jq -r '.txhash')"
-	[ "$code" = "0" ] || die "tx rejected by CheckTx: $(echo "$res" | jq -r '.raw_log')"
-
-	for _ in $(seq 1 30); do
-		if res="$(bin query tx "$hash" --node "$NODE" --output json 2>/dev/null)"; then
-			code="$(echo "$res" | jq -r '.code')"
-			[ "$code" = "0" ] || die "tx $hash failed: $(echo "$res" | jq -r '.raw_log')"
-			log "tx $hash included at height $(echo "$res" | jq -r '.height')"
-			break
-		fi
-		sleep 1
-	done
-	[ -n "${res:-}" ] && [ "$code" = "0" ] || die "tx $hash not found after 30s"
+	wait_tx "$res" >/dev/null
 
 	after="$(balance "$to")"
 	[ "$after" -eq $((before + SEND_AMOUNT)) ] || die "bob balance $after, expected $((before + SEND_AMOUNT))"
@@ -225,21 +256,38 @@ status() {
 	done
 }
 
-cmd="${1:-up}"
-require_tools
-case "$cmd" in
-up)
-	stop_node
-	wipe_localnet
-	init_chain
-	start_node
-	wait_for_blocks 3
-	smoke_test
-	log "node running: RPC $NODE, gRPC 127.0.0.1:$GRPC_PORT, API http://127.0.0.1:$API_PORT"
-	log "stop with: scripts/localnet.sh stop"
-	;;
-stop) stop_node ;;
-smoke) smoke_test ;;
-status) status ;;
-*) die "unknown command '$cmd' (use: up | stop | smoke | status)" ;;
-esac
+main() {
+	local cmd="${1:-up}"
+	require_tools
+	case "$cmd" in
+	up)
+		stop_node
+		wipe_localnet
+		init_chain
+		start_node
+		wait_for_blocks 3
+		smoke_test
+		log "node running: RPC $NODE, gRPC 127.0.0.1:$GRPC_PORT, API http://127.0.0.1:$API_PORT"
+		log "stop with: scripts/localnet.sh stop"
+		;;
+	init)
+		stop_node
+		wipe_localnet
+		init_chain
+		;;
+	start)
+		[ -d "$HOME_DIR" ] || die "no localnet at $HOME_DIR (run init or up first)"
+		node_pid >/dev/null && die "node already running"
+		start_node
+		wait_for_new_blocks 2
+		;;
+	stop) stop_node ;;
+	smoke) smoke_test ;;
+	status) status ;;
+	*) die "unknown command '$cmd' (use: up | init | start | stop | smoke | status)" ;;
+	esac
+}
+
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+	main "$@"
+fi
