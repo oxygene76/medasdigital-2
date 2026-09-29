@@ -100,6 +100,25 @@ build: check-go-version
 
 BUILD_TARGETS := build install
 
+# Binaries for scripts/upgrade-test.sh:
+#   build/old/medasdigitald  from OLD_REF (default 050907c = mainnet v1.0.1 code),
+#                            built in a temporary worktree with that commit's Makefile
+#   build/new/medasdigitald  from the current checkout
+OLD_REF ?= 050907c
+UPGRADE_OLD_SRC := $(BUILDDIR)/old-src
+
+build-upgrade-binaries: build
+	@echo "Building old binary from $(OLD_REF)"
+	@git worktree remove --force $(UPGRADE_OLD_SRC) 2>/dev/null || true
+	@git worktree add --detach $(UPGRADE_OLD_SRC) $(OLD_REF)
+	@$(MAKE) -C $(UPGRADE_OLD_SRC) build
+	@mkdir -p $(BUILDDIR)/old $(BUILDDIR)/new
+	@cp $(UPGRADE_OLD_SRC)/bin/medasdigitald $(BUILDDIR)/old/medasdigitald
+	@git worktree remove --force $(UPGRADE_OLD_SRC)
+	@cp bin/medasdigitald $(BUILDDIR)/new/medasdigitald
+
+.PHONY: build-upgrade-binaries
+
 build-reproducible-all: build-reproducible-amd64 build-reproducible-arm64
 
 build-reproducible-amd64:
