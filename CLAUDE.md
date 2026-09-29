@@ -62,6 +62,8 @@ Never edit generated files by hand. Change the `.proto` and run `make proto-gen`
 ```sh
 make build
 scripts/localnet.sh          # = up: wipe ./.localnet, fresh chain, start node, smoke test
+scripts/localnet.sh init     # wipe + fresh chain, without starting it
+scripts/localnet.sh start    # (re)start the existing chain; BINARY=... selects the binary
 scripts/localnet.sh status   # height and balances
 scripts/localnet.sh smoke    # bank-send smoke test against the running node
 scripts/localnet.sh stop
@@ -78,15 +80,68 @@ Example CLI call against the localnet:
 bin/medasdigitald --home .localnet/home q bank balances $(bin/medasdigitald --home .localnet/home keys show alice -a --keyring-backend test) --node tcp://127.0.0.1:36657
 ```
 
-## Upgrade infrastructure: missing
+## Upgrades
 
-There is **no upgrade handler** anywhere in the repo (no `SetUpgradeHandler`, no
-`StoreUpgrades`), and the chain has never been upgraded via `x/upgrade`. Before the
-first state-breaking change (e.g. new messages or state in `x/medasdigital`) this is
-needed:
-- an `app/upgrades` package with a handler that runs `RunMigrations`,
-- `ConsensusVersion` bumps and migrations for changed modules,
-- a rehearsal on the localnet (gov proposal, then halt, then binary swap).
+Mainnet (v1.0.1) has never been upgraded through `x/upgrade`. The infrastructure
+exists since branch `feat/upgrade-v2`; the first mainnet upgrade will be `v2`.
+
+Layout:
+- `app/upgrades/types.go`: `upgrades.Upgrade{UpgradeName, CreateUpgradeHandler, StoreUpgrades}`.
+- `app/upgrades/<name>/`: one package per upgrade (currently `v2`, which only runs `RunMigrations`).
+- `app/upgrades.go`: the `Upgrades` list, `setUpgradeHandlers()` and
+  `setUpgradeStoreLoader()`. The store loader reads `data/upgrade-info.json`, is
+  skipped for `--unsafe-skip-upgrades` heights, and is only set for known plan names.
+- `app/app.go` calls both **after** `registerIBCModules` and **before** `app.Load()`:
+  - The handlers migrate over the whole module manager, which must include the
+    manually wired IBC and wasm modules.
+  - `app.Load()` seals the BaseApp, and `SetStoreLoader` panics after that.
+
+Adding an upgrade:
+1. Create `app/upgrades/vN/upgrades.go` with `UpgradeName = "vN"`, a handler that
+   runs `mm.RunMigrations` plus any custom logic, and `StoreUpgrades`. New modules
+   go into `Added`, which is required, otherwise their store is missing.
+2. Append it to `Upgrades` in `app/upgrades.go`. Never remove an upgrade that has
+   been applied on mainnet: the binary would then refuse to process blocks.
+3. For changed module state, bump that module's `ConsensusVersion` and register a
+   migration in its `RegisterServices`.
+4. Run `scripts/upgrade-test.sh` (with `UPGRADE_NAME=vN`, and `OLD_REF` = the
+   currently deployed release).
+
+Upgrade test (`scripts/upgrade-test.sh`, about 3 minutes, no Cosmovisor):
+- `make build-upgrade-binaries` builds `build/old` from `OLD_REF` (default
+  `050907c` = v1.0.1 code, built with that commit's Makefile in a temporary
+  worktree) and `build/new` from the checkout.
+- It then runs the full flow: fresh localnet with old, gov proposal (height =
+  now + `UPGRADE_BUFFER`, default 100), deposit, vote, wait for "PASSED", wait for
+  `UPGRADE "v2" NEEDED`, swap binary, verify (blocks, `query upgrade applied`,
+  plan cleared, module versions unchanged, bank send).
+- `SKIP_BUILD=1` reuses existing binaries.
+
+Behaviour worth knowing (verified on the localnet):
+- **At the upgrade height the old binary does not exit.** It logs
+  `UPGRADE "v2" NEEDED` and `CONSENSUS FAILURE!!!`, and the process keeps running.
+  `/status` then shows the upgrade height (the block is stored), while
+  `/abci_info` shows the last committed app height (one lower). Stop it and start
+  the new binary.
+- **Old binary after the upgrade:** it starts, then fails at the first block with
+  `wrong app version 0, upgrade handler is missing for v2 upgrade plan`. Nothing
+  is committed, and the new binary continues cleanly.
+- **New binary before the upgrade height:** with a passed plan it fails with
+  `BINARY UPDATED BEFORE TRIGGER!`, commits nothing, and the old binary continues
+  cleanly. Without any plan the new binary runs normally.
+- Gov txs on the localnet use fixed gas (`--gas 400000`): `--gas auto`
+  underestimates `MsgVote`.
+
+## Mainnet state
+
+Verified on a validator:
+- `/usr/local/bin/medasdigitald` sha256
+  `676a9d2f4f0648994a7da8b30ab4fbbd69018bd82c23f1c077e2b01044871a68`, identical to
+  `binaries/v1.0.1/medasdigitald`. It reports commit `a77373b` but has the
+  dependencies of `050907c` (CometBFT v0.38.21); the app code of both commits is identical.
+- `genesis.json` sha256
+  `e4c22a18aa3a9577fa0565785bc6dfe1648a43f47c0e6bbcb5f236a6f635f9b0`, identical to
+  `genesis/mainnet/config/genesis.json` on `main` (last commit `9f506bd`).
 
 ## Rules
 
@@ -97,6 +152,8 @@ needed:
 - Changes to consensus-relevant code (anything that changes state transitions or
   app hash) only when explicitly asked for, and always together with an upgrade plan.
 - If something is unclear or a decision is pending, stop and ask instead of guessing.
-- Small, traceable commits with meaningful messages.
+- Small, traceable commits with meaningful messages. Commit as soon as an
+  intermediate step works (not only at the end of a task), so there is always a
+  known good state to return to, especially for upgrade or consensus code.
 - Do not set tags and do not commit binaries. Releases go through git tags and
   GitHub Releases, not the `binaries/` directory.
