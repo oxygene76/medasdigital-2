@@ -8,8 +8,9 @@ Cosmos SDK chain, originally scaffolded with Ignite (depinject, `app/app_config.
 | Binary | `medasdigitald` |
 | Bech32 prefix | `medas` (`medasvaloper`, `medasvalcons`) |
 | Denom | `umedas` |
-| Stack | Cosmos SDK v0.50.10, CometBFT v0.38.21, wasmd v0.53.0 (wasmvm v2.1.2), ibc-go v8.5.1 |
-| Go | 1.22.x (go.mod: 1.22.11, same as the mainnet binary) |
+| Stack (branch `feat/security-v2`, upgrade `v2`) | Cosmos SDK v0.50.15, CometBFT v0.38.26, wasmd v0.54.10 (wasmvm v2.2.9), ibc-go v8.8.0 |
+| Stack of mainnet v1.0.1 | Cosmos SDK v0.50.10, CometBFT v0.38.21, wasmd v0.53.0 (wasmvm v2.1.2), ibc-go v8.5.1 |
+| Go | 1.26.8 (go.mod: `go 1.23.2`, minimum required by wasmd v0.54.10; `toolchain go1.26.8`). v1.0.1 was built with 1.22.11 |
 
 Layout:
 - `app/` – app wiring. Most modules go through depinject (`app_config.go`); IBC and wasm are wired manually (`ibc.go`, `wasm.go`); ante handler in `ante.go`.
@@ -20,7 +21,7 @@ Layout:
 
 ## Build
 
-Needs Go 1.22.x **and a C compiler** (gcc): wasmvm requires CGO. Without gcc, CGO
+Needs Go 1.26.x **and a C compiler** (gcc): wasmvm requires CGO. Without gcc, CGO
 is silently off and wasmd fails to compile (`NewKeeper` type errors in
 `x/wasm/keeper/test_common.go`).
 
@@ -29,11 +30,24 @@ make build          # -> bin/medasdigitald, tags "netgo ledger", same flags as t
 go build ./...
 ```
 
-The binary links `libwasmvm.x86_64.so` dynamically; a local build finds it through
-its RUNPATH in the Go module cache.
+`make build` links `libwasmvm.x86_64.so` dynamically (development only); it finds
+the library through its RUNPATH in the Go module cache.
 
-`make build` fails on purpose if Go is not 1.22.x (consensus safety). Do not bump
+Release binaries are built statically (libwasmvm_muslc) and reproducibly in Docker:
+
+```sh
+make build-release [VERSION=<tag>]   # -> build/release/medasdigitald + .sha256
+```
+
+Refuses to run on a dirty tree. Image by digest, Alpine packages by version,
+libwasmvm_muslc by sha256 and modules by go.sum are pinned (see `Dockerfile`).
+The result must show `ldd: not a dynamic executable`.
+
+`make build` fails on purpose if Go is not 1.26.x (consensus safety). Do not change
 the Go version without coordinating with the validators.
+
+Vulnerability scan: `govulncheck ./...`, built with the same Go version:
+`GOBIN=$PWD/build/tools-go126 go install golang.org/x/vuln/cmd/govulncheck@latest`.
 
 ## Test
 
@@ -104,18 +118,34 @@ Adding an upgrade:
    been applied on mainnet: the binary would then refuse to process blocks.
 3. For changed module state, bump that module's `ConsensusVersion` and register a
    migration in its `RegisterServices`.
-4. Run `scripts/upgrade-test.sh` (with `UPGRADE_NAME=vN`, and `OLD_REF` = the
+4. Run `scripts/upgrade-test.sh` (with `UPGRADE_NAME=vN`, and `OLD_BINARY` = the
    currently deployed release).
 
-Upgrade test (`scripts/upgrade-test.sh`, about 3 minutes, no Cosmovisor):
-- `make build-upgrade-binaries` builds `build/old` from `OLD_REF` (default
-  `050907c` = v1.0.1 code, built with that commit's Makefile in a temporary
-  worktree) and `build/new` from the checkout.
-- It then runs the full flow: fresh localnet with old, gov proposal (height =
-  now + `UPGRADE_BUFFER`, default 100), deposit, vote, wait for "PASSED", wait for
-  `UPGRADE "v2" NEEDED`, swap binary, verify (blocks, `query upgrade applied`,
-  plan cleared, module versions unchanged, bank send).
-- `SKIP_BUILD=1` reuses existing binaries.
+Upgrade test (`scripts/upgrade-test.sh`, about 5 minutes, no Cosmovisor):
+- Binaries:
+  - old = the mainnet binary `binaries/v1.0.1/medasdigitald`. It loads
+    libwasmvm 2.1.2 (sha256 checked) from a "system" directory
+    `.localnet/syslib` via `LD_LIBRARY_PATH`, like `/lib` on the validators.
+  - new = the static `make build-release` output (skip the build with `SKIP_BUILD=1`).
+  - The library stays in place; the test checks via `/proc/<pid>/maps` which
+    binary loads it.
+- Flow:
+  1. On v1.0.1, create state: bank, wasm (store, instantiate, query), x/group
+     (group, policy, proposal, vote) and a tokenfactory denom.
+  2. Gov upgrade proposal, then the halt.
+  3. Swap the binary.
+  4. Verify:
+     - state at the last pre-upgrade height is identical via both binaries,
+     - module versions unchanged,
+     - libwasmvm-version 2.1.2 -> 2.2.9,
+     - wasm execute, new upload, group exec, distribution withdrawal,
+       tokenfactory update, a gov proposal and bank send all work.
+  5. Genesis export plus `genesis validate`.
+- `make build-upgrade-binaries` (old from `OLD_REF` with go1.22.11, new dynamic)
+  still exists for development builds.
+- The Wasm directory (contract code and cache) is `<home>/wasm`, not
+  `<home>/data/wasm`. Copies and backups need both. v2 uses a new cache
+  directory and leaves the old one untouched.
 
 Behaviour worth knowing (verified on the localnet):
 - **At the upgrade height the old binary does not exit.** It logs
@@ -142,6 +172,8 @@ Verified on a validator:
 - `genesis.json` sha256
   `e4c22a18aa3a9577fa0565785bc6dfe1648a43f47c0e6bbcb5f236a6f635f9b0`, identical to
   `genesis/mainnet/config/genesis.json` on `main` (last commit `9f506bd`).
+- The module version list of mainnet (`q upgrade module-versions`) has not been
+  collected yet; the upgrade test compares against a fresh v1.0.1 localnet.
 
 ## Rules
 
