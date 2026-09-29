@@ -119,6 +119,16 @@ build-upgrade-binaries: build
 
 .PHONY: build-upgrade-binaries
 
+# Reproducible static release binary (see Dockerfile). Refuses to build from a
+# dirty tree, because VERSION/COMMIT would not describe the sources.
+build-release:
+	@test -z "$$(git status --porcelain)" || { echo "working tree not clean"; exit 1; }
+	DOCKER_BUILDKIT=1 $(DOCKER) build --target export --output type=local,dest=$(BUILDDIR)/release \
+		--build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) .
+	cd $(BUILDDIR)/release && sha256sum medasdigitald | tee medasdigitald.sha256
+
+.PHONY: build-release
+
 build-reproducible-all: build-reproducible-amd64 build-reproducible-arm64
 
 build-reproducible-amd64:

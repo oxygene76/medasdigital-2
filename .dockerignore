@@ -1,0 +1,9 @@
+# Keep the release build context small and free of local state.
+.git
+.github
+.localnet
+bin
+build
+binaries
+genesis
+**/__pycache__
