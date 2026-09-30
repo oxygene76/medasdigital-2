@@ -1,0 +1,9 @@
+# Text files are stored and checked out with LF line endings.
+* text=auto eol=lf
+
+# Genesis data is kept byte-for-byte as published (some files use CRLF).
+genesis/** -text
+
+# Binary artifacts
+binaries/** binary
+*.wasm binary
