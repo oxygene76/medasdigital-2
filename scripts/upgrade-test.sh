@@ -317,6 +317,17 @@ log "gov: proposal $pid passed"
 
 smoke_test
 
+# Transactions signed by the old v1.0.1 binary (older protobuf / x/tx
+# encoding) must be accepted by v2 for both sign modes. This checks that the
+# dependency updates did not change tx decoding or sign bytes.
+for mode in direct amino-json; do
+	bob_before="$(balance_of "$BOB")"
+	res="$(BINARY="$OLD_BINARY" bin tx bank send alice "$BOB" "1000$DENOM" --sign-mode "$mode" "${tx_flags[@]}")"
+	wait_tx "$res" >/dev/null
+	[ "$(balance_of "$BOB")" -eq $((bob_before + 1000)) ] || die "tx signed by v1.0.1 ($mode) not applied"
+	log "tx signed by v1.0.1 with sign mode $mode accepted by v2"
+done
+
 # ------------------------------------------------------------ genesis export
 step "6/6 genesis export and validate-genesis"
 stop_node
