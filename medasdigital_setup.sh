@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # medasdigital_setup.sh  –  set up and maintain a MedasDigital node
-# Chain: medasdigital-2                                    Script version: 2.1
+# Chain: medasdigital-2                                    Script version: 2.2
 #
 #   New node:       sudo ./medasdigital_setup.sh install
 #                   sudo ./medasdigital_setup.sh init <moniker> [--genesis-sync]
@@ -34,8 +34,9 @@ UNIT_FILE="/etc/systemd/system/${DAEMON_NAME}.service"
 LOCAL_RPC="${LOCAL_RPC:-http://127.0.0.1:26657}"
 MIN_GAS_PRICE="${MIN_GAS_PRICE:-0.025umedas}"
 
-# Peers: Neptun, Saturn, Moon Core, 256x25
-PEERS="${PEERS:-51ca3b0a3663af88566b32ecfd77948e55000bcc@88.205.101.195:26656,044b317a7218210da4b0864d4b2ca0e1bf5ea078@88.205.101.197:26656,0df038d3c1e9e34314528aa4e1f8900581b1f68b@92.255.201.5:26156,854ef70d35ea01beaf7ba440369a24db4deef2b7@91.98.115.118:36656}"
+# Public peers of the MedasDigital nodes (Neptun, Uranus, Saturn). Further peers
+# are found automatically through peer exchange.
+PEERS="${PEERS:-51ca3b0a3663af88566b32ecfd77948e55000bcc@88.205.101.195:26656,90be2e9f0a279372d2931e38f15025db9a847dbd@88.205.101.196:26656,044b317a7218210da4b0864d4b2ca0e1bf5ea078@88.205.101.197:26656}"
 STATE_SYNC_RPC="${STATE_SYNC_RPC:-https://rpc.medas-digital.io:26657}"
 # Optional second, independent RPC used as light-client witness (defaults to the first)
 STATE_SYNC_RPC2="${STATE_SYNC_RPC2:-$STATE_SYNC_RPC}"
@@ -48,7 +49,7 @@ GENESIS_SHA256="${GENESIS_SHA256:-e4c22a18aa3a9577fa0565785bc6dfe1648a43f47c0e6b
 
 # The binary the chain started with (v1.0.1, dynamically linked to libwasmvm 2.1.2)
 GENESIS_VERSION="v1.0.1"
-GENESIS_BIN_URL="${GENESIS_BIN_URL:-${RAW_BASE}/binaries/v1.0.1/medasdigitald}"
+GENESIS_BIN_URL="${GENESIS_BIN_URL:-https://github.com/oxygene76/medasdigital-2/releases/download/v1.0.1/medasdigitald}"
 GENESIS_BIN_SHA256="${GENESIS_BIN_SHA256:-676a9d2f4f0648994a7da8b30ab4fbbd69018bd82c23f1c077e2b01044871a68}"
 LIBWASMVM_PATH="/usr/lib/libwasmvm.x86_64.so"
 LIBWASMVM_URL="https://github.com/CosmWasm/wasmvm/releases/download/v2.1.2/libwasmvm.x86_64.so"
@@ -61,7 +62,7 @@ COSMOVISOR_BIN_SHA256="be8424b018d3b934ccab875efcf23f82e92369df3681d092f13a5a7d4
 # Chain upgrades, oldest first:  "<upgrade name>|<app version>|<url>|<sha256>"
 # The upgrade name must match the name in the governance upgrade proposal.
 UPGRADES=(
-  # "v2|v2.0.0|https://github.com/oxygene76/medasdigital-2/releases/download/v2.0.0/medasdigitald|<sha256>"
+  "v2|v2.0.0|https://github.com/oxygene76/medasdigital-2/releases/download/v2.0.0/medasdigitald|1158578518b024dc4b44ea6ea77584a6186463b3fbf6451e3713932fa50e26d2"
 )
 
 # ------------------------------------------------------------------ HELPERS --
@@ -255,6 +256,10 @@ install_upgrades() {
     [[ -z "$want" || "$want" == "$name" ]] || continue
     found=1
     dest="$CV_DIR/upgrades/$name/bin/$DAEMON_NAME"
+    if [[ -z "$want" && ! -f "$dest" ]] && ! curl -fsIL --retry 2 -o /dev/null "$url"; then
+      warn "Upgrade '$name' is not published yet – skipped. Run '$0 prepare-upgrade $name' once it is released."
+      continue
+    fi
     fetch_verified "$url" "$sha" "$dest" 0755
     v=$("$dest" version 2>/dev/null || true)
     [[ "$v" == "$ver" ]] || die "Upgrade binary '$name' reports version '$v', expected '$ver'."
@@ -355,6 +360,13 @@ cmd_init() {
     trust_height=$((latest > 2000 ? latest - 2000 : 1))
     trust_hash=$(rpc "$STATE_SYNC_RPC/block?height=$trust_height" | jq -r '.result.block_id.hash') || true
     [[ "$trust_hash" =~ ^[0-9A-F]{64}$ ]] || die "Could not read the block hash at height $trust_height."
+    if [[ "$STATE_SYNC_RPC2" != "$STATE_SYNC_RPC" ]]; then
+      local hash2
+      hash2=$(rpc "$STATE_SYNC_RPC2/block?height=$trust_height" | jq -r '.result.block_id.hash') || true
+      [[ "$hash2" == "$trust_hash" ]] \
+        || die "The two state sync RPCs disagree about block $trust_height (or the second one is unreachable)."
+      info "Both state sync RPCs agree on block $trust_height."
+    fi
   fi
   set_current "$run"
   bin="$CV_DIR/current/bin/$DAEMON_NAME"
@@ -424,6 +436,14 @@ cmd_migrate() {
   fi
   unit_user=$(grep -oP '^User=\K\S+' "$UNIT_FILE" || echo root)
   [[ "$unit_user" == "$NODE_USER" ]] || die "The service runs as '$unit_user'. Re-run with NODE_USER=$unit_user"
+  local extra
+  extra=$(grep -oP '^ExecStart=\s*\S+\s*\K.*' "$UNIT_FILE" \
+    | sed -E 's/(^| )start( |$)/ /; s/--home[= ][^ ]+//' | xargs || true)
+  [[ -z "$extra" ]] \
+    || die "The service starts the node with extra options ($extra). They would be lost when switching. Move them into config.toml/app.toml first."
+  if grep -qE '^(Environment|EnvironmentFile)=' "$UNIT_FILE"; then
+    die "The service sets environment variables (Environment=/EnvironmentFile=). They would be lost when switching. Move them into the node configuration first."
+  fi
   ver=$("$real_bin" version 2>/dev/null) || die "The binary $real_bin does not run."
   sha=$(sha_of "$real_bin")
   if [[ "$sha" != "$GENESIS_BIN_SHA256" ]]; then
