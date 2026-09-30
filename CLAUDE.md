@@ -129,6 +129,10 @@ Upgrade test (`scripts/upgrade-test.sh`, about 5 minutes, no Cosmovisor):
   - new = the static `make build-release` output (skip the build with `SKIP_BUILD=1`).
   - The library stays in place; the test checks via `/proc/<pid>/maps` which
     binary loads it.
+- Before the upgrade the module versions must equal `scripts/mainnet-module-versions.json`.
+- `app/ante.go` keeps `wasmkeeper.NewTxContractsDecorator()` (decided). It is
+  the wasmd 0.54 setup-cost discount for repeated calls to the same code in a tx,
+  and without it the keeper logs a warning on every contract call.
 - Flow:
   1. On v1.0.1, create state: bank, wasm (store, instantiate, query), x/group
      (group, policy, proposal, vote) and a tokenfactory denom.
@@ -172,8 +176,15 @@ Verified on a validator:
 - `genesis.json` sha256
   `e4c22a18aa3a9577fa0565785bc6dfe1648a43f47c0e6bbcb5f236a6f635f9b0`, identical to
   `genesis/mainnet/config/genesis.json` on `main` (last commit `9f506bd`).
-- The module version list of mainnet (`q upgrade module-versions`) has not been
-  collected yet; the upgrade test compares against a fresh v1.0.1 localnet.
+- Module versions (`q upgrade module-versions` on a validator, 30 modules; the JSON
+  output omits version 0), stored in `scripts/mainnet-module-versions.json`:
+  06-solomachine 0, 07-tendermint 0, runtime 0, auth 5, authz 2, bank 4,
+  capability 1, circuit 1, consensus 1, crisis 2, distribution 3, evidence 1,
+  feegrant 2, feeibc 2, genutil 1, gov 5, group 2, ibc 6, interchainaccounts 3,
+  medasdigital 1, mint 2, nft 1, params 1, slashing 4, staking 5, tokenfactory 1,
+  transfer 5, upgrade 2, vesting 1, wasm 4.
+  `upgrade-test.sh` checks the v1.0.1 localnet against this list exactly before
+  the upgrade.
 
 ## Rules
 

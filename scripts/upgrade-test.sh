@@ -59,6 +59,7 @@ SYSLIB="$LOCALNET_DIR/syslib"
 MV_BEFORE="$LOCALNET_DIR/module-versions-before.json"
 MV_AFTER="$LOCALNET_DIR/module-versions-after.json"
 PROPOSAL_FILE="$LOCALNET_DIR/upgrade-proposal.json"
+MAINNET_MV="$REPO_ROOT/scripts/mainnet-module-versions.json"
 EXPORT_FILE="$LOCALNET_DIR/export-after-upgrade.json"
 
 # Fixed gas: --gas auto underestimates MsgVote (out of gas at WritePerByte).
@@ -191,7 +192,9 @@ tx tokenfactory create-denom "$TF_DENOM" "Test token" TST 6 https://example.org 
 log "tokenfactory: $(q tokenfactory show-denom "$TF_DENOM" | jq -c '.denom | {denom, owner, supply, maxSupply}')"
 
 module_versions >"$MV_BEFORE"
-log "module versions before: $(jq -c . "$MV_BEFORE")"
+# Must match mainnet exactly (q upgrade module-versions on a validator).
+diff <(jq -S . "$MAINNET_MV") <(jq -S . "$MV_BEFORE") || die "module versions of v1.0.1 differ from mainnet ($MAINNET_MV)"
+log "module versions before = mainnet ($(jq length "$MV_BEFORE") modules, $MAINNET_MV)"
 
 # ------------------------------------------------------------------ proposal
 step "2/6 governance proposal for upgrade \"$UPGRADE_NAME\""
