@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # medasdigital_setup.sh  –  set up and maintain a MedasDigital node
-# Chain: medasdigital-2                                    Script version: 2.2
+# Chain: medasdigital-2                                    Script version: 2.3
 #
 #   New node:       sudo ./medasdigital_setup.sh install
 #                   sudo ./medasdigital_setup.sh init <moniker> [--genesis-sync]
@@ -62,7 +62,7 @@ COSMOVISOR_BIN_SHA256="be8424b018d3b934ccab875efcf23f82e92369df3681d092f13a5a7d4
 # Chain upgrades, oldest first:  "<upgrade name>|<app version>|<url>|<sha256>"
 # The upgrade name must match the name in the governance upgrade proposal.
 UPGRADES=(
-  "v2|v2.0.0|https://github.com/oxygene76/medasdigital-2/releases/download/v2.0.0/medasdigitald|1158578518b024dc4b44ea6ea77584a6186463b3fbf6451e3713932fa50e26d2"
+  "v2|v2.0.0|https://github.com/oxygene76/medasdigital-2/releases/download/v2.0.0/medasdigitald|4df5db896514dc9795173274ec745dc73b630c90082960b96aad75b508b99bba"
 )
 
 # ------------------------------------------------------------------ HELPERS --
@@ -111,6 +111,10 @@ as_node_user() {
 fix_owner() { if [[ "$NODE_USER" != "root" ]]; then chown -R "$NODE_USER": "$@"; fi; }
 
 sha_of() { sha256sum "$1" | cut -d' ' -f1; }
+
+# Print a binary's version. The node binary creates config files in its home
+# directory even for "version", so point it to a throwaway directory.
+bin_version() { "$1" version --home "$TMP_DIR/version-home" 2>/dev/null; }
 
 # fetch_verified <url> <sha256> <destination> [mode]
 # Downloads, verifies and installs a file. Never overwrites a different existing file.
@@ -173,7 +177,7 @@ validator_report() {
     | jq '[.result.validators[].voting_power | tonumber] | add' 2>/dev/null) || total=0
   echo
   warn "This node is an ACTIVE VALIDATOR (voting power $vp of $total)."
-  p=$("$bin" query slashing params --node "$LOCAL_RPC" -o json 2>/dev/null) || return 0
+  p=$("$bin" query slashing params --node "$LOCAL_RPC" --home "$TMP_DIR/version-home" -o json 2>/dev/null) || return 0
   window=$(jq -r '.params.signed_blocks_window // .signed_blocks_window // empty' <<<"$p")
   minsigned=$(jq -r '.params.min_signed_per_window // .min_signed_per_window // empty' <<<"$p")
   [[ -n "$window" && -n "$minsigned" ]] || return 0
@@ -261,7 +265,7 @@ install_upgrades() {
       continue
     fi
     fetch_verified "$url" "$sha" "$dest" 0755
-    v=$("$dest" version 2>/dev/null || true)
+    v=$(bin_version "$dest" || true)
     [[ "$v" == "$ver" ]] || die "Upgrade binary '$name' reports version '$v', expected '$ver'."
     if ldd "$dest" 2>/dev/null | grep libwasmvm >/dev/null; then
       warn "Upgrade binary '$name' is dynamically linked to libwasmvm. Do NOT replace $LIBWASMVM_PATH while the old version runs."
@@ -444,7 +448,7 @@ cmd_migrate() {
   if grep -qE '^(Environment|EnvironmentFile)=' "$UNIT_FILE"; then
     die "The service sets environment variables (Environment=/EnvironmentFile=). They would be lost when switching. Move them into the node configuration first."
   fi
-  ver=$("$real_bin" version 2>/dev/null) || die "The binary $real_bin does not run."
+  ver=$(bin_version "$real_bin") || die "The binary $real_bin does not run."
   sha=$(sha_of "$real_bin")
   if [[ "$sha" != "$GENESIS_BIN_SHA256" ]]; then
     warn "Your binary (version '$ver', sha256 $sha) is not the official $GENESIS_VERSION build (self-built?)."
@@ -464,7 +468,7 @@ cmd_migrate() {
   set_current genesis
   install_upgrades
   fix_owner "$CV_DIR"
-  env DAEMON_NAME="$DAEMON_NAME" DAEMON_HOME="$NODE_HOME" "$COSMOVISOR_BIN" version >/dev/null 2>&1 \
+  env DAEMON_NAME="$DAEMON_NAME" DAEMON_HOME="$NODE_HOME" "$COSMOVISOR_BIN" run version --home "$TMP_DIR/version-home" >/dev/null 2>&1 \
     || die "cosmovisor cannot use the prepared layout in $CV_DIR."
   render_unit >"$TMP_DIR/new.service"
   echo
@@ -513,13 +517,13 @@ cmd_status() {
   echo "Node home        : $NODE_HOME"
   if has_old_style_service; then
     local b; b=$(grep -oP '^ExecStart=\s*\K\S+' "$UNIT_FILE")
-    echo "Active binary    : $b ($("$b" version 2>/dev/null || echo "not runnable"))"
+    echo "Active binary    : $b ($(bin_version "$b" || echo "not runnable"))"
     echo "Cosmovisor       : NOT used by the service (see '$0 migrate')"
   elif [[ -L "$CV_DIR/current" ]]; then
     active=$(basename "$(readlink -f "$CV_DIR/current")")
-    echo "Active binary    : $active ($("$CV_DIR/current/bin/$DAEMON_NAME" version 2>/dev/null || echo "not runnable"))"
+    echo "Active binary    : $active ($(bin_version "$CV_DIR/current/bin/$DAEMON_NAME" || echo "not runnable"))"
     for d in "$CV_DIR"/upgrades/*/; do
-      [[ -d "$d" ]] && echo "Prepared upgrade : $(basename "$d") ($("$d/bin/$DAEMON_NAME" version 2>/dev/null || echo "not runnable"))"
+      [[ -d "$d" ]] && echo "Prepared upgrade : $(basename "$d") ($(bin_version "$d/bin/$DAEMON_NAME" || echo "not runnable"))"
     done
   else
     echo "Active binary    : no cosmovisor setup (use '$0 migrate')"
@@ -536,7 +540,7 @@ cmd_status() {
   echo "Catching up      : $(jq -r .result.sync_info.catching_up <<<"$s")"
   echo "Voting power     : $(jq -r .result.validator_info.voting_power <<<"$s")"
   echo "Peers            : $(rpc "$LOCAL_RPC/net_info" | jq -r .result.n_peers)"
-  if plan=$("$BIN_LINK" query upgrade plan --node "$LOCAL_RPC" -o json 2>/dev/null) && [[ -n "$plan" ]]; then
+  if plan=$("$BIN_LINK" query upgrade plan --node "$LOCAL_RPC" --home "$TMP_DIR/version-home" -o json 2>/dev/null) && [[ -n "$plan" ]]; then
     pname=$(jq -r '.name // .plan.name // empty' <<<"$plan")
     pheight=$(jq -r '.height // .plan.height // empty' <<<"$plan")
     if [[ -n "$pname" ]]; then
