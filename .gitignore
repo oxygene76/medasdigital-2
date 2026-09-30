@@ -31,3 +31,8 @@ build/
 
 # Local single-node testnet (scripts/localnet.sh)
 .localnet/
+
+# Internal, never published: local agent notes and advisory details that are
+# released only after the corresponding upgrade.
+CLAUDE.local.md
+docs/upgrades/*-advisories.md

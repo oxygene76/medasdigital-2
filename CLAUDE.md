@@ -200,3 +200,8 @@ Verified on a validator:
   known good state to return to, especially for upgrade or consensus code.
 - Do not set tags and do not commit binaries. Releases go through git tags and
   GitHub Releases, not the `binaries/` directory.
+- The repository is public. Commit messages must not contain claude.ai session
+  links (no `Claude-Session:` trailer); `Co-Authored-By` is fine.
+- Internal details (infrastructure, validator setup, advisory details before an
+  upgrade) belong in `CLAUDE.local.md` or `docs/upgrades/*-advisories.md`, which
+  are gitignored, never in versioned files or commit messages.
