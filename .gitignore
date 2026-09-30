@@ -25,11 +25,9 @@ release/
 # Go workspace file
 go.work
 
-# Build output (make build) and pinned proto tools (make proto-tools)
+# Build output and local testnet
 bin/
 build/
-
-# Local single-node testnet (scripts/localnet.sh)
 .localnet/
 
 # Internal, never published: local agent notes and advisory details that are
