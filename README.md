@@ -1,320 +1,188 @@
-# Welcome to MedasDigital 2.0: Building the Future of Digital Ownership
+# MedasDigital 2.0
 
-MedasDigital 2.0 is an innovative blockchain project built on the Cosmos SDK, designed to empower users with a decentralized platform for asset creation and ownership. With a focus on security, flexibility, and ease of use, MedasDigital 2.0 is set to redefine how individuals and businesses engage with blockchain technology.
+MedasDigital 2.0 is a blockchain built on the Cosmos SDK for creating and
+owning digital assets. It supports:
+- custom tokens (token factory),
+- NFTs,
+- CosmWasm smart contracts,
+- IBC.
 
-## Key Features of MedasDigital 2.0
+The network is secured by CometBFT consensus and governed on-chain by its
+token holders.
 
-- **Token Creation and Management**: MedasDigital 2.0 allows users to easily create, issue, and manage custom tokens. Whether for personal, business, or community purposes, our platform offers a streamlined experience for tokenization.
-- **NFT Functionality**: Supporting the full life cycle of Non-Fungible Tokens (NFTs), MedasDigital 2.0 enables users to create, trade, and manage digital assets. From art to collectibles, MedasDigital 2.0 provides a secure and scalable environment for digital ownership.
-- **Smart Contracts and WASM Support**: Our WASM integration supports smart contracts, enabling advanced functionalities for decentralized applications (dApps) and allowing developers to bring their unique ideas to life on a robust, secure blockchain.
-- **Enhanced Security and Decentralization**: Built with the Cosmos SDK, MedasDigital 2.0 leverages Tendermint’s consensus engine, offering a high-performance, secure network. The platform’s design encourages decentralization, creating a resilient ecosystem supported by a global community of validators and node operators.
-- **Community-Focused Governance**: MedasDigital 2.0 empowers its community with governance features, allowing token holders to influence network upgrades and policies directly. Through transparent and decentralized decision-making, MedasDigital 2.0 ensures that the community remains at the heart of the project’s evolution.
+This repository contains the chain software (`medasdigitald`), the mainnet
+genesis and the operator tooling.
 
-## A Growing Ecosystem with Real-World Use Cases
+## Network
 
-MedasDigital 2.0 is more than a blockchain; it’s a thriving ecosystem designed to bring real-world applications to digital ownership and beyond. With support for token creation, NFTs, and smart contracts, MedasDigital 2.0 provides an ideal environment for developers, entrepreneurs, and community members to innovate and grow.
+| | |
+|---|---|
+| Chain ID | `medasdigital-2` |
+| Current software | **v1.0.1** ([release](https://github.com/oxygene76/medasdigital-2/releases/tag/v1.0.1), tag `v1.0.1`) |
+| Denom | `umedas` (1 MEDAS = 1 000 000 umedas) |
+| Address prefix | `medas` |
+| Minimum gas price | `0.025umedas` |
+| Genesis | [`genesis/mainnet/config/genesis.json`](genesis/mainnet/config/genesis.json), SHA-256 `e4c22a18aa3a9577fa0565785bc6dfe1648a43f47c0e6bbcb5f236a6f635f9b0` |
+| RPC | `https://rpc.medas-digital.io:26657` |
+| REST (LCD) | `https://lcd.medas-digital.io:1317` |
+| gRPC | `grpc.medas-digital.io:9090` (TLS) |
+| Explorer | _to be added_ |
+| Peers | _to be added_ |
 
-Join us as we build the future of blockchain technology. MedasDigital 2.0 is committed to creating a decentralized, user-centric platform that unlocks new possibilities in digital ownership. Whether you’re a developer, validator, or simply a blockchain enthusiast, there’s a place for you in the MedasDigital 2.0 ecosystem.
+> **Upcoming mandatory upgrade: v2.** The network will upgrade to v2 through a
+> governance proposal. All node operators must prepare for it. See
+> [docs/upgrades/v2.md](docs/upgrades/v2.md).
 
------
+## Run a node
 
-## MedasDigital 2.0 Launch: A Phased Validator and Node Approach
+Requirements:
+- Linux x86_64 (amd64) with systemd; Ubuntu 22.04 or later is recommended.
+- 4 CPU cores and 8 GB RAM.
+- 100 GB+ free disk space for a node started with state sync, 250 GB+ for a full
+  sync from genesis.
+- Port 26656/tcp reachable for P2P.
 
-To ensure a stable and seamless start, we’re launching MedasDigital 2.0 with a set of our own initial validators. This approach allows us to closely monitor network stability, optimize performance, and ensure a secure environment for all participants.
+> ⚠️ **Do not use release v1.0.0.** It is not compatible with the mainnet and
+> cannot sync the chain. Older versions of `medasdigital_setup.sh` installed it
+> as the "latest" release. The mainnet binary is **v1.0.1**.
 
-### Why Start with Our Own Validators?
+### Quick start with the setup script (recommended)
 
-- **Stability and Reliability**: By beginning with our own validators, we maintain complete control over network stability during the critical early phase, minimizing potential issues.
-- **Security Optimization**: Launching with our validators allows us to monitor security metrics closely and make any necessary adjustments before opening the network to external participants.
-- **Gradual Decentralization**: Shortly after launch, we’ll expand validator and node access, enabling community members to join and contribute to network growth.
+[`medasdigital_setup.sh`](medasdigital_setup.sh) sets up a node the way the
+network expects it:
+- The node runs under [Cosmovisor](https://github.com/cosmos/cosmos-sdk/tree/main/tools/cosmovisor),
+  so upgrades switch the binary automatically.
+- Every download is verified by SHA-256: binary v1.0.1, libwasmvm 2.1.2,
+  genesis and Cosmovisor.
+- The node is initialized with state sync.
+- The script never creates, imports or modifies validator keys or wallets.
 
------
-
-## Node Setup Guide
-
-This comprehensive guide will help you set up a MedasDigital 2.0 node from scratch, including compilation, service integration, and validator creation.
-
-### Prerequisites
-
-Before starting, ensure your system meets the following requirements:
-
-- Ubuntu 20.04 LTS or later (or compatible Linux distribution)
-- Minimum 4 GB RAM (8 GB recommended)
-- 100 GB+ available disk space
-- Stable internet connection
-- Go 1.21+ installed
-
-### Step 1: Install Dependencies
-
-First, update your system and install the necessary dependencies:
-
-```bash
-# Update system packages
-sudo apt update && sudo apt upgrade -y
-
-# Install essential tools
-sudo apt install -y build-essential git curl wget jq
-
-# Install Go (if not already installed)
-wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
-sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.5.linux-amd64.tar.gz
-echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
-echo 'export GOPATH=$HOME/go' >> ~/.bashrc
-echo 'export GOBIN=$GOPATH/bin' >> ~/.bashrc
-source ~/.bashrc
-
-# Verify Go installation
-go version
+```sh
+curl -fsSLO https://raw.githubusercontent.com/oxygene76/medasdigital-2/main/medasdigital_setup.sh
+chmod +x medasdigital_setup.sh
+sudo ./medasdigital_setup.sh install                 # cosmovisor, libwasmvm 2.1.2, medasdigitald v1.0.1
+sudo ./medasdigital_setup.sh init <your-moniker>     # state sync; add --genesis-sync for a full sync
+sudo ./medasdigital_setup.sh service                 # systemd unit "medasdigitald"
+sudo systemctl start medasdigitald
+./medasdigital_setup.sh status                       # height, catching up, peers, upgrades
+journalctl -fu medasdigitald
 ```
 
-### Step 2: Clone and Compile MedasDigital
+Settings can be changed with environment variables, for example:
+- `NODE_USER` / `NODE_HOME`: run the node as a dedicated user.
+- `STATE_SYNC_RPC` / `STATE_SYNC_RPC2`: RPC servers for state sync.
+  `STATE_SYNC_RPC2` should be an independent second server.
+- `PEERS`: persistent peers.
 
-Clone the repository and compile the node binary:
-
-```bash
-# Clone the repository
-git clone https://github.com/oxygene76/medasdigital-2.git
-cd medasdigital-2
-
-# Build the binary
-make build
-
-# Install the binary to system path
-sudo cp build/medasdigitald /usr/local/bin/
-
-# Verify installation
-medasdigitald version
+```sh
+sudo NODE_USER=medas ./medasdigital_setup.sh install
 ```
 
-### Step 3: Initialize the Node
+The script supports one node per machine.
 
-Set up your node configuration:
+### Manual setup
 
-```bash
-# Set node name (replace with your preferred name)
-MONIKER="your-node-name"
+1. **Binary v1.0.1** from the [GitHub release](https://github.com/oxygene76/medasdigital-2/releases/tag/v1.0.1):
 
-# Initialize the node
-medasdigitald init $MONIKER --chain-id medasdigital-2
+   ```sh
+   curl -fsSLO https://github.com/oxygene76/medasdigital-2/releases/download/v1.0.1/medasdigitald
+   echo "676a9d2f4f0648994a7da8b30ab4fbbd69018bd82c23f1c077e2b01044871a68  medasdigitald" | sha256sum -c -
+   sudo install -m 0755 medasdigitald /usr/local/bin/medasdigitald
+   ```
 
-# Create necessary directories
-mkdir -p ~/.medasdigital/config
-mkdir -p ~/.medasdigital/data
+2. **libwasmvm 2.1.2.** v1.0.1 is dynamically linked against this exact version:
+
+   ```sh
+   curl -fsSLO https://github.com/CosmWasm/wasmvm/releases/download/v2.1.2/libwasmvm.x86_64.so
+   echo "015bdae5e70304f1e487981f90e3956754718fe7bdac4446aab0838fcb8b33e0  libwasmvm.x86_64.so" | sha256sum -c -
+   sudo install -m 0644 libwasmvm.x86_64.so /usr/lib/libwasmvm.x86_64.so && sudo ldconfig
+   medasdigitald version                       # v1.0.1
+   medasdigitald query wasm libwasmvm-version  # 2.1.2
+   ```
+
+3. **Initialize and fetch the genesis:**
+
+   ```sh
+   medasdigitald init <your-moniker> --chain-id medasdigital-2
+   curl -fsSL -o ~/.medasdigital/config/genesis.json \
+     https://raw.githubusercontent.com/oxygene76/medasdigital-2/v1.0.1/genesis/mainnet/config/genesis.json
+   echo "e4c22a18aa3a9577fa0565785bc6dfe1648a43f47c0e6bbcb5f236a6f635f9b0  $HOME/.medasdigital/config/genesis.json" | sha256sum -c -
+   ```
+
+4. **Configure:**
+   - `persistent_peers` in `config.toml`: see [Network](#network).
+   - `minimum-gas-prices = "0.025umedas"` in `app.toml`.
+   - For state sync, set in the `[statesync]` section of `config.toml`:
+     `enable = true`, two `rpc_servers`, and a recent `trust_height` /
+     `trust_hash` taken from the RPC (`/block?height=<latest-2000>`).
+
+5. **Run:** as a systemd service, ideally under Cosmovisor with v1.0.1 as the
+   genesis binary. The setup script shows the exact unit.
+
+## Existing nodes: switch to Cosmovisor
+
+A node that runs `medasdigitald start` directly from a systemd unit can be
+switched to Cosmovisor without touching its keys or data:
+
+```sh
+sudo ./medasdigital_setup.sh migrate
 ```
 
-### Step 4: Configure Genesis and Network Settings
+The script:
+1. checks the running binary,
+2. installs Cosmovisor,
+3. copies the running binary as the Cosmovisor genesis binary,
+4. shows the changes to the unit,
+5. restarts the node once, after confirmation.
 
-Download and configure the genesis file and network settings:
+On a validator it also shows the voting power and how long the validator may be
+offline before it gets jailed. At the end it prints the exact commands to
+switch back:
 
-```bash
-# Download genesis file (replace URL with actual genesis file location)
-wget -O ~/.medasdigital/config/genesis.json https://raw.githubusercontent.com/oxygene76/medasdigital-2/main/genesis.json
-
-# Configure peers and seeds (replace with actual peer information)
-SEEDS="seed1@ip:port,seed2@ip:port"
-PEERS="peer1@ip:port,peer2@ip:port"
-
-# Update config.toml
-sed -i "s/seeds = \"\"/seeds = \"$SEEDS\"/" ~/.medasdigital/config/config.toml
-sed -i "s/persistent_peers = \"\"/persistent_peers = \"$PEERS\"/" ~/.medasdigital/config/config.toml
-
-# Configure app.toml for optimal performance
-sed -i 's/minimum-gas-prices = ""/minimum-gas-prices = "0.001umedas"/' ~/.medasdigital/config/app.toml
+```sh
+sudo systemctl stop medasdigitald
+sudo cp /etc/systemd/system/medasdigitald.service.pre-cosmovisor /etc/systemd/system/medasdigitald.service
+sudo rm /usr/local/bin/medasdigitald && sudo mv /usr/local/bin/medasdigitald.pre-cosmovisor /usr/local/bin/medasdigitald
+sudo systemctl daemon-reload && sudo systemctl start medasdigitald
 ```
 
-### Step 5: Create Systemd Service
+The rollback is only valid until the next chain upgrade.
 
-Create a systemd service to manage your node:
+## Validators
 
-```bash
-# Create the service file
-sudo tee /etc/systemd/system/medasdigital.service > /dev/null <<EOF
-[Unit]
-Description=MedasDigital Node
-After=network-online.target
+- **Create the validator only after the node is fully synced**
+  (`medasdigitald status | jq .sync_info.catching_up` → `false`).
+- Create it with a JSON file:
 
-[Service]
-User=$USER
-ExecStart=/usr/local/bin/medasdigitald start --home $HOME/.medasdigital
-Restart=on-failure
-RestartSec=3
-LimitNOFILE=65535
+  ```sh
+  medasdigitald keys add <wallet>        # write down the mnemonic offline
+  medasdigitald comet show-validator     # consensus public key for the JSON file
+  medasdigitald tx staking create-validator --help
+  medasdigitald tx staking create-validator validator.json --from <wallet> \
+    --chain-id medasdigital-2 --gas auto --gas-adjustment 1.5 --gas-prices 0.025umedas
+  ```
 
-[Install]
-WantedBy=multi-user.target
-EOF
+- **Back up your keys** offline and encrypted:
+  - `config/priv_validator_key.json` (consensus key),
+  - the wallet mnemonic,
+  - `config/node_key.json` (optional).
+- `data/priv_validator_state.json` belongs to the running node. Keep it with the
+  key when you move a validator.
+- **Never run the same `priv_validator_key.json` on two machines at the same
+  time**, not even briefly during a move or with a standby node. Double signing
+  slashes 5 % of the stake and tombstones the validator permanently.
+- Downtime:
+  - Missing more than 50 % of the blocks in the signing window jails the
+    validator for 10 minutes and slashes 1 %.
+  - `medasdigitald query slashing params` shows the current window.
+  - Plan maintenance, and never stop several validators at the same time.
 
-# Reload systemd and enable the service
-sudo systemctl daemon-reload
-sudo systemctl enable medasdigital
-```
+## Building from source
 
-### Step 6: Start the Node
-
-Start your node and monitor its status:
-
-```bash
-# Start the service
-sudo systemctl start medasdigital
-
-# Check service status
-sudo systemctl status medasdigital
-
-# Monitor logs in real-time
-journalctl -u medasdigital -f
-
-# Check sync status
-medasdigitald status | jq .SyncInfo
-```
-
-### Step 7: Create a Wallet
-
-Create a new wallet for your node operations:
-
-```bash
-# Create a new wallet (replace 'wallet-name' with your preferred name)
-medasdigitald keys add wallet-name
-
-# Or import an existing wallet
-medasdigitald keys add wallet-name --recover
-
-# List all wallets
-medasdigitald keys list
-
-# Check wallet balance
-medasdigitald query bank balances $(medasdigitald keys show wallet-name -a)
-```
-
-### Step 8: Create a Validator
-
-Once your node is fully synchronized, you can create a validator:
-
-```bash
-# Check if node is synchronized
-medasdigitald status | jq .SyncInfo.catching_up
-
-# Create validator transaction (adjust values as needed)
-medasdigitald tx staking create-validator \
-  --amount 1000000umedas \
-  --pubkey $(medasdigitald tendermint show-validator) \
-  --moniker "Your Validator Name" \
-  --identity "" \
-  --website "" \
-  --security-contact "" \
-  --details "Your validator description" \
-  --chain-id medasdigital-2 \
-  --commission-rate 0.05 \
-  --commission-max-rate 0.20 \
-  --commission-max-change-rate 0.01 \
-  --min-self-delegation 1 \
-  --gas auto \
-  --gas-adjustment 1.5 \
-  --fees 5000umedas \
-  --from wallet-name
-
-# Check validator status
-medasdigitald query staking validator $(medasdigitald keys show wallet-name --bech val -a)
-```
-
-## Node Management Commands
-
-### Service Management
-
-```bash
-# Start the service
-sudo systemctl start medasdigital
-
-# Stop the service
-sudo systemctl stop medasdigital
-
-# Restart the service
-sudo systemctl restart medasdigital
-
-# Check service status
-sudo systemctl status medasdigital
-
-# Enable service to start on boot
-sudo systemctl enable medasdigital
-
-# Disable service from starting on boot
-sudo systemctl disable medasdigital
-```
-
-### Monitoring and Troubleshooting
-
-```bash
-# View real-time logs
-journalctl -u medasdigital -f
-
-# View recent logs
-journalctl -u medasdigital --since "1 hour ago"
-
-# Check node status
-medasdigitald status
-
-# Check sync status
-medasdigitald status | jq .SyncInfo
-
-# Check connected peers
-medasdigitald query tendermint-validator-set
-
-# Check validator info
-medasdigitald query staking validators --limit 100
-```
-
-### Wallet Operations
-
-```bash
-# Send tokens
-medasdigitald tx bank send wallet-name <recipient-address> 1000000umedas --fees 5000umedas
-
-# Check balance
-medasdigitald query bank balances $(medasdigitald keys show wallet-name -a)
-
-# Delegate to validator
-medasdigitald tx staking delegate <validator-address> 1000000umedas --from wallet-name --fees 5000umedas
-
-# Withdraw rewards
-medasdigitald tx distribution withdraw-all-rewards --from wallet-name --fees 5000umedas
-```
-
-## Security Best Practices
-
-When running a validator node, consider these security measures:
-
-1. **Firewall Configuration**: Only open necessary ports (26656 for P2P, 26657 for RPC if needed)
-1. **Key Management**: Store your validator keys securely and consider using a hardware security module
-1. **Monitoring**: Set up monitoring and alerting for your validator
-1. **Backup**: Regularly backup your validator keys and node data
-1. **Updates**: Keep your node software updated to the latest version
-
-## Troubleshooting
-
-### Common Issues
-
-**Node won’t start**: Check logs with `journalctl -u medasdigital -f` for specific error messages
-
-**Sync issues**: Verify peers are configured correctly and genesis file is valid
-
-**Out of disk space**: Monitor disk usage and clean up old logs if necessary
-
-**Memory issues**: Ensure your system has sufficient RAM and consider enabling swap
-
-### Getting Help
-
-If you encounter issues not covered in this guide:
-
-1. Check the logs for specific error messages
-1. Consult the community forums or Discord
-1. Review the GitHub repository for known issues
-1. Contact the development team for technical support
-
-## Building MedasDigital 2.0 Together
-
-By following this comprehensive setup guide, you’ll be contributing to the MedasDigital 2.0 network as either a node operator or validator. Your participation helps strengthen the network’s security and decentralization.
-
-Stay tuned for updates and improvements to the network. We look forward to building the future of MedasDigital 2.0 together!
+Release binaries are built from tags, never from `main`. See
+[docs/building.md](docs/building.md) for the required Go version, a
+reproducible build and how to compare the result with the published checksum.
 
 ## License
 
-This project is licensed under the MIT License. Please see the LICENSE file for more details.
+This project is licensed under the MIT License.
