@@ -185,4 +185,4 @@ reproducible build and how to compare the result with the published checksum.
 
 ## License
 
-This project is licensed under the MIT License.
+Licensed under the [Apache License 2.0](LICENSE).
