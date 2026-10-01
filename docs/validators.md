@@ -3,24 +3,30 @@
 The setup script never creates or imports keys. Do these steps yourself,
 on the node, after it is fully synced.
 
+Run every command in this guide as the user the node runs as
+(NODE_USER, default root). If you set NODE_HOME, add
+--home <NODE_HOME> to every command.
+
 ## 1. Wait until the node is synced
 
-    ./medasdigital_setup.sh status        # "Catching up: false"
+    ./medasdigital_setup.sh status        # "Catching up" must be false
 
 Creating a validator on a node that is still catching up makes it miss
 blocks right away.
 
 ## 2. Create or restore the operator wallet
 
-The keyring uses the "file" backend and asks for a passphrase.
+These commands pass --keyring-backend file explicitly. Without it,
+the binary falls back to the "test" backend, which stores keys
+unencrypted. The file backend asks for a passphrase.
 
-    medasdigitald keys add <wallet>             # new wallet
-    medasdigitald keys add <wallet> --recover   # restore from mnemonic
-    medasdigitald keys show <wallet> -a         # account address
+    medasdigitald keys add <wallet> --keyring-backend file             # new wallet
+    medasdigitald keys add <wallet> --recover --keyring-backend file   # restore from mnemonic
+    medasdigitald keys show <wallet> -a --keyring-backend file         # account address
 
 Write the mnemonic down offline. Never store it on the server.
-If the node runs as a dedicated user (NODE_USER), run these commands as
-that user, for example `sudo -u medas -H medasdigitald keys add <wallet>`.
+For a dedicated node user, for example:
+`sudo -u medas -H medasdigitald keys add <wallet> --keyring-backend file`.
 
 ## 3. Fund the wallet
 
@@ -50,12 +56,13 @@ Create `validator.json`:
 Submit it:
 
     medasdigitald tx staking create-validator validator.json \
-      --from <wallet> --chain-id medasdigital-2 \
+      --from <wallet> --keyring-backend file --chain-id medasdigital-2 \
       --gas auto --gas-adjustment 1.5 --gas-prices 0.025umedas
 
 Check:
 
-    medasdigitald q staking validator $(medasdigitald keys show <wallet> --bech val -a)
+    medasdigitald keys show <wallet> --bech val -a --keyring-backend file   # operator address (asks for the passphrase)
+    medasdigitald q staking validator <operator-address>
     ./medasdigital_setup.sh status        # voting power > 0
 
 ## 5. Protect your keys
@@ -76,5 +83,10 @@ Check:
 A validator that misses too many blocks is jailed. Once the node is
 running and synced again:
 
-    medasdigitald tx slashing unjail --from <wallet> \
+    medasdigitald tx slashing unjail --from <wallet> --keyring-backend file \
       --chain-id medasdigital-2 --gas auto --gas-adjustment 1.5 --gas-prices 0.025umedas
+
+## Upgrades
+
+Before every chain upgrade, follow the matching guide in
+[docs/upgrades/](upgrades/).
