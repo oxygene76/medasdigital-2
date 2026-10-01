@@ -150,6 +150,8 @@ The rollback is only valid until the next chain upgrade.
 
 ## Validators
 
+Step by step: [docs/validators.md](docs/validators.md).
+
 - **Create the validator only after the node is fully synced**
   (`medasdigitald status | jq .sync_info.catching_up` → `false`).
 - Create it with a JSON file:
