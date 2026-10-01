@@ -152,32 +152,9 @@ The rollback is only valid until the next chain upgrade.
 
 Step by step: [docs/validators.md](docs/validators.md).
 
-- **Create the validator only after the node is fully synced**
-  (`medasdigitald status | jq .sync_info.catching_up` → `false`).
-- Create it with a JSON file:
-
-  ```sh
-  medasdigitald keys add <wallet>        # write down the mnemonic offline
-  medasdigitald comet show-validator     # consensus public key for the JSON file
-  medasdigitald tx staking create-validator --help
-  medasdigitald tx staking create-validator validator.json --from <wallet> \
-    --chain-id medasdigital-2 --gas auto --gas-adjustment 1.5 --gas-prices 0.025umedas
-  ```
-
-- **Back up your keys** offline and encrypted:
-  - `config/priv_validator_key.json` (consensus key),
-  - the wallet mnemonic,
-  - `config/node_key.json` (optional).
-- `data/priv_validator_state.json` belongs to the running node. Keep it with the
-  key when you move a validator.
-- **Never run the same `priv_validator_key.json` on two machines at the same
-  time**, not even briefly during a move or with a standby node. Double signing
-  slashes 5 % of the stake and tombstones the validator permanently.
-- Downtime:
-  - Missing more than 50 % of the blocks in the signing window jails the
-    validator for 10 minutes and slashes 1 %.
-  - `medasdigitald query slashing params` shows the current window.
-  - Plan maintenance, and never stop several validators at the same time.
+Never run the same `priv_validator_key.json` on two machines at
+the same time: that is double signing, and the validator is
+slashed and permanently removed.
 
 ## Building from source
 

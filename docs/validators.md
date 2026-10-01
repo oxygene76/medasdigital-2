@@ -16,9 +16,14 @@ blocks right away.
 
 ## 2. Create or restore the operator wallet
 
-These commands pass --keyring-backend file explicitly. Without it,
-the binary falls back to the "test" backend, which stores keys
-unencrypted. The file backend asks for a passphrase.
+These commands pass `--keyring-backend file` explicitly, so every
+command uses the same encrypted keyring. Without the option, the
+binary uses the backend set in `config/client.toml` ("os" by
+default). That keyring lives in a different place, so a key
+created one way is not found the other way. If your wallet
+already exists in another backend, pass that backend instead.
+Never use "test" on a server: it stores keys unencrypted. The
+file backend asks for a passphrase.
 
     medasdigitald keys add <wallet> --keyring-backend file             # new wallet
     medasdigitald keys add <wallet> --recover --keyring-backend file   # restore from mnemonic
@@ -68,20 +73,29 @@ Check:
 ## 5. Protect your keys
 
 - `config/priv_validator_key.json` is your validator's signing key. Keep
-  an offline backup.
+  an offline, encrypted backup of it, of the wallet mnemonic and,
+  optionally, of `config/node_key.json` (the node's P2P identity).
 - **Never run the same `priv_validator_key.json` on two machines at the
   same time.** This is double signing: the validator is slashed and
   permanently removed (tombstoned). This includes clones, restored
-  backups and VM snapshots that are started with network access.
+  backups and VM snapshots that are started with network access, and
+  standby nodes, even briefly during a move.
 - Moving a validator: stop and disable the old node first and make sure
   it cannot start again, then start the new one.
-- `data/priv_validator_state.json` stays on the node and must never be
-  replaced with an older copy.
+- When moving a validator, copy `data/priv_validator_state.json`
+  from the stopped old node together with the key. Never replace
+  it with an older copy, for example from a backup.
 
 ## 6. After downtime
 
-A validator that misses too many blocks is jailed. Once the node is
-running and synced again:
+A validator that misses too many blocks is jailed. With the current
+parameters, missing more than 50 % of the blocks in the signing window
+jails the validator for 10 minutes and slashes 1 % of the stake; double
+signing slashes 5 %. `medasdigitald query slashing params` shows the
+current values. Plan maintenance, and never stop several validators at
+the same time.
+
+Once the node is running and synced again:
 
     medasdigitald tx slashing unjail --from <wallet> --keyring-backend file \
       --chain-id medasdigital-2 --gas auto --gas-adjustment 1.5 --gas-prices 0.025umedas
