@@ -16,8 +16,12 @@ that time**.
 
 1. **Commit.** The author publishes only a hash of the statement. The chain
    records the author's address, block height and block time.
-2. **Reveal.** Later, anyone publishes the statement together with a secret salt.
-   The chain checks that it matches the hash and makes it permanently public.
+2. **Reveal.** Later, anyone publishes the SHA-256 digest of the statement
+   together with the secret salt, and optionally the statement itself. The chain
+   checks that they match the hash and makes them permanently public. A
+   statement that is not put on chain (for example a large file, or a paper
+   published elsewhere) is verified by hashing it and comparing with the
+   revealed digest.
 
 The hash binds the statement to the committing address. A hash copied by
 someone else can never be revealed under the copier's address (section 3.3).
@@ -33,6 +37,7 @@ validate or rank statements; evaluation happens off-chain (section 12).
 | revealer | Address that signed `MsgReveal`. Any address; carries no meaning for attribution. |
 | salt | 32 secret random bytes chosen by the creator. |
 | payload | The statement, as bytes. Clients SHOULD use canonical JSON (RFC 8785). |
+| content digest | `SHA-256(payload)`, 32 bytes. Only the digest enters the commitment. |
 | schema | Public name of the payload format, e.g. `orbit.prediction.v1`. |
 | label | Optional public free text attached to a commit. |
 | block time | CometBFT BFT time of the block, as reported in the block header. |
@@ -42,11 +47,13 @@ validate or rank statements; evaluation happens off-chain (section 12).
 ### 3.1 Definition
 
 ```
+content_sha256 = SHA-256(payload)      32 bytes; payload is at least 1 byte
+
 preimage = "medas-notary/v1"           15 bytes, ASCII, no terminator
         || uint8(len(creator_bytes))   1 byte: 20 (0x14) or 32 (0x20)
         || creator_bytes               raw address bytes, 20 or 32
         || salt                        exactly 32 bytes
-        || payload                     all remaining bytes, at least 1
+        || content_sha256              exactly 32 bytes
 
 hash = SHA-256(preimage)               32 bytes
 ```
@@ -58,8 +65,11 @@ hash = SHA-256(preimage)               32 bytes
 - `salt` MUST be exactly 32 bytes and SHOULD come from a cryptographically secure
   random number generator (e.g. `secrets.token_bytes(32)`, `crypto.getRandomValues`).
   Never reuse a salt.
-- `payload` is everything after the salt. Because the salt has a fixed length
-  and the creator is length-prefixed, the preimage is unambiguous.
+- The preimage has a fixed length (80 or 92 bytes) and is unambiguous: the
+  creator is length-prefixed, salt and digest have fixed lengths.
+- Hashing the content first means that a client can commit to content of any
+  size, that the content never has to be on chain, and that the commitment can
+  be checked from the digest alone.
 
 ### 3.2 Payload encoding (client convention)
 
@@ -82,7 +92,8 @@ least 1 byte is a valid payload for the chain, including non-UTF-8 data
 - **Hiding.** Without the salt, the hash reveals nothing about the payload, even
   for guessable payloads, because the salt has 256 bits of entropy.
 - **Binding.** Finding a second (salt, payload) pair for the same hash is
-  infeasible (SHA-256 collision resistance).
+  infeasible: it would need a SHA-256 collision either of the preimage or of
+  the content.
 - **Creator binding.** Suppose address B copies A's hash. Then B's commit can
   only be revealed with a preimage containing B's address bytes. That preimage
   differs from the one A hashed, so B's copy is never revealable.
@@ -107,7 +118,8 @@ least 1 byte is a valid payload for the chain, including non-UTF-8 data
 | `revealed` | bool | module | True after a successful reveal. |
 | `revealer` | address | MsgReveal | Empty until revealed. |
 | `salt` | 32 bytes | MsgReveal | Empty until revealed. |
-| `payload` | bytes | MsgReveal | Empty until revealed. |
+| `content_sha256` | 32 bytes | MsgReveal | Empty until revealed. |
+| `payload` | bytes | MsgReveal | Optional; empty if only the digest was revealed. |
 | `reveal_height` | int64 | module | 0 until revealed. |
 | `reveal_time` | timestamp | module | Unset (null) until revealed. |
 
@@ -136,22 +148,28 @@ emits `EventCommitCreated`.
 
 ### 5.2 MsgReveal
 
-`MsgReveal { revealer, id, salt, payload }`. The signer is `revealer`, which may
-be **any** address. Attribution follows from the commit's `creator`, which is
-bound into the hash.
+`MsgReveal { revealer, id, salt, content_sha256, payload }`. The signer is
+`revealer`, which may be **any** address. Attribution follows from the commit's
+`creator`, which is bound into the hash.
 
 The message MUST be rejected unless all of the following hold:
 1. A commit with `id` exists and is not yet revealed.
-2. `salt` is exactly 32 bytes.
-3. `payload` is 1 to `params.max_payload_bytes` bytes long, using the parameter
-   value at the time of the reveal (see 13.1).
-4. `SHA-256(preimage(commit.creator, salt, payload)) == commit.hash`.
+2. `salt` and `content_sha256` are exactly 32 bytes each.
+3. `payload` is either empty or 1 to `params.max_payload_bytes` bytes long,
+   using the parameter value at the time of the reveal (see 13.1).
+4. If `payload` is not empty: `SHA-256(payload) == content_sha256`.
+5. `SHA-256(preimage(commit.creator, salt, content_sha256)) == commit.hash`.
 
 There is no deadline for revealing. On success the module sets `revealed`,
-`revealer`, `salt`, `payload`, `reveal_height` and `reveal_time` and emits
-`EventCommitRevealed`.
+`revealer`, `salt`, `content_sha256`, `payload`, `reveal_height` and
+`reveal_time` and emits `EventCommitRevealed`.
 
-Once broadcast, a reveal transaction exposes salt and payload in the mempool.
+A reveal without payload proves that the creator committed to *some* content
+with this digest. Whoever holds the content can prove that it is that content;
+evaluators SHOULD require the content to be publicly available (rule 12.7).
+
+Once broadcast, a reveal transaction exposes salt, digest and payload in the
+mempool.
 Anyone can submit the same reveal first. The result is the same except for the
 `revealer` field, which is why `revealer` MUST NOT be interpreted as authorship.
 
@@ -236,7 +254,8 @@ medasdigital.medasdigital.EventCommitRevealed { id, creator, revealer }
   - ids are unique and > 0, and `next_commit_id` > every id;
   - every commit satisfies the stateless rules of 5.1 (and of 5.2 if revealed);
   - no (creator, hash) pair repeats;
-  - each revealed commit's salt and payload reproduce its hash.
+  - each revealed commit's salt and content digest reproduce its hash, and a
+    non-empty payload hashes to the content digest.
 - `HashIndex` and `CreatorIndex` are not exported; they are rebuilt from the
   commits on import.
 
@@ -263,6 +282,10 @@ enforce them.
    labels MUST NOT contain personal data.
 6. **The salt is the only key.** Whoever loses the salt can never reveal. There
    is no recovery.
+7. **Digest-only reveals need the content.** A reveal without payload
+   establishes priority only for whoever can present content with the revealed
+   digest. Until the content is publicly available, the entry proves only that
+   the creator committed to some content.
 
 ## 13. Open points (not normative, to be decided before mainnet)
 
@@ -290,6 +313,10 @@ enforce them.
    fees. A 16 KiB reveal costs roughly 0.5–0.7 M gas, about 0.016 MEDAS at
    0.025 umedas/gas. Unrevealed commits are never pruned.
 
+7. **Message change for the content digest.** `MsgReveal` and `Commit` need the
+   new field `content_sha256` (section 4, 5.2), and `payload` becomes optional.
+   `notary.proto` and the generated code still have to be updated.
+
 ## 14. Example
 
 Creator `medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf` (test vector 1).
@@ -305,12 +332,14 @@ Creator `medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf` (test vector 1).
    scripts/notary_hash.py hash --creator medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf \
      --salt 000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f \
      --payload-file prediction.json
-   dfa7416689de1848783c4494b7a4296e1c770d9c80454bcc1a4eb725d3691f6c
+   63bcbb73650f9eb71db03a53fc6ce5e42fc9bf5010eec987631d998389092c15
    ```
+   The content digest is `scripts/notary_hash.py content-sha256 --payload-file prediction.json`
+   (`9121baa9…e577e7a6`, the same as `sha256sum prediction.json`).
 4. Commit. Only the hash, schema and label become public. The response contains the id.
    ```
    medasdigitald tx medasdigital commit \
-     --hash dfa7416689de1848783c4494b7a4296e1c770d9c80454bcc1a4eb725d3691f6c \
+     --hash 63bcbb73650f9eb71db03a53fc6ce5e42fc9bf5010eec987631d998389092c15 \
      --schema orbit.prediction.v1 --label "2024 YR4 close approach" --from <creator>
    ```
    The chain records e.g. `id = 1`, `commit_height = 1200000` and
@@ -320,10 +349,13 @@ Creator `medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf` (test vector 1).
    ```
    medasdigitald tx medasdigital reveal --id 1 \
      --salt 000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f \
+     --content-sha256 9121baa9dd2a71230fb2db60e69a429c7c0132827fadd926f9a1d10ae577e7a6 \
      --payload $(xxd -p -c0 prediction.json) --from <any address>
    ```
+   `--payload` may be left out; then the prediction must be published elsewhere.
 7. Verify. Anyone can fetch commit 1 and recompute the hash from `creator`,
-   `salt` and `payload` with the reference script. The prediction is then proven
+   `salt` and `content_sha256` with the reference script, and check
+   `sha256sum prediction.json` against `content_sha256`. The prediction is then proven
    to have been fixed by the creator at `commit_time`. Per rule 12.3, it is
    evaluated together with all other commits of that creator.
 
@@ -336,12 +368,15 @@ file. Verify it with `scripts/notary_hash.py vectors`.
 
 | # | Creator | Salt (hex) | Payload | Hash (hex) |
 |---|---|---|---|---|
-| 1 | `medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf` (20 bytes, gov module account) | `000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f` | `{"epoch":"2026-10-01T00:00:00Z","object":"2024 YR4","ra_deg":"123.456789","schema":"orbit.prediction.v1"}` | `dfa7416689de1848783c4494b7a4296e1c770d9c80454bcc1a4eb725d3691f6c` |
-| 2 | `medas14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s32jrf6` (32 bytes, CosmWasm contract code 1 / instance 1) | `6d3479a290dce3001d82da753592bccac6719c722dc232de68d34ea41b057dd4` | `{"note":"Δt ≤ 0.5 s, Beobachter: Sternwarte Göttingen","object":"(3200) Phaethon","observer":"Müller"}` (UTF-8) | `7872919d266a32f56ebac8caeb01dc5f342bbaddf1e76f2424beba5099c402e4` |
-| 3 | `medas1qyqszqgpqyqszqgpqyqszqgpqyqszqgphqakax` (20 × 0x01) | `ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff` | `x` (1 byte) | `6020c7c8631884517e1ecf7cb09b8c074c8049b6087e209e542fd35cca61c74f` |
-| 4 | as #1 | as #1 | hex `00fffe00` (not UTF-8) | `b3dcd22c5d8366d75e2edce66edb0a1b96e9e44bf89ce9c32da8583f1bb3cb27` |
+| 1 | `medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf` (20 bytes, gov module account) | `000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f` | `{"epoch":"2026-10-01T00:00:00Z","object":"2024 YR4","ra_deg":"123.456789","schema":"orbit.prediction.v1"}` | `63bcbb73650f9eb71db03a53fc6ce5e42fc9bf5010eec987631d998389092c15` |
+| 2 | `medas14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s32jrf6` (32 bytes, CosmWasm contract code 1 / instance 1) | `6d3479a290dce3001d82da753592bccac6719c722dc232de68d34ea41b057dd4` | `{"note":"Δt ≤ 0.5 s, Beobachter: Sternwarte Göttingen","object":"(3200) Phaethon","observer":"Müller"}` (UTF-8) | `f3e7b524805190962db10f9ca13eec1e71d0f96e5280161f99555735ff6f5d70` |
+| 3 | `medas1qyqszqgpqyqszqgpqyqszqgpqyqszqgphqakax` (20 × 0x01) | `ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff` | `x` (1 byte) | `b7baf1fef6d243fe01d6175b545bde9cfbb6ea1e4b9a67e982ab43d75e85ab25` |
+| 4 | as #1 | as #1 | hex `00fffe00` (not UTF-8) | `cb4427611907992f7f736ae99bd173af9a25ac517a844b41e9c84237b230324a` |
+
+The content digests are in the test data file (`content_sha256_hex`).
 
 The vectors were cross-checked independently:
 - address bytes with `medasdigitald debug addr`;
 - the contract address with wasmd `BuildContractAddressClassic`;
-- the hashes with `sha256sum` over a preimage assembled in the shell.
+- the content digests and hashes with `sha256sum` over a preimage assembled in
+  the shell (vectors 1 and 3, for the content digest variant).

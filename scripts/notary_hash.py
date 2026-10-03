@@ -3,11 +3,12 @@
 
 Standard library only. Normative definition: docs/notary-spec.md.
 
+    content_sha256 = SHA-256(payload)        payload: the content, at least 1 byte
     preimage = b"medas-notary/v1"            15 bytes ASCII
              || uint8(len(creator_bytes))
              || creator_bytes                raw address bytes (20 or 32)
              || salt                         exactly 32 bytes
-             || payload                      remaining bytes, at least 1
+             || content_sha256               exactly 32 bytes
     hash     = SHA-256(preimage)
 
 Usage:
@@ -15,6 +16,10 @@ Usage:
         print a fresh 32-byte salt (hex) from the OS CSPRNG
     notary_hash.py hash --creator ADDR --salt HEX (--payload STR | --payload-file F | --payload-hex HEX)
         print the commitment hash (hex)
+    notary_hash.py hash --creator ADDR --salt HEX --content-sha256 HEX
+        same, from the content digest alone (the content itself is not needed)
+    notary_hash.py content-sha256 (--payload STR | --payload-file F | --payload-hex HEX)
+        print SHA-256 of the content (hex)
     notary_hash.py canonical-json FILE
         print FILE as canonical JSON (RFC 8785 subset, see canonical_json)
     notary_hash.py vectors [FILE]
@@ -32,6 +37,7 @@ import sys
 
 DOMAIN = b"medas-notary/v1"
 SALT_LEN = 32
+DIGEST_LEN = 32
 ADDRESS_LENGTHS = (20, 32)
 HRP = "medas"
 
@@ -122,19 +128,31 @@ def address_bytes(creator, hrp=HRP):
     return raw
 
 
-def preimage(creator_raw, salt, payload):
+def content_sha256(payload):
+    if len(payload) < 1:
+        raise ValueError("payload must not be empty")
+    return hashlib.sha256(payload).digest()
+
+
+def preimage(creator_raw, salt, digest):
+    """digest: SHA-256 of the content (32 bytes), not the content itself."""
     if len(creator_raw) not in ADDRESS_LENGTHS:
         raise ValueError("creator must be 20 or 32 bytes")
     if len(salt) != SALT_LEN:
         raise ValueError("salt must be exactly 32 bytes")
-    if len(payload) < 1:
-        raise ValueError("payload must not be empty")
-    return DOMAIN + bytes([len(creator_raw)]) + creator_raw + salt + payload
+    if len(digest) != DIGEST_LEN:
+        raise ValueError("content digest must be exactly 32 bytes")
+    return DOMAIN + bytes([len(creator_raw)]) + creator_raw + salt + digest
+
+
+def commitment_hash_from_digest(creator, salt, digest, hrp=HRP):
+    """creator: bech32 string, salt: 32 bytes, digest: SHA-256 of the content -> 32 bytes."""
+    return hashlib.sha256(preimage(address_bytes(creator, hrp), salt, digest)).digest()
 
 
 def commitment_hash(creator, salt, payload, hrp=HRP):
-    """creator: bech32 string, salt: 32 bytes, payload: bytes -> 32 bytes."""
-    return hashlib.sha256(preimage(address_bytes(creator, hrp), salt, payload)).digest()
+    """creator: bech32 string, salt: 32 bytes, payload: content bytes -> 32 bytes."""
+    return commitment_hash_from_digest(creator, salt, content_sha256(payload), hrp)
 
 
 # --------------------------------------------------------------------------
@@ -242,13 +260,15 @@ def make_vectors():
     vectors = []
     for c in cases:
         creator = bech32_encode(HRP, c["creator_raw"])
-        pre = preimage(c["creator_raw"], c["salt"], c["payload"])
+        digest = content_sha256(c["payload"])
+        pre = preimage(c["creator_raw"], c["salt"], digest)
         vectors.append({
             "name": c["name"],
             "creator": creator,
             "creator_hex": c["creator_raw"].hex(),
             "salt_hex": c["salt"].hex(),
             "payload_hex": c["payload"].hex(),
+            "content_sha256_hex": digest.hex(),
             "payload_utf8": c["payload"].decode("utf-8") if _is_utf8(c["payload"]) else None,
             "preimage_hex": pre.hex(),
             "hash_hex": hashlib.sha256(pre).hexdigest(),
@@ -304,10 +324,13 @@ def verify_vectors(path):
     for v in data["vectors"]:
         salt, payload = bytes.fromhex(v["salt_hex"]), bytes.fromhex(v["payload_hex"])
         raw = address_bytes(v["creator"], data["hrp"])
+        digest = content_sha256(payload)
         checks = {
             "creator_hex": raw.hex() == v["creator_hex"],
             "payload_utf8": v["payload_utf8"] is None or v["payload_utf8"].encode("utf-8") == payload,
-            "preimage": preimage(raw, salt, payload).hex() == v["preimage_hex"],
+            "content_sha256": digest.hex() == v["content_sha256_hex"],
+            "preimage": preimage(raw, salt, digest).hex() == v["preimage_hex"],
+            "hash_from_digest": commitment_hash_from_digest(v["creator"], salt, digest, data["hrp"]).hex() == v["hash_hex"],
             "hash": commitment_hash(v["creator"], salt, payload, data["hrp"]).hex() == v["hash_hex"],
         }
         good = all(checks.values())
@@ -324,6 +347,15 @@ def verify_vectors(path):
 # --------------------------------------------------------------------------
 
 
+def _read_payload(a):
+    if a.payload is not None:
+        return a.payload.encode("utf-8")
+    if a.payload_file is not None:
+        with open(a.payload_file, "rb") as f:
+            return f.read()
+    return bytes.fromhex(a.payload_hex)
+
+
 def main(argv):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -335,7 +367,13 @@ def main(argv):
     g.add_argument("--payload", help="UTF-8 string (used as is, not canonicalised)")
     g.add_argument("--payload-file")
     g.add_argument("--payload-hex")
+    g.add_argument("--content-sha256", help="SHA-256 of the content, 32 bytes hex")
     h.add_argument("--hrp", default=HRP)
+    d = sub.add_parser("content-sha256")
+    gd = d.add_mutually_exclusive_group(required=True)
+    gd.add_argument("--payload")
+    gd.add_argument("--payload-file")
+    gd.add_argument("--payload-hex")
     c = sub.add_parser("canonical-json")
     c.add_argument("file")
     v = sub.add_parser("vectors")
@@ -346,14 +384,13 @@ def main(argv):
     if a.cmd == "salt":
         print(secrets.token_bytes(SALT_LEN).hex())
     elif a.cmd == "hash":
-        if a.payload is not None:
-            payload = a.payload.encode("utf-8")
-        elif a.payload_file is not None:
-            with open(a.payload_file, "rb") as f:
-                payload = f.read()
+        if a.content_sha256 is not None:
+            digest = bytes.fromhex(a.content_sha256)
         else:
-            payload = bytes.fromhex(a.payload_hex)
-        print(commitment_hash(a.creator, bytes.fromhex(a.salt), payload, a.hrp).hex())
+            digest = content_sha256(_read_payload(a))
+        print(commitment_hash_from_digest(a.creator, bytes.fromhex(a.salt), digest, a.hrp).hex())
+    elif a.cmd == "content-sha256":
+        print(content_sha256(_read_payload(a)).hex())
     elif a.cmd == "canonical-json":
         with open(a.file, encoding="utf-8") as f:
             sys.stdout.buffer.write(canonical_json(json.load(f)))
