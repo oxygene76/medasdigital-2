@@ -1,0 +1,18 @@
+{
+  "messages": [
+    {
+      "@type": "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
+      "authority": "medas10d07y265gmmuvt4z0w9aw880jnsr700jl30dxf",
+      "plan": {
+        "name": "v2",
+        "height": "10273674",
+        "info": "https://github.com/oxygene76/medasdigital-2/releases/tag/v2.0.0"
+      }
+    }
+  ],
+  "metadata": "",
+  "deposit": "50000000umedas",
+  "title": "Mandatory security upgrade to v2.0.0",
+  "summary": "Mandatory security upgrade of medasdigital-2 to medasdigitald v2.0.0 (upgrade name v2) at height 10273674, expected around Monday, 5 October 2026, 14:00 UTC. v2.0.0 updates Cosmos SDK to v0.50.15, CometBFT to v0.38.26, wasmd to v0.54.10 (wasmvm v2.2.9) and ibc-go to v8.8.0. v1.0.1 stops at the upgrade height, and every validator and full node must switch to v2.0.0 there. Release binary: https://github.com/oxygene76/medasdigital-2/releases/tag/v2.0.0 (sha256 4df5db896514dc9795173274ec745dc73b630c90082960b96aad75b508b99bba). Instructions: https://github.com/oxygene76/medasdigital-2/blob/main/docs/upgrades/v2.md. Nodes set up with medasdigital_setup.sh: nodes without Cosmovisor run 'sudo ./medasdigital_setup.sh migrate' first, then every node runs 'sudo ./medasdigital_setup.sh prepare-upgrade v2' before the upgrade height; Cosmovisor then switches automatically.",
+  "expedited": true
+}
