@@ -433,5 +433,37 @@ transaction search `transfer.recipient='<anchor address>'` and ordered by
 3. The commit time is the block time of the commit's block (12.4). The
    evaluation rules of section 12 apply unchanged.
 
+### 16.4 Registration
+
+An address is **registered** if and only if an admin address sent it an
+approve transaction. An approve transaction is a transaction that
+1. was executed successfully (result code 0),
+2. contains exactly one message, a `cosmos.bank.v1beta1.MsgSend` whose
+   `from_address` is an admin address (16.5),
+3. sends at least 1000000 umedas (1 MEDAS) to the registered address, and
+4. has exactly the memo `medas-notary/v1:approve`.
+
+Registration is public and can be checked by anyone: the transaction search
+`transfer.sender='<admin address>'` lists all approvals of an admin. A
+registration does not expire; later approve transactions for the same
+address change nothing. The transferred amount covers the researcher's fees.
+
+Names, institutions and ORCID iDs are not part of the registration on chain.
+They are kept off chain by the operators and shown only with the researcher's
+consent. Rejections and the review itself happen off chain.
+
+Evaluators SHOULD consider entries of registered addresses only, unless they
+have other reasons to trust an address.
+
+### 16.5 Admin addresses
+
+| Address | Since |
+|---|---|
+| _to be published by the operators_ | |
+
+Changes to this list are made by changing this section. An approve
+transaction counts only if its sender was in the list at the time of the
+transaction.
+
 Phase 0 records stay valid after the module is introduced; the module does not
 import them.
