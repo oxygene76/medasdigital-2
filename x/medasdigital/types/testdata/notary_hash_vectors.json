@@ -70,5 +70,11 @@
       "payload_hex": "7b2265706f6368223a22323032362d31302d30315430303a30303a30305a222c226f626a656374223a223230323420595234222c2272615f646567223a223132332e343536373839222c22736368656d61223a226f726269742e70726564696374696f6e2e7631227d",
       "hash_hex": "63bcbb73650f9eb71db03a53fc6ce5e42fc9bf5010eec987631d998389092c15"
     }
-  ]
+  ],
+  "phase0_anchor": {
+    "derivation": "first 20 bytes of SHA-256(anchor_domain), bech32 with hrp",
+    "anchor_domain": "medas-notary/v1/anchor",
+    "address_hex": "bd2c71bfffa6a70160428cf4ebd1e704bf2e3761",
+    "address": "medas1h5k8r0ll56nszczz3n6wh508qjljudmp5rclgk"
+  }
 }

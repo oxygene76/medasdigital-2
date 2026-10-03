@@ -20,6 +20,8 @@ Usage:
         same, from the content digest alone (the content itself is not needed)
     notary_hash.py content-sha256 (--payload STR | --payload-file F | --payload-hex HEX)
         print SHA-256 of the content (hex)
+    notary_hash.py anchor-address
+        print the phase 0 notary address (no key exists for it)
     notary_hash.py canonical-json FILE
         print FILE as canonical JSON (RFC 8785 subset, see canonical_json)
     notary_hash.py vectors [FILE]
@@ -38,6 +40,9 @@ import sys
 DOMAIN = b"medas-notary/v1"
 SALT_LEN = 32
 DIGEST_LEN = 32
+# Phase 0 (memo anchors): the notary address is derived from this string. It is
+# not a public key hash, so nobody holds a key for it (docs/notary-spec.md, 16.1).
+ANCHOR_DOMAIN = b"medas-notary/v1/anchor"
 ADDRESS_LENGTHS = (20, 32)
 HRP = "medas"
 
@@ -126,6 +131,15 @@ def address_bytes(creator, hrp=HRP):
     if len(raw) not in ADDRESS_LENGTHS:
         raise ValueError(f"address has {len(raw)} bytes, expected 20 or 32")
     return raw
+
+
+def anchor_address_bytes():
+    """First 20 bytes of SHA-256("medas-notary/v1/anchor")."""
+    return hashlib.sha256(ANCHOR_DOMAIN).digest()[:20]
+
+
+def anchor_address(hrp=HRP):
+    return bech32_encode(hrp, anchor_address_bytes())
 
 
 def content_sha256(payload):
@@ -306,6 +320,12 @@ def make_vectors():
         "hrp": HRP,
         "vectors": vectors,
         "negative": negatives,
+        "phase0_anchor": {
+            "derivation": "first 20 bytes of SHA-256(anchor_domain), bech32 with hrp",
+            "anchor_domain": ANCHOR_DOMAIN.decode(),
+            "address_hex": anchor_address_bytes().hex(),
+            "address": anchor_address(),
+        },
     }
 
 
@@ -336,6 +356,12 @@ def verify_vectors(path):
         good = all(checks.values())
         ok &= good
         print(("ok  " if good else "FAIL"), v["name"], "" if good else checks)
+    a = data.get("phase0_anchor")
+    if a is not None:
+        raw = hashlib.sha256(a["anchor_domain"].encode()).digest()[:20]
+        good = raw.hex() == a["address_hex"] and bech32_encode(data["hrp"], raw) == a["address"]
+        ok &= good
+        print(("ok  " if good else "FAIL"), "phase 0 anchor address", a["address"])
     for v in data.get("negative", []):
         h = commitment_hash(v["creator"], bytes.fromhex(v["salt_hex"]), bytes.fromhex(v["payload_hex"]), data["hrp"])
         good = h.hex() != v["hash_hex"]
@@ -379,6 +405,7 @@ def main(argv):
     v = sub.add_parser("vectors")
     v.add_argument("file", nargs="?", default=DEFAULT_VECTORS)
     sub.add_parser("make-vectors")
+    sub.add_parser("anchor-address")
     a = p.parse_args(argv)
 
     if a.cmd == "salt":
@@ -396,6 +423,8 @@ def main(argv):
             sys.stdout.buffer.write(canonical_json(json.load(f)))
     elif a.cmd == "vectors":
         return 0 if verify_vectors(a.file) else 1
+    elif a.cmd == "anchor-address":
+        print(anchor_address())
     elif a.cmd == "make-vectors":
         print(json.dumps(make_vectors(), ensure_ascii=False, indent=2))
     return 0

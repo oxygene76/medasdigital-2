@@ -380,3 +380,58 @@ The vectors were cross-checked independently:
 - the contract address with wasmd `BuildContractAddressClassic`;
 - the content digests and hashes with `sha256sum` over a preimage assembled in
   the shell (vectors 1 and 3, for the content digest variant).
+
+## 16. Phase 0: anchoring with transfer memos
+
+Until `x/medasdigital` implements sections 4 to 11 on chain, commits and reveals
+are anchored as bank transfers with a memo. The commitment hash (section 3) is
+the same, so a phase 0 commit can be checked with the same tools and test
+vectors.
+
+### 16.1 Notary address
+
+```
+anchor_address = bech32("medas", SHA-256("medas-notary/v1/anchor")[0:20])
+               = medas1h5k8r0ll56nszczz3n6wh508qjljudmp5rclgk
+                 (hex bd2c71bfffa6a70160428cf4ebd1e704bf2e3761)
+```
+
+Nobody holds a key for this address. An account address of a secp256k1 key is
+`RIPEMD-160(SHA-256(public key))`; a key for the address above would need a
+RIPEMD-160 preimage of these 20 bytes, which is infeasible. The transferred
+amounts (1 umedas per anchor) are therefore permanently locked. Recompute the
+address with `scripts/notary_hash.py anchor-address`; `vectors` checks it
+against the test data file (`phase0_anchor`).
+
+### 16.2 Anchor transactions
+
+A transaction is an anchor if and only if:
+1. it was executed successfully (result code 0);
+2. it contains exactly one message, a `cosmos.bank.v1beta1.MsgSend` with
+   `to_address` = anchor address and at least 1 umedas;
+3. its memo is exactly one of the following (lowercase hex, 64 characters each):
+
+```
+commit: medas-notary/v1:<hash>                                    80 characters
+reveal: medas-notary/v1:reveal:<hash>:<salt>:<content_sha256>    217 characters
+```
+
+The `from_address` of the `MsgSend` is the sender. Anchors are found with the
+transaction search `transfer.recipient='<anchor address>'` and ordered by
+(height, index in block).
+
+### 16.3 Rules
+
+1. **Commit.** The sender is the creator. Only the first commit of a
+   (creator, hash) pair counts; later ones are ignored.
+2. **Reveal.** A reveal is valid only if
+   - its sender equals the creator of the commit (unlike `MsgReveal` in 5.2,
+     where any address may reveal),
+   - it comes after that commit in transaction order, and
+   - `SHA-256(preimage(creator, salt, content_sha256)) == hash`.
+   The first valid reveal of a commit counts; later ones are ignored.
+3. The commit time is the block time of the commit's block (12.4). The
+   evaluation rules of section 12 apply unchanged.
+
+Phase 0 records stay valid after the module is introduced; the module does not
+import them.
