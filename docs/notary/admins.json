@@ -1,0 +1,20 @@
+{
+  "description": "MEDAS Notary admin addresses (docs/notary-spec.md 16.5). The git history of this file is the record of who was an admin when. Entries are never removed: an admin who leaves gets valid_until. An approve or revoke transaction counts only if its sender is an admin with role 'admin' at the block time of the transaction (valid_from <= time < valid_until).",
+  "version": 1,
+  "networks": {
+    "medasdigital-2": {
+      "admins": []
+    },
+    "medasdigital-local": {
+      "admins": [
+        {
+          "address": "medas18fs9vla500cqwn5rgt62mq7mesp3p8t7em507y",
+          "role": "admin",
+          "valid_from": "2020-01-01T00:00:00Z",
+          "valid_until": null,
+          "note": "public localnet test key (localnet/admin.mnemonic); never valid on another network"
+        }
+      ]
+    }
+  }
+}

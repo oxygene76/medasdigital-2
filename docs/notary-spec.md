@@ -474,10 +474,13 @@ unless they have other reasons to trust an address.
 
 ### 16.5 Admin addresses
 
-The admin list is the file `config/admins.json` of the MEDAS Notary web
-application, published at `https://notary.medas-digital.io/admins.json`. It is
-the only list; this specification does not repeat it. For each network (chain
-ID) it lists entries:
+The admin list is the file [`docs/notary/admins.json`](notary/admins.json) in
+this repository. It is the only list; this specification does not repeat it.
+Its git history is the record of who was an admin when: every change is a
+commit, and entries are never deleted. Clients use the file of a fixed commit
+and name that commit (the MEDAS Notary web application publishes its copy at
+`https://notary.medas-digital.io/admins.json` with the source commit). For
+each network (chain ID) the file lists entries:
 
 ```json
 { "address": "medas1...", "role": "admin",
