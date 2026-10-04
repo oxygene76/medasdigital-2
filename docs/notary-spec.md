@@ -435,35 +435,61 @@ transaction search `transfer.recipient='<anchor address>'` and ordered by
 
 ### 16.4 Registration
 
-An address is **registered** if and only if an admin address sent it an
-approve transaction. An approve transaction is a transaction that
-1. was executed successfully (result code 0),
-2. contains exactly one message, a `cosmos.bank.v1beta1.MsgSend` whose
-   `from_address` is an admin address (16.5),
-3. sends at least 1000000 umedas (1 MEDAS) to the registered address, and
-4. has exactly the memo `medas-notary/v1:approve`.
+Registration is decided by two kinds of transactions from admin addresses
+(16.5) to the address concerned:
+
+| Kind | Memo (exactly) | Amount |
+|---|---|---|
+| approve | `medas-notary/v1:approve` | at least 1000000 umedas (1 MEDAS) |
+| revoke | `medas-notary/v1:revoke` | at least 1 umedas |
+
+Such a transaction counts only if
+1. it was executed successfully (result code 0),
+2. it contains exactly one message, a `cosmos.bank.v1beta1.MsgSend` with the
+   memo and amount above, and
+3. its `from_address` was an admin **at the block time of the transaction**
+   (16.5).
+
+An address is **registered at a point of the chain** (height, index in block)
+if the last counting transaction for it before that point is an approval.
+Consequences:
+- A revocation ends the registration from that point on. A later approval
+  registers the address again; approvals before the revocation do not.
+- An entry (16.3) counts as made by a registered researcher if its creator was
+  registered at the commit. Entries made before a revocation keep their time
+  stamps; clients SHOULD mark them with the time of the revocation.
+- Removing an admin (16.5) does not affect transactions it sent while it was
+  an admin.
 
 Registration is public and can be checked by anyone: the transaction search
-`transfer.sender='<admin address>'` lists all approvals of an admin. A
-registration does not expire; later approve transactions for the same
-address change nothing. The transferred amount covers the researcher's fees.
+`transfer.sender='<admin address>'` lists all transactions of an admin. The
+approved amount covers the researcher's fees.
 
 Names, institutions and ORCID iDs are not part of the registration on chain.
 They are kept off chain by the operators and shown only with the researcher's
-consent. Rejections and the review itself happen off chain.
+consent. The review itself, rejections and reasons happen off chain.
 
-Evaluators SHOULD consider entries of registered addresses only, unless they
-have other reasons to trust an address.
+Evaluators SHOULD consider entries of addresses registered at the commit only,
+unless they have other reasons to trust an address.
 
 ### 16.5 Admin addresses
 
-| Address | Since |
-|---|---|
-| _to be published by the operators_ | |
+The admin list is the file `config/admins.json` of the MEDAS Notary web
+application, published at `https://notary.medas-digital.io/admins.json`. It is
+the only list; this specification does not repeat it. For each network (chain
+ID) it lists entries:
 
-Changes to this list are made by changing this section. An approve
-transaction counts only if its sender was in the list at the time of the
-transaction.
+```json
+{ "address": "medas1...", "role": "admin",
+  "valid_from": "2026-10-01T00:00:00Z", "valid_until": null }
+```
+
+An address is an admin at time t if it has an entry with role `admin` and
+`valid_from <= t < valid_until` (`valid_until` null: open). Entries are never
+deleted; an admin who leaves gets `valid_until`, so earlier transactions keep
+their meaning. The address of the public localnet test key
+(`medas18fs9vla500cqwn5rgt62mq7mesp3p8t7em507y`) MUST NOT appear in the list
+for medasdigital-2.
 
 Phase 0 records stay valid after the module is introduced; the module does not
 import them.
