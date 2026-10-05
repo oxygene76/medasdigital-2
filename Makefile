@@ -2,7 +2,7 @@
 
 BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 COMMIT := $(shell git log -1 --format='%H')
-GO_VERSION := 1.22
+GO_VERSION := 1.26
 
 # don't override user values
 ifeq (,$(VERSION))
@@ -100,6 +100,35 @@ build: check-go-version
 
 BUILD_TARGETS := build install
 
+# Binaries for scripts/upgrade-test.sh:
+#   build/old/medasdigitald  from OLD_REF (default 050907c = mainnet v1.0.1 code),
+#                            built in a temporary worktree with that commit's Makefile
+#   build/new/medasdigitald  from the current checkout
+OLD_REF ?= 050907c
+UPGRADE_OLD_SRC := $(BUILDDIR)/old-src
+
+build-upgrade-binaries: build
+	@echo "Building old binary from $(OLD_REF)"
+	@git worktree remove --force $(UPGRADE_OLD_SRC) 2>/dev/null || true
+	@git worktree add --detach $(UPGRADE_OLD_SRC) $(OLD_REF)
+	@GOTOOLCHAIN=go1.22.11 $(MAKE) -C $(UPGRADE_OLD_SRC) build
+	@mkdir -p $(BUILDDIR)/old $(BUILDDIR)/new
+	@cp $(UPGRADE_OLD_SRC)/bin/medasdigitald $(BUILDDIR)/old/medasdigitald
+	@git worktree remove --force $(UPGRADE_OLD_SRC)
+	@cp bin/medasdigitald $(BUILDDIR)/new/medasdigitald
+
+.PHONY: build-upgrade-binaries
+
+# Reproducible static release binary (see Dockerfile). Refuses to build from a
+# dirty tree, because VERSION/COMMIT would not describe the sources.
+build-release:
+	@test -z "$$(git status --porcelain)" || { echo "working tree not clean"; exit 1; }
+	DOCKER_BUILDKIT=1 $(DOCKER) build --target export --output type=local,dest=$(BUILDDIR)/release \
+		--build-arg VERSION=$(VERSION) --build-arg COMMIT=$(COMMIT) .
+	cd $(BUILDDIR)/release && sha256sum medasdigitald | tee medasdigitald.sha256
+
+.PHONY: build-release
+
 build-reproducible-all: build-reproducible-amd64 build-reproducible-arm64
 
 build-reproducible-amd64:
@@ -136,13 +165,39 @@ check-go-version:
 ###                                Protobuf                                 ###
 ###############################################################################
 
-containerProtoVer=0.13.0
-containerProtoImage=ghcr.io/cosmos/proto-builder:$(containerProtoVer)
+# Proto generation runs buf directly with the plugin versions pinned in go.mod
+# (see tools/tools.go). No Ignite and no Docker needed. The tools are installed
+# into build/tools so they do not collide with anything on the PATH.
+PROTO_TOOLS_DIR := $(BUILDDIR)/tools
+PROTO_TOOLS := \
+	github.com/bufbuild/buf/cmd/buf \
+	github.com/cosmos/cosmos-proto/cmd/protoc-gen-go-pulsar \
+	github.com/cosmos/gogoproto/protoc-gen-gocosmos \
+	github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
-proto-gen:
+proto-tools:
+	@echo "Installing pinned proto tools into $(PROTO_TOOLS_DIR)"
+	@GOBIN=$(PROTO_TOOLS_DIR) go install $(PROTO_TOOLS)
+
+# gogo output lands under <go_package>/ (medasdigital/x/...), so it is generated
+# into a temp dir and only the x/ tree is copied back, like Ignite does.
+# module/module.proto has no x/ go_package; its gogo output is discarded
+# (the pulsar variant under api/ is the one used by depinject).
+proto-gen: proto-tools
 	@echo "Generating Protobuf files"
-	@$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(containerProtoImage) \
-		sh ./scripts/protocgen.sh;
+	@set -e; tmp=$$(mktemp -d); trap 'rm -rf "$$tmp"' EXIT; \
+	cd proto; \
+	PATH=$(PROTO_TOOLS_DIR):$$PATH buf generate --template buf.gen.gogo.yaml --output $$tmp; \
+	PATH=$(PROTO_TOOLS_DIR):$$PATH buf generate --template buf.gen.pulsar.yaml --output $(CURDIR); \
+	cp -r $$tmp/medasdigital/x/. $(CURDIR)/x/
+
+# Fails if the committed generated files differ from a fresh generation.
+proto-check: proto-gen
+	@git diff --exit-code -- '*.pb.go' '*.pb.gw.go' '*.pulsar.go' \
+		&& echo "Generated protobuf files are up to date"
+
+.PHONY: proto-tools proto-gen proto-check
 
 docs:
 	@echo
