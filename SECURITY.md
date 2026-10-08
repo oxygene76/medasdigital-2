@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Please report security issues in medasdigitald or the medasdigital-2 network
-privately to **<ADRESSE>**, not in public issues or chats.
+privately to **security@medas-digital.io**, not in public issues or chats.
 
 Include what you found, how to reproduce it and which version
 (`medasdigitald version`) is affected. We confirm receipt and keep you
