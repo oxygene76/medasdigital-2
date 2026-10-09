@@ -3,7 +3,15 @@
   "version": 1,
   "networks": {
     "medasdigital-2": {
-      "admins": []
+      "admins": [
+        {
+          "address": "medas1wg443w3st9mv05n68jklky5yzpn23ff09d8qf7",
+          "role": "admin",
+          "valid_from": "2026-10-09T00:00:00Z",
+          "valid_until": null,
+          "note": "Eike"
+        }
+      ]
     },
     "medasdigital-local": {
       "admins": [
