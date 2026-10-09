@@ -496,3 +496,39 @@ for medasdigital-2.
 
 Phase 0 records stay valid after the module is introduced; the module does not
 import them.
+
+## 17. Outlook: computation jobs (not normative)
+
+This section records a direction for later versions. It changes nothing in
+phase 0 (section 16) or in protocol version 1; phase 0 records keep their
+meaning.
+
+**Role of the notary.** For computation jobs the notary is only the proof
+layer: it proves *that* a job was submitted with a given specification at a
+given time, and *that* a given result was published for it later, by whom and
+when. Payment, escrow and settlement (who pays, how much, when funds are
+released, disputes) are out of scope of the notary and belong to a separate,
+later module or contract that refers to notary records by their identifiers.
+
+**Reserved for the v4 module** (the on-chain notary module, see the v3 plan):
+- an **entry type** on every commit, e.g. `note` (a plain record as today),
+  `job` (a job specification) and `result` (the result of a job). The type is
+  part of the stored commit and, like `schema`, should be covered by the hash
+  (open point 3, section 13);
+- an optional **reference to an earlier entry** (by its commit identifier or
+  commitment hash), so that a `result` points to its `job`, and later entries
+  can point to the ones they build on. The reference is only valid if the
+  referenced entry exists and was committed earlier (lower height, or the same
+  height and a lower index).
+
+**Principles for jobs.**
+- Only a fixed set of job types, each with a published, versioned
+  specification of input, computation and output; no arbitrary code.
+- Jobs are executed off chain, in a separate virtual machine per job (never on
+  validator hosts), with the job type's fixed environment.
+- On chain only hashes and identifiers: hash of the job specification and its
+  inputs, hash of the result, the references and times. Inputs and results
+  themselves stay off chain.
+- Job types whose results can be recomputed and checked by anybody
+  (deterministic computation, checkable outputs) are preferred over types whose
+  results can only be trusted.
