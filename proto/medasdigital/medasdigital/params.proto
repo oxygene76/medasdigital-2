@@ -11,9 +11,5 @@ message Params {
   option (amino.name) = "medasdigital/x/medasdigital/Params";
   option (gogoproto.equal) = true;
 
-  // max_payload_bytes limits the payload of a MsgReveal (default 16384, allowed 1-65536).
-  uint32 max_payload_bytes = 1;
-
-  // max_label_length limits the label of a MsgCommit in bytes (default 128, allowed 0-1024).
-  uint32 max_label_length = 2;
+  
 }

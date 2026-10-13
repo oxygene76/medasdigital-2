@@ -16,12 +16,6 @@ service Msg {
   // UpdateParams defines a (governance) operation for updating the module
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
-
-  // Commit stores a notary commitment (hash only).
-  rpc Commit(MsgCommit) returns (MsgCommitResponse);
-
-  // Reveal discloses salt and payload of an existing commit.
-  rpc Reveal(MsgReveal) returns (MsgRevealResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -44,45 +38,3 @@ message MsgUpdateParams {
 // MsgUpdateParamsResponse defines the response structure for executing a
 // MsgUpdateParams message.
 message MsgUpdateParamsResponse {}
-
-// MsgCommit stores the hash of a not yet disclosed statement.
-message MsgCommit {
-  option (cosmos.msg.v1.signer) = "creator";
-  option (amino.name) = "medasdigital/MsgCommit";
-
-  // creator is bound into the hash; only this address' commits can be revealed.
-  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-
-  // hash is SHA-256 over the v1 preimage, exactly 32 bytes.
-  bytes hash = 2;
-
-  // schema names the payload format, 1-64 bytes of [a-z0-9._-].
-  string schema = 3;
-
-  // label is an optional public note (valid UTF-8, max params.max_label_length bytes).
-  string label = 4;
-}
-
-// MsgCommitResponse returns the id of the new commit.
-message MsgCommitResponse {
-  uint64 id = 1;
-}
-
-// MsgReveal discloses salt and payload of a commit. Any address may reveal.
-message MsgReveal {
-  option (cosmos.msg.v1.signer) = "revealer";
-  option (amino.name) = "medasdigital/MsgReveal";
-
-  string revealer = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-
-  uint64 id = 2;
-
-  // salt is exactly 32 bytes.
-  bytes salt = 3;
-
-  // payload is 1 to params.max_payload_bytes bytes.
-  bytes payload = 4;
-}
-
-// MsgRevealResponse is the Msg/Reveal response type.
-message MsgRevealResponse {}

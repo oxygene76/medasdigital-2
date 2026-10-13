@@ -14,70 +14,15 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_GenesisState_2_list)(nil)
-
-type _GenesisState_2_list struct {
-	list *[]*Commit
-}
-
-func (x *_GenesisState_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_GenesisState_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_GenesisState_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Commit)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_GenesisState_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*Commit)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_GenesisState_2_list) AppendMutable() protoreflect.Value {
-	v := new(Commit)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_GenesisState_2_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_GenesisState_2_list) NewElement() protoreflect.Value {
-	v := new(Commit)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_GenesisState_2_list) IsValid() bool {
-	return x.list != nil
-}
-
 var (
-	md_GenesisState                protoreflect.MessageDescriptor
-	fd_GenesisState_params         protoreflect.FieldDescriptor
-	fd_GenesisState_commits        protoreflect.FieldDescriptor
-	fd_GenesisState_next_commit_id protoreflect.FieldDescriptor
+	md_GenesisState        protoreflect.MessageDescriptor
+	fd_GenesisState_params protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_medasdigital_medasdigital_genesis_proto_init()
 	md_GenesisState = File_medasdigital_medasdigital_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
-	fd_GenesisState_commits = md_GenesisState.Fields().ByName("commits")
-	fd_GenesisState_next_commit_id = md_GenesisState.Fields().ByName("next_commit_id")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -151,18 +96,6 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.Commits) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.Commits})
-		if !f(fd_GenesisState_commits, value) {
-			return
-		}
-	}
-	if x.NextCommitId != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.NextCommitId)
-		if !f(fd_GenesisState_next_commit_id, value) {
-			return
-		}
-	}
 }
 
 // Has reports whether a field is populated.
@@ -180,10 +113,6 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "medasdigital.medasdigital.GenesisState.params":
 		return x.Params != nil
-	case "medasdigital.medasdigital.GenesisState.commits":
-		return len(x.Commits) != 0
-	case "medasdigital.medasdigital.GenesisState.next_commit_id":
-		return x.NextCommitId != uint64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: medasdigital.medasdigital.GenesisState"))
@@ -202,10 +131,6 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "medasdigital.medasdigital.GenesisState.params":
 		x.Params = nil
-	case "medasdigital.medasdigital.GenesisState.commits":
-		x.Commits = nil
-	case "medasdigital.medasdigital.GenesisState.next_commit_id":
-		x.NextCommitId = uint64(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: medasdigital.medasdigital.GenesisState"))
@@ -225,15 +150,6 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 	case "medasdigital.medasdigital.GenesisState.params":
 		value := x.Params
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "medasdigital.medasdigital.GenesisState.commits":
-		if len(x.Commits) == 0 {
-			return protoreflect.ValueOfList(&_GenesisState_2_list{})
-		}
-		listValue := &_GenesisState_2_list{list: &x.Commits}
-		return protoreflect.ValueOfList(listValue)
-	case "medasdigital.medasdigital.GenesisState.next_commit_id":
-		value := x.NextCommitId
-		return protoreflect.ValueOfUint64(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: medasdigital.medasdigital.GenesisState"))
@@ -256,12 +172,6 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "medasdigital.medasdigital.GenesisState.params":
 		x.Params = value.Message().Interface().(*Params)
-	case "medasdigital.medasdigital.GenesisState.commits":
-		lv := value.List()
-		clv := lv.(*_GenesisState_2_list)
-		x.Commits = *clv.list
-	case "medasdigital.medasdigital.GenesisState.next_commit_id":
-		x.NextCommitId = value.Uint()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: medasdigital.medasdigital.GenesisState"))
@@ -287,14 +197,6 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 			x.Params = new(Params)
 		}
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-	case "medasdigital.medasdigital.GenesisState.commits":
-		if x.Commits == nil {
-			x.Commits = []*Commit{}
-		}
-		value := &_GenesisState_2_list{list: &x.Commits}
-		return protoreflect.ValueOfList(value)
-	case "medasdigital.medasdigital.GenesisState.next_commit_id":
-		panic(fmt.Errorf("field next_commit_id of message medasdigital.medasdigital.GenesisState is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: medasdigital.medasdigital.GenesisState"))
@@ -311,11 +213,6 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "medasdigital.medasdigital.GenesisState.params":
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "medasdigital.medasdigital.GenesisState.commits":
-		list := []*Commit{}
-		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
-	case "medasdigital.medasdigital.GenesisState.next_commit_id":
-		return protoreflect.ValueOfUint64(uint64(0))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: medasdigital.medasdigital.GenesisState"))
@@ -389,15 +286,6 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Params)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.Commits) > 0 {
-			for _, e := range x.Commits {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.NextCommitId != 0 {
-			n += 1 + runtime.Sov(uint64(x.NextCommitId))
-		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -426,27 +314,6 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.NextCommitId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.NextCommitId))
-			i--
-			dAtA[i] = 0x18
-		}
-		if len(x.Commits) > 0 {
-			for iNdEx := len(x.Commits) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.Commits[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x12
-			}
 		}
 		if x.Params != nil {
 			encoded, err := options.Marshal(x.Params)
@@ -547,59 +414,6 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Commits", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Commits = append(x.Commits, &Commit{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Commits[len(x.Commits)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			case 3:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field NextCommitId", wireType)
-				}
-				x.NextCommitId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.NextCommitId |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -656,11 +470,6 @@ type GenesisState struct {
 
 	// params defines all the parameters of the module.
 	Params *Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	// commits are all notary commits. The hash and creator indexes are rebuilt
-	// from them on import.
-	Commits []*Commit `protobuf:"bytes,2,rep,name=commits,proto3" json:"commits,omitempty"`
-	// next_commit_id is the id the next commit will get (1 on a fresh chain).
-	NextCommitId uint64 `protobuf:"varint,3,opt,name=next_commit_id,json=nextCommitId,proto3" json:"next_commit_id,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -690,20 +499,6 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
-func (x *GenesisState) GetCommits() []*Commit {
-	if x != nil {
-		return x.Commits
-	}
-	return nil
-}
-
-func (x *GenesisState) GetNextCommitId() uint64 {
-	if x != nil {
-		return x.NextCommitId
-	}
-	return 0
-}
-
 var File_medasdigital_medasdigital_genesis_proto protoreflect.FileDescriptor
 
 var file_medasdigital_medasdigital_genesis_proto_rawDesc = []byte{
@@ -715,37 +510,28 @@ var file_medasdigital_medasdigital_genesis_proto_rawDesc = []byte{
 	0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x26, 0x6d,
 	0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2f, 0x6d, 0x65, 0x64, 0x61,
-	0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2f, 0x6e, 0x6f, 0x74, 0x61, 0x72, 0x79, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x26, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69,
-	0x74, 0x61, 0x6c, 0x2f, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c,
-	0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc2, 0x01,
-	0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x44,
-	0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21,
-	0x2e, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2e, 0x6d, 0x65,
-	0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x12, 0x46, 0x0a, 0x07, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x74, 0x73, 0x18,
-	0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67,
+	0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x54, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73,
+	0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x44, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67,
 	0x69, 0x74, 0x61, 0x6c, 0x2e, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61,
-	0x6c, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x74, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7,
-	0xb0, 0x2a, 0x01, 0x52, 0x07, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x74, 0x73, 0x12, 0x24, 0x0a, 0x0e,
-	0x6e, 0x65, 0x78, 0x74, 0x5f, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x03,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x0c, 0x6e, 0x65, 0x78, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x74,
-	0x49, 0x64, 0x42, 0xde, 0x01, 0x0a, 0x1d, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x65, 0x64, 0x61, 0x73,
-	0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2e, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67,
-	0x69, 0x74, 0x61, 0x6c, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f,
-	0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2a, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74,
-	0x61, 0x6c, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69,
-	0x74, 0x61, 0x6c, 0x2f, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c,
-	0xa2, 0x02, 0x03, 0x4d, 0x4d, 0x58, 0xaa, 0x02, 0x19, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69,
-	0x67, 0x69, 0x74, 0x61, 0x6c, 0x2e, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74,
-	0x61, 0x6c, 0xca, 0x02, 0x19, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61,
-	0x6c, 0x5c, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0xe2, 0x02,
-	0x25, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x5c, 0x4d, 0x65,
-	0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
-	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1a, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69,
-	0x67, 0x69, 0x74, 0x61, 0x6c, 0x3a, 0x3a, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69,
-	0x74, 0x61, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6c, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7,
+	0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0xde, 0x01, 0x0a, 0x1d,
+	0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c,
+	0x2e, 0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x42, 0x0c, 0x47,
+	0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x2a, 0x6d,
+	0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x6d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2f, 0x6d, 0x65, 0x64,
+	0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0xa2, 0x02, 0x03, 0x4d, 0x4d, 0x58, 0xaa,
+	0x02, 0x19, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x2e, 0x4d,
+	0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0xca, 0x02, 0x19, 0x4d, 0x65,
+	0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x5c, 0x4d, 0x65, 0x64, 0x61, 0x73,
+	0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0xe2, 0x02, 0x25, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64,
+	0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x5c, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69,
+	0x74, 0x61, 0x6c, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
+	0x02, 0x1a, 0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x3a, 0x3a,
+	0x4d, 0x65, 0x64, 0x61, 0x73, 0x64, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -764,16 +550,14 @@ var file_medasdigital_medasdigital_genesis_proto_msgTypes = make([]protoimpl.Mes
 var file_medasdigital_medasdigital_genesis_proto_goTypes = []interface{}{
 	(*GenesisState)(nil), // 0: medasdigital.medasdigital.GenesisState
 	(*Params)(nil),       // 1: medasdigital.medasdigital.Params
-	(*Commit)(nil),       // 2: medasdigital.medasdigital.Commit
 }
 var file_medasdigital_medasdigital_genesis_proto_depIdxs = []int32{
 	1, // 0: medasdigital.medasdigital.GenesisState.params:type_name -> medasdigital.medasdigital.Params
-	2, // 1: medasdigital.medasdigital.GenesisState.commits:type_name -> medasdigital.medasdigital.Commit
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_medasdigital_medasdigital_genesis_proto_init() }
@@ -781,7 +565,6 @@ func file_medasdigital_medasdigital_genesis_proto_init() {
 	if File_medasdigital_medasdigital_genesis_proto != nil {
 		return
 	}
-	file_medasdigital_medasdigital_notary_proto_init()
 	file_medasdigital_medasdigital_params_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_medasdigital_medasdigital_genesis_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
