@@ -1,12 +1,23 @@
 # medas notary: commit–reveal specification
 
 Status: **draft for review**, protocol version 1
-Chain: medasdigital-2 (module `x/medasdigital`, introduced with software upgrade `v2`)
+Chain: medasdigital-2
+On-chain implementation: a CosmWasm contract, see [notary-contract-spec.md](notary-contract-spec.md)
 Reference implementation of the hash: [`scripts/notary_hash.py`](../scripts/notary_hash.py)
 Test vectors: [`x/medasdigital/types/testdata/notary_hash_vectors.json`](../x/medasdigital/types/testdata/notary_hash_vectors.json)
 
 The key words MUST, MUST NOT, SHOULD and MAY are used as described in RFC 2119.
 Section 13 (open points) is not normative.
+
+**Which parts apply.** The notary will run as a CosmWasm contract on the
+current chain, not as a native module (decision of October 2026). Normative
+and unchanged are the commitment hash (section 3), the evaluation rules
+(section 12), the example and test vectors (sections 14, 15) and phase 0
+(section 16). Sections 4 to 11 describe the earlier design as a module of
+`x/medasdigital`; they are kept as the basis of the contract and are
+superseded by notary-contract-spec.md where the two differ (no payload, label
+or schema on chain; entry types and references; registration and admins in
+the contract). Where these sections say "module", read "contract".
 
 ## 1. Purpose
 
@@ -383,8 +394,8 @@ The vectors were cross-checked independently:
 
 ## 16. Phase 0: anchoring with transfer memos
 
-Until `x/medasdigital` implements sections 4 to 11 on chain, commits and reveals
-are anchored as bank transfers with a memo. The commitment hash (section 3) is
+Until the notary contract (notary-contract-spec.md) is live on mainnet, commits
+and reveals are anchored as bank transfers with a memo. The commitment hash (section 3) is
 the same, so a phase 0 commit can be checked with the same tools and test
 vectors.
 
@@ -494,8 +505,10 @@ their meaning. The address of the public localnet test key
 (`medas18fs9vla500cqwn5rgt62mq7mesp3p8t7em507y`) MUST NOT appear in the list
 for medasdigital-2.
 
-Phase 0 records stay valid after the module is introduced; the module does not
-import them.
+Phase 0 records stay valid after the contract is introduced; the contract does
+not import them (notary-contract-spec.md section 11). From then on the admin
+list is kept in the contract with its history, and this file gets no new
+entries.
 
 ## 17. Outlook: computation jobs (not normative)
 
@@ -508,18 +521,19 @@ layer: it proves *that* a job was submitted with a given specification at a
 given time, and *that* a given result was published for it later, by whom and
 when. Payment, escrow and settlement (who pays, how much, when funds are
 released, disputes) are out of scope of the notary and belong to a separate,
-later module or contract that refers to notary records by their identifiers.
+later contract that refers to notary records by their identifiers.
 
-**Reserved for the v4 module** (the on-chain notary module, see the v3 plan):
-- an **entry type** on every commit, e.g. `note` (a plain record as today),
-  `job` (a job specification) and `result` (the result of a job). The type is
-  part of the stored commit and, like `schema`, should be covered by the hash
-  (open point 3, section 13);
-- an optional **reference to an earlier entry** (by its commit identifier or
-  commitment hash), so that a `result` points to its `job`, and later entries
-  can point to the ones they build on. The reference is only valid if the
-  referenced entry exists and was committed earlier (lower height, or the same
-  height and a lower index).
+**In the notary contract** (notary-contract-spec.md section 5; earlier
+reserved for a native module in an upgrade `v4`, which is no longer planned):
+- an **entry type** on every commit: `note` (a plain record as today), `job`
+  (a job specification) and `result` (the result of a job);
+- an optional **reference to an earlier entry** by its commit id, so that a
+  `result` points to its `job`, and later entries can point to the ones they
+  build on. A reference is only valid if the referenced entry exists and was
+  committed earlier.
+Type and reference are public at commit time and stored immutably with the
+commit; they are not part of the commitment hash, which stays protocol
+version 1.
 
 **Principles for jobs.**
 - Only a fixed set of job types, each with a published, versioned
