@@ -60,9 +60,9 @@ since the epoch in state, RFC 3339 in query responses).
 
 ```
 InstantiateMsg {
-  fee: Coin,                      // per commit, e.g. 1000000 umedas; amount 0 = no fee
+  fee: Coin,                      // per commit; pilot: 1000000000 umedas (1,000 MEDAS); amount 0 = no fee
   fee_split: FeeSplit,            // section 6
-  start_credit: Coin,             // minimum an approval must carry, e.g. 20000000 umedas
+  start_credit: Coin,             // minimum an approval must carry (section 6.2 and open decision 8)
   require_registration: bool,     // true: only registered addresses may commit
   admins: [address],              // initial notary admins (section 8), valid from this block
   phase0_registrations: [         // optional, section 11
@@ -229,6 +229,38 @@ FeeSplit {
   each commit records what applied.
 - Reveals, approvals and revocations cost no notary fee.
 
+### 6.1 Pilot values (decided)
+
+| Parameter | Pilot |
+|---|---|
+| `fee` | 1,000 MEDAS per entry (`1000000000umedas`) |
+| `burn_bps` | 10000 (100 % burnt) |
+| `community_pool_bps` | 0 |
+| `recipients` | none |
+
+The split stays in the code and in the parameters for later; in the pilot
+every fee is burnt completely.
+
+### 6.2 Network fees: measured gas
+
+Measured on a localnet with the v2.0.0 binary and a throwaway prototype that
+follows the state layout and checks of this specification (commit with all
+indexes, reveal with SHA-256 check, approval, fee burn). The real contract
+will differ somewhat; the values are to be measured again with it (test plan).
+
+| Transaction | Gas used | Gas wanted (simulation × 1.3) | Fee at 0.025 umedas/gas |
+|---|---|---|---|
+| commit, fee paid and burnt | 198,000 – 212,000 | about 250,000 | 0.0063 MEDAS |
+| commit without payment (prepaid entry, open decision 8) | 159,000 – 165,000 | about 190,000 | 0.0048 MEDAS |
+| reveal | 144,000 | about 161,000 | 0.0040 MEDAS |
+| approve (burn and forward) | 200,000 | about 235,000 | 0.0059 MEDAS |
+
+100 transactions (for example 50 commits and 50 reveals) cost about 0.5 MEDAS,
+100 commits about 0.63 MEDAS. **Proposed reserve for network fees: 2 MEDAS**
+(about 100 transactions with a margin of a factor 3 for the real contract and
+for a higher gas price). The network fee is negligible next to the notary fee
+of 1,000 MEDAS per entry.
+
 ## 7. Registration: approval and revocation
 
 - `Approve { address }` by a notary admin registers the address. The attached
@@ -286,9 +318,18 @@ second owner field that could diverge.
 ## 10. Build, upload and instantiation
 
 1. **Reproducible build.** Built with the CosmWasm optimizer image pinned by
-   digest and a pinned Rust toolchain, from a tagged commit. The build writes
-   the `.wasm` file and its sha256; two independent builds MUST give the same
-   hash.
+   digest and a pinned Rust toolchain, from a tagged commit, with
+   `Cargo.lock` committed and `--locked`. The build writes the `.wasm` file
+   and its sha256; two independent builds MUST give the same hash.
+   - **Toolchain limit (checked on the localnet):** wasmvm 2.2 rejects Wasm
+     built with Rust 1.82 or later ("zero byte expected": the reference-types
+     encoding these compilers emit by default). The contract MUST be built
+     with Rust 1.81 or an optimizer image based on it, and
+     cosmwasm-std MUST stay on the 2.2 line (`~2.2`); newer dependency
+     versions that need a newer compiler are excluded by the lock file.
+   - The build MUST include storing the result on a localnet with the
+     mainnet binary, so that a Wasm the chain does not accept is never
+     released.
 2. **Published code hash.** The sha256 of the `.wasm` file is published with
    the release, in this repository (`docs/notary/contract.json`, see below)
    and on the Methodology page of the web application. On chain it is the
@@ -423,8 +464,8 @@ entries are made.
 | Time to mainnet | upload and instantiation | upgrade cycle |
 
 Open decisions:
-1. Fee split values (burn, community pool, recipients) and whether the fee
-   stays 1 MEDAS.
+1. ~~Fee and split~~ **decided:** 1,000 MEDAS per entry, 100 % burn in the
+   pilot (section 6.1).
 2. `require_registration` in the pilot: true (as the web application does
    today) or open commits with `registered` shown.
 3. Reveal by anybody (this draft) or only by the creator (as in phase 0).
@@ -433,3 +474,25 @@ Open decisions:
 6. Repository for the code (section 13).
 7. The address of the pilot contract admin and the time of the hand-over to
    governance.
+8. **How a researcher gets the means for entries.** Two variants were given;
+   they differ in what `start_credit` is and are not yet reconciled:
+   - **(a) Prepaid entries (quota per address).** `Approve { address,
+     entries }` carries `entries × fee` plus at least `start_credit`; the fee
+     part is burnt at once like for a commit, the rest goes to the address.
+     `GrantEntries { address, entries }` by a notary admin for registered
+     addresses carries exactly `entries × fee`, burnt at once. A commit uses
+     the quota first and then needs no funds; with an empty quota the normal
+     fee applies. `fee_paid` records quota or direct payment; quota and grants
+     are queryable with history, event `wasm-notary_grant`. After a revocation
+     the quota stays but is usable only after a new approval. Pilot: 3 entries
+     at approval; `start_credit` covers only network fees (2 MEDAS, 6.2).
+     Admin page: grant entries, show the quota.
+   - **(b) Starting credit in MEDAS.** No quota. The approval forwards one
+     entry plus the reserve for network fees to the researcher
+     (`start_credit` = 1,002 MEDAS with the values of 6.1 and 6.2); every
+     commit pays the fee. Researchers buy further MEDAS themselves on
+     Osmosis; if the balance is too low for an entry, the web application
+     shows a notice with a link to the pool.
+   With (a) the fee of prepaid entries is burnt when they are granted, and a
+   researcher cannot spend it on anything else; with (b) the starting credit
+   is freely usable MEDAS.
