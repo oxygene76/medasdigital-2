@@ -247,9 +247,9 @@ every fee is burnt completely.
 ### 6.2 Network fees: measured gas
 
 First measured with a throwaway prototype, then confirmed with the contract
-itself (medas-notary-contract 0.1.0, release Wasm, `scripts/localnet-check.sh`
+itself (medas-notary-contract 0.2.0, release Wasm, `scripts/localnet-check.sh`
 on a localnet with the v2.0.0 binary; last run 15 October 2026 with the Wasm
-of sha256 `3838154bc54a63cc4a7066e9a8aca7c4439270f19473d2994d410f2d0ab646b4`):
+of sha256 `1487721ae59465653638cdae9e98fb1a2f45239381cca78a2013d49d47a13e76`):
 commit 209,000 – 216,000 gas, reveal 142,000, approve 168,000 – 181,000,
 revoke 134,000, parameter or notary admin change about 130,000. Storing the
 code took 2.58 million gas.
@@ -402,8 +402,9 @@ second owner field that could diverge.
          "contract_admin": "medas1…",          // section 9, at instantiation
          "codes": [                            // newest last; a migration appends
            { "code_id": 1, "code_sha256": "<hex>",
-             "source": { "repository": "https://…", "tag": "v0.1.0", "commit": "<hex>" },
-             "from_height": 123 }              // first block with this code
+             "source": { "repository": "https://…", "tag": "v0.2.0", "commit": "<hex>" },
+             "from_height": 123 }              // first block with this code; for the first
+                                               // code the instantiation height = cut-off of phase 0 (section 11)
          ]
        }
      }
@@ -432,8 +433,12 @@ second owner field that could diverge.
   (rule 12.2), so clients MUST NOT mark one of several unrevealed commits as
   the earlier one. Clients show both sources and name the source of each
   entry.
-- New entries go to the contract once it is live. Phase 0 commits can still be
-  revealed the phase 0 way.
+- **Cut-off:** phase 0 ends with the block in which the contract is
+  instantiated on the network, height `H` (`from_height` of the first entry of
+  `codes` in `docs/notary/contract.json`). Memo commits up to and including
+  block `H` stay entries and can still be revealed the phase 0 way, also
+  later. Memo commits after `H` are not entries; clients do not list them.
+  New entries go to the contract.
 - Phase 0 registrations: approvals by memo stay the record for the phase 0
   period and are **not** carried into the contract. Researchers registered in
   phase 0 are approved again through the contract (with the starting credit);
