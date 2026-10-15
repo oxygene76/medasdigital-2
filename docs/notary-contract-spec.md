@@ -330,10 +330,26 @@ The contract admin is the admin of the contract instance in the wasm module
 (contract info query) on every `SetNotaryAdmin` and `UpdateParams`; there is no
 second owner field that could diverge.
 
-- **Pilot:** an address created by the operators and used for nothing else
-  (no notary admin, no relayer, no validator key), kept offline between uses.
-  It can change the admin list and the parameters and migrate the contract to
-  new code.
+- **Pilot (decided 15 October 2026):** the contract admin is the existing
+  upload address of mainnet, `medas1rtpn4veps600g8p5nm8e7m4pcggvgqv5cw04tv`,
+  the only address allowed to store code (`code_upload_access:
+  AnyOfAddresses`, checked on mainnet on 15 October 2026). It stores the
+  notary code, limits its instantiation to itself and instantiates the
+  contract with itself as `--admin` (section 10). It can change the admin
+  list and the parameters and migrate the contract to new code.
+- **Deliberate deviation** from a separate address used for nothing else:
+  upload and contract administration share one key. That is one key less to
+  keep safe; in exchange the key carries both roles, and its loss or
+  compromise affects both (code upload for the whole chain and control of the
+  notary contract). Therefore:
+  - the key is kept **offline** and taken out only for an upload, an
+    instantiation, a parameter or notary admin change or a migration;
+  - it is **never imported into a browser wallet** (Keplr, Leap) and never
+    used through the web application; it signs only with the CLI (or a
+    Ledger device);
+  - it is never a notary admin, relayer or validator key;
+  - the contract admin is handed over to governance **after the pilot**
+    (next item), which ends the double role.
 - **Afterwards:** hand-over to governance with `MsgUpdateAdmin` to the address
   of the gov module. From then on parameter changes, admin changes and
   migrations need a governance proposal (`MsgExecuteContract` or
@@ -362,12 +378,13 @@ second owner field that could diverge.
    the release, in this repository (`docs/notary/contract.json`, see below)
    and on the Methodology page of the web application. On chain it is the
    checksum of the code: `medasdigitald q wasm code-info <code_id>`.
-3. **Upload.** Code upload on mainnet is restricted to one address. Either
-   that address stores the code, or a governance proposal does
-   (`MsgStoreCode` with the gov module as sender). The code is stored with
-   instantiate permission limited to the contract admin, so that no second
-   instance of the same code can be mistaken for the notary.
-4. **Instantiation** by the contract admin, with `--admin <contract admin>`,
+3. **Upload.** Code upload on mainnet is restricted to one address, which in
+   the pilot is also the contract admin (section 9). It stores the code with
+   instantiate permission limited to itself
+   (`--instantiate-anyof-addresses <upload address>`), so that no second
+   instance of the same code can be mistaken for the notary. (A governance
+   proposal could store code as well; not used for the pilot.)
+4. **Instantiation** by the same address, with `--admin <upload address>`,
    the label `medas-notary` and the `InstantiateMsg` of 3.1.
 5. **Record.** `docs/notary/contract.json` lists, per network: code id, code
    hash, contract address, instantiation transaction, source repository and
@@ -396,8 +413,10 @@ second owner field that could diverge.
    Clients use the last entry of `codes` and refuse contract mode if the code
    of the address on chain (`ContractInfo`, `CodeInfo`) has another checksum.
 6. **Check after instantiation:** code hash on chain equals the published
-   hash; `Config` returns the intended parameters; the contract admin is the
-   pilot address; `NotaryAdmins` lists the intended notary admins.
+   hash; `Config` returns the intended parameters; the contract admin (wasm
+   `ContractInfo.admin`) and the code's creator are the upload address, and
+   the code's instantiate permission lists only that address; `NotaryAdmins`
+   lists the intended notary admins.
 
 ## 11. Phase 0 entries
 
@@ -534,10 +553,12 @@ Open decisions:
 3. Reveal by anybody (this draft) or only by the creator (as in phase 0).
 4. ~~Seeding phase 0 registrations~~ **decided:** no seeding; phase 0
    researchers are approved again through the contract (section 11).
-5. Upload by the permitted address or by governance proposal.
+5. ~~Upload by the permitted address or by governance proposal~~ **decided:**
+   by the upload address (section 10).
 6. Repository for the code (section 13).
-7. The address of the pilot contract admin and the time of the hand-over to
-   governance.
+7. ~~The address of the pilot contract admin~~ **decided (15 October 2026):**
+   the upload address, as a deliberate deviation (section 9). Still open: the
+   time of the hand-over to governance after the pilot.
 8. ~~How a researcher gets the means for entries~~ **decided (variant b,
    15 October 2026):** starting credit of 1,002 MEDAS with the approval, no
    quota; further MEDAS from Osmosis (section 7).
