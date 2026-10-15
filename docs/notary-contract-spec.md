@@ -248,9 +248,11 @@ every fee is burnt completely.
 
 First measured with a throwaway prototype, then confirmed with the contract
 itself (medas-notary-contract 0.1.0, release Wasm, `scripts/localnet-check.sh`
-on a localnet with the v2.0.0 binary): commit 205,000 – 212,000 gas, reveal
-142,000, approve 169,000 – 182,000, revoke 137,000, parameter or admin change
-about 130,000. Storing the code took 2.67 million gas.
+on a localnet with the v2.0.0 binary; last run 15 October 2026 with the Wasm
+of sha256 `3838154bc54a63cc4a7066e9a8aca7c4439270f19473d2994d410f2d0ab646b4`):
+commit 209,000 – 216,000 gas, reveal 142,000, approve 168,000 – 181,000,
+revoke 134,000, parameter or notary admin change about 130,000. Storing the
+code took 2.58 million gas.
 
 | Transaction | Gas used | Gas wanted (simulation × 1.3) | Fee at 0.025 umedas/gas |
 |---|---|---|---|
