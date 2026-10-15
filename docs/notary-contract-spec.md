@@ -64,12 +64,14 @@ InstantiateMsg {
   fee_split: FeeSplit,            // section 6
   start_credit: Coin,             // minimum an approval must carry; pilot: 1002000000 umedas (section 7)
   require_registration: bool,     // true: only registered addresses may commit
-  admins: [address],              // initial notary admins (section 8), valid from this block
-  phase0_registrations: [         // optional, section 11
-    { address, approve_tx: hex }
-  ]
+  notary_admins: [address],       // initial notary admins (section 8), from the next block; at most 20
 }
 ```
+
+The denom of `fee` is the contract's denom for good: `start_credit` must use
+it, and `UpdateParams` rejects a `fee` or `start_credit` in any other denom.
+Fees already paid and the starting credits of all approvals thus stay
+comparable.
 
 ### 3.2 Execute
 
@@ -79,7 +81,7 @@ InstantiateMsg {
 | `Reveal { id, salt, content_sha256 }` | anybody | none | checks and stores the reveal (section 4) |
 | `Approve { address }` | notary admin | at least `start_credit` | registers the address, forwards the funds to it (section 7) |
 | `Revoke { address }` | notary admin | none | ends the registration (section 7) |
-| `SetAdmin { address, active }` | contract admin | none | adds or retires a notary admin (section 8) |
+| `SetNotaryAdmin { address, active }` | contract admin | none | adds or retires a notary admin from the next block (section 8) |
 | `UpdateParams { fee?, fee_split?, start_credit?, require_registration? }` | contract admin | none | changes parameters from this block on |
 
 Every message MUST be rejected if it carries funds other than stated, and the
@@ -94,12 +96,12 @@ distributed or burnt in the same transaction.
 | `Commit { id }` | one commit |
 | `Commits { start_after?, limit? }` | commits in id order |
 | `CommitsByCreator { creator, start_after?, limit? }` | all commits of an address, revealed or not (evaluation rule 12.3) |
-| `CommitsByHash { hash }` | all commits with this hash (at most one per creator) |
+| `CommitsByHash { hash, start_after?, limit? }` | commits with this hash in id order (at most one per creator) |
 | `References { id, start_after?, limit? }` | commits that refer to `id` (e.g. the results of a job) |
 | `Registration { address }` | current status and the full history of approvals and revocations |
 | `Registrations { start_after?, limit? }` | addresses with a registration history |
-| `Admins {}` | every notary admin with all its validity periods |
-| `AdminAt { address, time }` | whether the address was a notary admin at that block time |
+| `NotaryAdmins {}` | every notary admin with all its periods (bounded: at most 20 open periods) |
+| `NotaryAdminAt { address, height }` | whether the address is a notary admin in the block at that height |
 
 `limit` defaults to 30 and is capped at 100. All queries are deterministic and
 bounded, so other contracts may call them.
@@ -111,11 +113,12 @@ bounded, so other contracts may call them.
 | `config` | item | `fee`, `fee_split`, `start_credit`, `require_registration` |
 | `next_id` | item | next commit id, starts at 1 |
 | `commits` | map `id` → `Commit` | section 4 |
-| `by_hash` | map `(hash, creator)` → `id` | uniqueness of (creator, hash); `CommitsByHash` |
+| `by_hash` | map `(hash, creator)` → `id` | uniqueness of (creator, hash) |
+| `hash_ids` | map `(hash, id)` → () | `CommitsByHash` in id order |
 | `by_creator` | map `(creator, id)` → () | `CommitsByCreator` |
 | `refs` | map `(referenced id, id)` → () | `References` |
-| `registrations` | map `address` → list of `{ kind, admin, height, time, origin }` | section 7 |
-| `admins` | map `address` → list of `{ from_height, from_time, until_height?, until_time? }` | section 8 |
+| `registrations` | map `address` → list of `{ kind, admin, height, time }` | section 7 |
+| `notary_admins` | map `address` → list of `{ from_height, until_height?, opened_at, closed_at? }` | section 8 |
 | cw2 `contract_info` | item | name `medas-notary`, semantic version |
 
 Nothing is ever deleted. A commit changes exactly once, when it is revealed.
@@ -125,10 +128,10 @@ Nothing is ever deleted. A commit changes exactly once, when it is revealed.
 `wasm-notary_commit { id, creator, hash, entry_type, reference, registered }`,
 `wasm-notary_reveal { id, creator, revealer }`,
 `wasm-notary_approve { address, admin }`, `wasm-notary_revoke { address, admin }`,
-`wasm-notary_admin { address, active }`, `wasm-notary_params { … }`.
+`wasm-notary_admin { address, active, from_height | until_height }`, `wasm-notary_params { … }`.
 Indexers can follow the contract with the transaction search
-`wasm._contract_address='<address>'`; the state queries are the source of
-truth.
+`execute._contract_address='<address>'` (wasmd emits this event for every
+call); the state queries are the source of truth.
 
 ## 4. Commit and reveal
 
@@ -275,7 +278,7 @@ of 1,000 MEDAS per entry.
   on Osmosis (section 12).
 - `Revoke { address }` by a notary admin ends the registration.
 - Both MUST be rejected unless the sender is a notary admin **in this block**
-  (section 8). Both append `{ kind, admin, height, time }` to the address's
+  (section 8: by height, fixed within the block). Both append `{ kind, admin, height, time }` to the address's
   history; nothing is overwritten.
 - An address is registered at a point of the chain if the last entry of its
   history before that point is an approval (same rule as notary-spec.md 16.4).
@@ -290,23 +293,39 @@ of 1,000 MEDAS per entry.
 
 The admin list moves from `docs/notary/admins.json` into the contract.
 
-- `SetAdmin { address, active: true }` opens a validity period starting with
-  the current block (height and time); `active: false` closes the open period
-  with the current block. Periods are never deleted or edited, so a later
-  period after a pause is a new entry.
-- An address is a notary admin at time `t` if one of its periods satisfies
-  `from_time <= t < until_time` (open period: no upper bound).
-- `Admins {}` returns all addresses with all periods; `AdminAt` answers for a
-  given time. With the histories of section 7 anybody can check from the
-  contract state alone who was admin when an approval was made.
-- Only the **contract admin** (section 9) may send `SetAdmin` and
+Periods are defined by **block height**, not by block time: an address is a
+notary admin in the block at height `h` if one of its periods satisfies
+`from_height <= h < until_height` (open period: no upper bound).
+
+- A change by `SetNotaryAdmin` in block `h` takes effect from block `h + 1`.
+  `active: true` opens a period with `from_height = h + 1`; `active: false`
+  sets `until_height = h + 1` on the open period. The set of notary admins is
+  therefore fixed within a block, and the order of transactions in a block
+  does not matter: an admin retired in block `h` can still approve and revoke
+  in block `h`, before and after the retirement; a new admin appointed in
+  block `h` acts from `h + 1` on.
+- Within one block, retiring and reappointing cancel out: reappointing an
+  admin retired in the same block continues its period, and retiring an admin
+  appointed in the same block removes that period (it never took effect).
+  Otherwise periods are never deleted or edited; a later period after a pause
+  is a new entry.
+- Each period also records the block times of the changes (`opened_at`,
+  `closed_at`) for display; they decide nothing.
+- At most **20** addresses may have an open period (current or from the next
+  block), so `NotaryAdmins` stays bounded; `SetNotaryAdmin` and the
+  instantiation reject more.
+- `NotaryAdmins {}` returns all addresses with all periods; `NotaryAdminAt`
+  answers for a height. With the histories of section 7 (which record the
+  height) anybody can check from the contract state alone who was admin when
+  an approval was made.
+- Only the **contract admin** (section 9) may send `SetNotaryAdmin` and
   `UpdateParams`. Notary admins cannot change the list or the parameters.
 
 ## 9. Contract admin
 
 The contract admin is the admin of the contract instance in the wasm module
 (the address that may migrate it). The contract reads it from the chain
-(contract info query) on every `SetAdmin` and `UpdateParams`; there is no
+(contract info query) on every `SetNotaryAdmin` and `UpdateParams`; there is no
 second owner field that could diverge.
 
 - **Pilot:** an address created by the operators and used for nothing else
@@ -353,7 +372,7 @@ second owner field that could diverge.
    tag. Clients pin this file at a commit, like the admin list in phase 0.
 6. **Check after instantiation:** code hash on chain equals the published
    hash; `Config` returns the intended parameters; the contract admin is the
-   pilot address; `Admins` lists the intended notary admins.
+   pilot address; `NotaryAdmins` lists the intended notary admins.
 
 ## 11. Phase 0 entries
 
@@ -363,15 +382,19 @@ second owner field that could diverge.
   replace a fact everybody can check by a claim of the importer.
 - The commitment hash is the same. The same (creator, hash) may exist as a
   phase 0 anchor and as a contract commit; the earlier one establishes
-  priority (evaluation rule 12.1). Clients show both sources and name the
-  source of each entry.
+  priority, and only once it is validly revealed (evaluation rule 12.1).
+  Priority is decided per (creator, hash): unrevealed commits of the same
+  hash by other creators are copies or coincidences and establish nothing
+  (rule 12.2), so clients MUST NOT mark one of several unrevealed commits as
+  the earlier one. Clients show both sources and name the source of each
+  entry.
 - New entries go to the contract once it is live. Phase 0 commits can still be
   revealed the phase 0 way.
 - Phase 0 registrations: approvals by memo stay the record for the phase 0
-  period. To avoid approving and funding the same researchers twice, the
-  instantiation MAY seed registrations (`phase0_registrations`): each seeded
-  address gets a history entry with `origin: phase0` and the hash of its
-  phase 0 approve transaction, so the entry can be checked against the chain.
+  period and are **not** carried into the contract. Researchers registered in
+  phase 0 are approved again through the contract (with the starting credit);
+  the contract's registration history contains only its own approvals and
+  revocations.
 - `docs/notary/admins.json` stays the admin list for the phase 0 period and
   gets no new entries after the contract is live.
 
@@ -380,10 +403,10 @@ second owner field that could diverge.
 **Profile service and index**
 - The index follows the contract instead of memo transfers: transaction
   search by contract address for new events, contract queries
-  (`Commits`, `Registration`, `Admins`) as source of truth. The phase 0 index
+  (`Commits`, `Registration`, `NotaryAdmins`) as source of truth. The phase 0 index
   is kept and shown as a second source.
 - Approvals are checked against `Registration` in the contract instead of
-  decoding a bank transfer; the admin list comes from `Admins` (with history)
+  decoding a bank transfer; the admin list comes from `NotaryAdmins` (with history)
   instead of the pinned `admins.json`.
 - The backfill becomes a paginated read of the contract state; any node with
   the current state is enough (no full transaction index needed for contract
@@ -436,10 +459,14 @@ carry the `.wasm` file and its sha256.
   commits (`fee_paid`);
 - registration: approve, revoke, approve again; history; `registered` on
   commits before and after; approval below `start_credit`;
-- admins: periods, retired admin cannot approve, earlier approvals stay
-  valid, `AdminAt` at period borders;
-- authority: `SetAdmin` and `UpdateParams` by anybody but the contract admin
-  fail; migration keeps state and rejects lower versions;
+- notary admins: changes take effect in the next block (appointment and
+  retirement, approval in the block of the retirement), retirement and
+  reappointment in the same block, `NotaryAdminAt` at period borders, at most
+  20; retired admin cannot approve, earlier approvals stay valid;
+- parameters: `UpdateParams` with another denom is rejected;
+- `CommitsByHash` pagination;
+- authority: `SetNotaryAdmin` and `UpdateParams` by anybody but the contract
+  admin fail; migration keeps state and rejects lower versions;
 - no balance left on the contract after any message.
 
 **Localnet** (`scripts/localnet.sh`, static v2.0.0 binary)
@@ -480,7 +507,8 @@ Open decisions:
 2. `require_registration` in the pilot: true (as the web application does
    today) or open commits with `registered` shown.
 3. Reveal by anybody (this draft) or only by the creator (as in phase 0).
-4. Seeding phase 0 registrations at instantiation, or approving again.
+4. ~~Seeding phase 0 registrations~~ **decided:** no seeding; phase 0
+   researchers are approved again through the contract (section 11).
 5. Upload by the permitted address or by governance proposal.
 6. Repository for the code (section 13).
 7. The address of the pilot contract admin and the time of the hand-over to
