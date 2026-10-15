@@ -213,3 +213,35 @@ bewusste Abweichung von der geprüften Datei.
     (SDK, ibc-go) auslösen lassen, bleiben bis zum Software-Upgrade offen.
 - Wird der Schlüssel der Deploy-Adresse kompromittiert, fällt die Schutzwirkung
   weg. Er gehört entsprechend gesichert, idealerweise auf eine Ledger-Hardware-Wallet.
+
+## 11. Zweite Rolle der Deploy-Adresse: Contract-Admin des Notariats (Pilot)
+
+Entscheidung vom 15.10.2026: Im Pilot ist `$DEPLOY` auch Contract-Admin des
+Notariats-Contracts (`docs/notary-contract-spec.md` Abschnitt 9 und 10 auf
+`feat/notary`). Das ist eine **bewusste Abweichung** von der Spezifikation, die
+eine eigene, sonst unbenutzte Adresse vorsah.
+
+- `$DEPLOY` lädt den Notariats-Code hoch, erlaubt die Instanziierung nur sich
+  selbst und instanziiert mit `--admin` auf sich selbst:
+
+  ```sh
+  $MD tx wasm store medas_notary.wasm --from $DEPLOY_KEY --instantiate-anyof-addresses $DEPLOY ...
+  $MD tx wasm instantiate <code_id> '<InstantiateMsg>' --label medas-notary --admin $DEPLOY --from $DEPLOY_KEY ...
+  ```
+
+  Danach kann nur `$DEPLOY` Parameter und Notariats-Admins ändern und den
+  Contract migrieren.
+- **Vorteil:** ein Schlüssel weniger. **Preis:** Verlust oder Kompromittierung
+  trifft beide Rollen zugleich, den Code-Upload der ganzen Chain und die
+  Kontrolle über das Notariat.
+- Deshalb gilt für den Schlüssel von `$DEPLOY` zusätzlich zu Abschnitt 10:
+  - **offline** aufbewahrt, nur für einen Upload, eine Instanziierung, eine
+    Parameter- oder Admin-Änderung des Notariats oder eine Migration hervorgeholt;
+  - **nie in einer Browser-Wallet** (Keplr, Leap) und nie über die Web-App des
+    Notariats; signiert wird nur mit der CLI oder einem Ledger;
+  - nie Notariats-Admin, Relayer- oder Validator-Schlüssel.
+- **Nach dem Pilot** geht der Contract-Admin an Governance über
+  (`MsgUpdateAdmin` auf `$GOV`). Damit endet die Doppelrolle; `$DEPLOY` bleibt
+  nur Upload-Adresse, bis der Rückweg aus Abschnitt 8 den Upload wieder freigibt.
+- Stand der Mainnet-Parameter am 15.10.2026 (Abfrage, keine Transaktion):
+  `code_upload_access` = `AnyOfAddresses [$DEPLOY]`, Codes 1–3 von `$DEPLOY`.
