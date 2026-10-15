@@ -36,7 +36,7 @@ registered researcher, and who was an admin, and it checks reveals on chain.
 | Chain today | wasmd v0.54.10, wasmvm v2.2.9, capabilities up to `cosmwasm_2_2` |
 | After v3 | wasmd v0.60.x, wasmvm v2.3.x (same VM generation) |
 | Contract framework | cosmwasm-std 2.2.x, cw-storage-plus 2.x, cw2 |
-| Required capabilities | `iterator`, `cosmwasm_1_3` (community pool message), nothing above `cosmwasm_2_2` |
+| Required capabilities | `iterator`, `staking` (cosmwasm-std feature for distribution messages), `cosmwasm_1_3` (community pool message), nothing above `cosmwasm_2_2`; all offered by wasmd v0.54.10 |
 | Not used | IBC entry points, sudo, stargate/any messages, submessage replies, floats |
 
 - The build checks the required capabilities (`cosmwasm-check
@@ -53,8 +53,8 @@ registered researcher, and who was an admin, and it checks reveals on chain.
 ## 3. Messages, queries and state
 
 Hashes and salts are passed and returned as 64 lowercase hex characters.
-Addresses are bech32 with prefix `medas`. Times are block times (nanoseconds
-since the epoch in state, RFC 3339 in query responses).
+Addresses are bech32 with prefix `medas`. Times are block times, given as
+nanoseconds since the epoch in a string (the CosmWasm `Timestamp` format).
 
 ### 3.1 Instantiate
 
@@ -243,10 +243,11 @@ every fee is burnt completely.
 
 ### 6.2 Network fees: measured gas
 
-Measured on a localnet with the v2.0.0 binary and a throwaway prototype that
-follows the state layout and checks of this specification (commit with all
-indexes, reveal with SHA-256 check, approval, fee burn). The real contract
-will differ somewhat; the values are to be measured again with it (test plan).
+First measured with a throwaway prototype, then confirmed with the contract
+itself (medas-notary-contract 0.1.0, release Wasm, `scripts/localnet-check.sh`
+on a localnet with the v2.0.0 binary): commit 205,000 – 212,000 gas, reveal
+142,000, approve 169,000 – 182,000, revoke 137,000, parameter or admin change
+about 130,000. Storing the code took 2.67 million gas.
 
 | Transaction | Gas used | Gas wanted (simulation × 1.3) | Fee at 0.025 umedas/gas |
 |---|---|---|---|
