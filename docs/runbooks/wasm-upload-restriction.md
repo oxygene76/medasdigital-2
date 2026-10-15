@@ -225,6 +225,7 @@ eine eigene, sonst unbenutzte Adresse vorsah.
   selbst und instanziiert mit `--admin` auf sich selbst:
 
   ```sh
+  export DEPLOY_KEY=<key-name von $DEPLOY>   # auf dem Offline-Rechner, nicht auf einem Validator
   $MD tx wasm store medas_notary.wasm --from $DEPLOY_KEY --instantiate-anyof-addresses $DEPLOY ...
   $MD tx wasm instantiate <code_id> '<InstantiateMsg>' --label medas-notary --admin $DEPLOY --from $DEPLOY_KEY ...
   ```
