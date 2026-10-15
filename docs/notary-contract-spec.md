@@ -62,7 +62,7 @@ since the epoch in state, RFC 3339 in query responses).
 InstantiateMsg {
   fee: Coin,                      // per commit; pilot: 1000000000 umedas (1,000 MEDAS); amount 0 = no fee
   fee_split: FeeSplit,            // section 6
-  start_credit: Coin,             // minimum an approval must carry (section 6.2 and open decision 8)
+  start_credit: Coin,             // minimum an approval must carry; pilot: 1002000000 umedas (section 7)
   require_registration: bool,     // true: only registered addresses may commit
   admins: [address],              // initial notary admins (section 8), valid from this block
   phase0_registrations: [         // optional, section 11
@@ -251,7 +251,6 @@ will differ somewhat; the values are to be measured again with it (test plan).
 | Transaction | Gas used | Gas wanted (simulation × 1.3) | Fee at 0.025 umedas/gas |
 |---|---|---|---|
 | commit, fee paid and burnt | 198,000 – 212,000 | about 250,000 | 0.0063 MEDAS |
-| commit without payment (prepaid entry, open decision 8) | 159,000 – 165,000 | about 190,000 | 0.0048 MEDAS |
 | reveal | 144,000 | about 161,000 | 0.0040 MEDAS |
 | approve (burn and forward) | 200,000 | about 235,000 | 0.0059 MEDAS |
 
@@ -265,7 +264,14 @@ of 1,000 MEDAS per entry.
 
 - `Approve { address }` by a notary admin registers the address. The attached
   funds (at least `start_credit`, in the fee denom) are forwarded to the
-  address in the same transaction, as the starting credit for fees.
+  address in the same transaction, as the starting credit.
+- **Pilot:** `start_credit` = **1,002 MEDAS**: one entry (1,000 MEDAS) plus a
+  reserve of 2 MEDAS for network fees (section 6.2). There are no prepaid
+  entries or quotas: every commit pays the fee.
+- Researchers buy further MEDAS themselves, e.g. on Osmosis. If the balance of
+  the connected address is lower than `fee` plus the network fee of a commit,
+  the web application says so before the commit and links to the MEDAS pool
+  on Osmosis (section 12).
 - `Revoke { address }` by a notary admin ends the registration.
 - Both MUST be rejected unless the sender is a notary admin **in this block**
   (section 8). Both append `{ kind, admin, height, time }` to the address's
@@ -388,6 +394,10 @@ second owner field that could diverge.
 - Commit, reveal, approve and revoke become `MsgExecuteContract` (Keplr and
   Leap sign it in direct and amino mode). Fee and starting credit come from
   `Config`, not from build-time constants.
+- Before a commit the site compares the balance with `fee` plus the network
+  fee. If it is not enough, it shows a notice with a link to the MEDAS pool on
+  Osmosis (the pool id is configuration, not code) instead of the commit
+  button.
 - The receipt stays as it is (creator, hash, salt, content digest) and gets
   the contract address and the commit id.
 - The directory shows entry type and reference, and `registered` from the
@@ -474,25 +484,6 @@ Open decisions:
 6. Repository for the code (section 13).
 7. The address of the pilot contract admin and the time of the hand-over to
    governance.
-8. **How a researcher gets the means for entries.** Two variants were given;
-   they differ in what `start_credit` is and are not yet reconciled:
-   - **(a) Prepaid entries (quota per address).** `Approve { address,
-     entries }` carries `entries × fee` plus at least `start_credit`; the fee
-     part is burnt at once like for a commit, the rest goes to the address.
-     `GrantEntries { address, entries }` by a notary admin for registered
-     addresses carries exactly `entries × fee`, burnt at once. A commit uses
-     the quota first and then needs no funds; with an empty quota the normal
-     fee applies. `fee_paid` records quota or direct payment; quota and grants
-     are queryable with history, event `wasm-notary_grant`. After a revocation
-     the quota stays but is usable only after a new approval. Pilot: 3 entries
-     at approval; `start_credit` covers only network fees (2 MEDAS, 6.2).
-     Admin page: grant entries, show the quota.
-   - **(b) Starting credit in MEDAS.** No quota. The approval forwards one
-     entry plus the reserve for network fees to the researcher
-     (`start_credit` = 1,002 MEDAS with the values of 6.1 and 6.2); every
-     commit pays the fee. Researchers buy further MEDAS themselves on
-     Osmosis; if the balance is too low for an entry, the web application
-     shows a notice with a link to the pool.
-   With (a) the fee of prepaid entries is burnt when they are granted, and a
-   researcher cannot spend it on anything else; with (b) the starting credit
-   is freely usable MEDAS.
+8. ~~How a researcher gets the means for entries~~ **decided (variant b,
+   15 October 2026):** starting credit of 1,002 MEDAS with the approval, no
+   quota; further MEDAS from Osmosis (section 7).
