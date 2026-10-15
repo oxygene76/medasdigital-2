@@ -372,6 +372,29 @@ second owner field that could diverge.
 5. **Record.** `docs/notary/contract.json` lists, per network: code id, code
    hash, contract address, instantiation transaction, source repository and
    tag. Clients pin this file at a commit, like the admin list in phase 0.
+   A network without an entry has no notary contract (clients stay in phase 0
+   there). Format:
+
+   ```
+   {
+     "version": 1,
+     "networks": {
+       "<chain id>": {
+         "address": "medas1…",                 // contract address (32 bytes)
+         "instantiate_tx": "<hex>",            // hash of the instantiation transaction
+         "contract_admin": "medas1…",          // section 9, at instantiation
+         "codes": [                            // newest last; a migration appends
+           { "code_id": 1, "code_sha256": "<hex>",
+             "source": { "repository": "https://…", "tag": "v0.1.0", "commit": "<hex>" },
+             "from_height": 123 }              // first block with this code
+         ]
+       }
+     }
+   }
+   ```
+
+   Clients use the last entry of `codes` and refuse contract mode if the code
+   of the address on chain (`ContractInfo`, `CodeInfo`) has another checksum.
 6. **Check after instantiation:** code hash on chain equals the published
    hash; `Config` returns the intended parameters; the contract admin is the
    pilot address; `NotaryAdmins` lists the intended notary admins.

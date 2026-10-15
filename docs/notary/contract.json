@@ -1,0 +1,5 @@
+{
+  "description": "MEDAS Notary contract per network (docs/notary-contract-spec.md section 10). Clients pin this file at a commit and use the contract only on networks listed here; on all other networks they stay in phase 0. Before use they check that the code of the contract address on chain has code_sha256. Entries are only added; a migration to new code adds the new code_id and code_sha256 under 'codes', newest last. The git history of this file is the record.",
+  "version": 1,
+  "networks": {}
+}
